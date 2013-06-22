@@ -4,7 +4,7 @@
 #include "InPut/sensorvalue.h"
 #include "defines.h"
 #include <QtGui>
-#include "../ChronoReaderWidget/TimeCalcs/timecalcs.h"
+#include "../cookie-ChronoReaderWidget/TimeCalc/timecalcs.h"
 
 class TableMgr
 {

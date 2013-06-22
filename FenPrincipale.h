@@ -3,7 +3,7 @@
 
 #include <QtGui>
 #include "ui_FenPrincipale.h"
-#include "../ChronoReaderWidget/chronoreaderwidget.h"
+#include "../cookie-ChronoReaderWidget/chronoreaderwidget.h"
 #include "InPut/sensormanager.h"
 #include "InPut/serial.h"
 #include "UI/boardingtable.h"

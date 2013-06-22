@@ -91,12 +91,18 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     QString date = QString(df.readAll());
     df.close();
 
-    int h=date.split(":").at(0).toInt();
-    int m=date.split(":").at(1).toInt();
-    int s=date.split(":").at(2).toInt() ;
+    if(date.size() == 3) {
+        int h=date.split(":").at(0).toInt();
+        int m=date.split(":").at(1).toInt();
+        int s=date.split(":").at(2).toInt();
 
-    heureLancement->setTime(QTime(h,m,s));
-    chronoWidget->laucherCounter(QTime(h,m,s));
+        heureLancement->setTime(QTime(h,m,s));
+        chronoWidget->laucherCounter(QTime(h,m,s));
+    } else {
+        heureLancement->setTime(QTime::currentTime());
+        chronoWidget->laucherCounter(QTime::currentTime());
+    }
+
 }
 
 FenPrincipale::~FenPrincipale(){
