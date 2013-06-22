@@ -28,7 +28,7 @@ class Serial : public QThread
     Q_OBJECT
 
 public:
-    Serial(QString _port="/dev/TTYUSB0",QThread * parent = 0);
+    Serial(QString _port="/dev/TTYUSB0",speed_t _baudrate=B600,QThread * parent = 0);
     ~Serial();
     void run();
     bool init();
@@ -70,6 +70,7 @@ private:
     unsigned char buffer[1024];
     struct termios tio;
     int tty_fd;
+    speed_t baudrate;
 
 };
 

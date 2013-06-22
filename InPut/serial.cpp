@@ -104,7 +104,7 @@ bool Serial::OpenCOM(int nId)
         printf("Erreur lors de l'ouverture du port COM%d", nId);
         return FALSE;
     }
-    /* affectation taille des tampons d'émission et de réception */
+    /* affectation taille des tampons d'ï¿½mission et de rï¿½ception */
     SetupComm(g_hCOM, RX_SIZE, TX_SIZE);
     /* configuration du port COM */
     if(!SetCommTimeouts(g_hCOM, &g_cto) || !SetCommState(g_hCOM, &g_dcb))
@@ -113,7 +113,7 @@ bool Serial::OpenCOM(int nId)
         CloseHandle(g_hCOM);
         return false;
     }
-    /* on vide les tampons d'émission et de réception, mise à 1 DTR */
+    /* on vide les tampons d'ï¿½mission et de rï¿½ception, mise ï¿½ 1 DTR */
     PurgeComm(g_hCOM, PURGE_TXCLEAR|PURGE_RXCLEAR|PURGE_TXABORT|PURGE_RXABORT);
     EscapeCommFunction(g_hCOM, SETDTR);
 
@@ -123,7 +123,7 @@ bool Serial::OpenCOM(int nId)
 
 /******************************************************************************
 CloseCOM : fermeture du port COM.
-retour : vrai si l'opération a réussi, faux sinon.
+retour : vrai si l'opï¿½ration a rï¿½ussi, faux sinon.
 ******************************************************************************/
 bool Serial::CloseCOM()
 {
@@ -136,16 +136,16 @@ bool Serial::CloseCOM()
 
 
 /******************************************************************************
-ReadCOM : lecture de données sur le port COM.
-entrée : buffer : buffer où mettre les données lues.
-nBytesToRead : nombre max d'octets à lire.
+ReadCOM : lecture de donnï¿½es sur le port COM.
+entrï¿½e : buffer : buffer oï¿½ mettre les donnï¿½es lues.
+nBytesToRead : nombre max d'octets Ã  lire.
 pBytesRead : variable qui va recevoir le nombre d'octets lus.
-retour : vrai si l'opération a réussi, faux sinon.
+retour : vrai si l'opÃ©ration a rÃ©ussi, faux sinon.
 -------------------------------------------------------------------------------
-Remarques : - la constante MAX_WAIT_READ utilisée dans la structure
+Remarques : - la constante MAX_WAIT_READ utilisÃ©e dans la structure
 COMMTIMEOUTS permet de limiter le temps d'attente si aucun
-caractères n'est présent dans le tampon d'entrée.
-- la fonction peut donc retourner vrai sans avoir lu de données.
+caractÃ¨res n'est prÃ©sent dans le tampon d'entrÃ©e.
+- la fonction peut donc retourner vrai sans avoir lu de donnÃ©es.
 ******************************************************************************/
 bool Serial::ReadCOM(void* buffer, int nBytesToRead, int* pBytesRead)
 {
@@ -154,16 +154,16 @@ bool Serial::ReadCOM(void* buffer, int nBytesToRead, int* pBytesRead)
 
 }
 /******************************************************************************
-WriteCOM : envoi de données sur le port COM.
-entrée : buffer : buffer avec les données à envoyer.
-nBytesToWrite : nombre d'octets à envoyer.
+WriteCOM : envoi de donnÃ©es sur le port COM.
+entrÃ©e : buffer : buffer avec les donnÃ©es Ã  envoyer.
+nBytesToWrite : nombre d'octets Ã  envoyer.
 pBytesWritten : variable qui va recevoir le nombre d'octets
-envoyés.
-retour : vrai si l'opération a réussi, faux sinon.
+envoyÃ©s.
+retour : vrai si l'opÃ©ration a rÃ©ussi, faux sinon.
 ******************************************************************************/
 bool Serial::WriteCOM(void* buffer, int nBytesToWrite, int* pBytesWritten)
 {
-    /* écriture sur le port */
+    /* Ã©criture sur le port */
 
     return WriteFile(g_hCOM, buffer, nBytesToWrite, (DWORD*)pBytesWritten, NULL);
 }
@@ -172,9 +172,10 @@ bool Serial::WriteCOM(void* buffer, int nBytesToWrite, int* pBytesWritten)
 #endif
 
 #ifdef __linux
-Serial::Serial(QString _port, QThread * parent) : QThread(parent)
+Serial::Serial(QString _port,speed_t _baudrate, QThread * parent) : QThread(parent)
 {
     port = _port;
+    baudrate = _baudrate;
 }
 
 
@@ -208,7 +209,7 @@ bool Serial::init() {
         return false;
     }
 
-    setspeed(BAUD);
+    setspeed(baudrate);
     return true;
 }
 

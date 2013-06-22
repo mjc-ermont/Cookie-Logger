@@ -38,7 +38,23 @@ void AskDialog::continueClicked()
     else
         port = selectEntry->currentText();
 
-    Serial* com = new Serial(port);
+    Serial* com;
+    switch (baudrate->currentText().toInt()) {
+    case 600:
+        com = new Serial(port, B600);
+        break;
+    case 4800:
+        com = new Serial(port, B4800);
+        break;
+    case 9600:
+        com = new Serial(port, B9600);
+        break;
+    case 57600:
+    default:
+        com = new Serial(port, B57600);
+        break;
+    }
+
 
     com->start();
 
