@@ -42,6 +42,8 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         Serial* com;
         QTimer *timerAct;
         QTimer *actTemps;
+        QTimer *resetIndicator;
+
         BoardingTable* tableauBord;
         MapsView* carte;
         TableMgr* tableManager;
@@ -62,6 +64,8 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void requestAct();
         void informationsReceived(QStringList);
         void syncTime();
+        void resetIndicatorRx();
+        void setIndicatorRx();
 
         void on_b_param_clicked();
         void on_b_table_clicked();

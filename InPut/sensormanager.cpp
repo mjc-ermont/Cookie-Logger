@@ -76,6 +76,8 @@ Data* SensorManager::addData(QString trame) {
                 d = sensorList[numCapteur]->getValues()[numValeur]->addData(valeur);
                 parent->getBT()->update(sensorList[numCapteur]->getValues()[numValeur]);
 
+                parent->setIndicatorRx();
+
                 QString url = parent->dataServerLineEdit->text();
                 QStringList split = url.split("||");
                 if(split.size() == 2) {

@@ -14,6 +14,11 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     optimisation_graph = false;
     setupUi(this);
 
+    indicator_rx->setEnabled(false);
+    QPalette p = indicator_rx->palette();
+    indicator_rx->setPalette(p);
+    resetIndicator=NULL;
+
     stack->setCurrentIndex(0);
 
 
@@ -152,6 +157,8 @@ void FenPrincipale::syncTime() {
 
 void FenPrincipale::informationsReceived(QStringList trames) {
     if(trames.size() > 0) {
+
+
         for(int i=0;i<trames.size();i++) {
             sensormgr->addData(trames[i]);
         }
@@ -161,6 +168,21 @@ void FenPrincipale::informationsReceived(QStringList trames) {
             value.first->majData();
         }
     }
+}
+
+void FenPrincipale::setIndicatorRx() {
+
+
+    resetIndicator = new QTimer();
+    connect(resetIndicator,SIGNAL(timeout()),this,SLOT(resetIndicatorRx()));
+
+    resetIndicator->start(1000);
+
+    indicator_rx->setChecked(true);
+}
+
+void FenPrincipale::resetIndicatorRx() {
+    indicator_rx->setChecked(false);
 }
 
 void FenPrincipale::message(QString message){
