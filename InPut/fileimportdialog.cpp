@@ -20,14 +20,18 @@ void FileImportDialog::on_buttonBox_accepted() {
     QFile f(fileLineEdit->text());
     f.open(QFile::ReadOnly);
     QString content = f.readAll();
-    QStringList trames = content.split("@");
-    int i=0;
-    QTime base = QTime::currentTime();
-    foreach(QString trame, trames) {
-        Data* d = m_parent->getSensorMgr()->addData(trame);
-        if(d != NULL)
-            d->time = QTime(base.hour(),base.minute(),base.second()+i);
+    QStringList database = content.split("!!");
+    foreach(QString data, database) {
+        QStringList spl = data.split(";");
+        if(spl.size() == 4) {
+            int numCapteur = spl.at(0).toInt();
+            int numValeur = spl.at(1).toInt();
+            double valeur = spl.at(2).toDouble();
+            QTime t = QTime::fromString(spl.at(3));
 
-        i++;
+            Data* d = m_parent->getSensorMgr()->getSensor(numCapteur)->getValues().at(numValeur)->addData(valeur);
+            d->time = t;
+        }
     }
+
 }

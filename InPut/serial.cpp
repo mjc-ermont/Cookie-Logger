@@ -232,10 +232,6 @@ void Serial::readData() {
     for(int i=0;i<eol;i++)
         s += buffer[i];
 
-    QFile logfile("log.beat");
-    logfile.open(QFile::Append);
-    logfile.write(s.remove('\n').toStdString().c_str());
-    logfile.close();
 
     QString data = skipped_buf + s;
 

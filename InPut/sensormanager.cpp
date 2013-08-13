@@ -91,6 +91,13 @@ Data* SensorManager::addData(QString trame) {
 
                     serveur_search->get("/Cookie-WebUI-Server/bin/add.php?t=token&nc="+QString::number(numCapteur)+"&nv="+QString::number(numValeur)+"&v="+QString::number(valeur, 'f'));
                 }
+
+                QFile log("log.dan"); // DAN = Data ANalysis
+                log.open(QFile::Append);
+                log.write((QString::number(numCapteur) + ";" + QString::number(numValeur) + ";" + QString::number(valeur) + ";" + QTime::currentTime().toString()).toStdString().c_str());
+                log.write("!!"); // Separator
+                log.flush();
+                log.close();
             }
         }
     }
