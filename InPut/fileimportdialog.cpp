@@ -4,6 +4,7 @@ FileImportDialog::FileImportDialog(FenPrincipale *parent) : QDialog(parent)
 {
     m_parent = parent;
     setupUi(this);
+    this->setWindowTitle("Y'en a du log, dans ces petites boîtes!");
 }
 
 FileImportDialog::~FileImportDialog()
@@ -11,7 +12,7 @@ FileImportDialog::~FileImportDialog()
 }
 
 void FileImportDialog::on_choirlefichier_clicked() {
-    QString path = QFileDialog::getOpenFileName(this,"Jus de carotte");
+    QString path = QFileDialog::getOpenFileName(this,"Auriez-vous l'extrême amabilité de m'indiquer où se trouve mon fichier log.dan ?");
     if(path != "")
         fileLineEdit->setText(path);
 }

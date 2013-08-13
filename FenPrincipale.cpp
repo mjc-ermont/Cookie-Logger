@@ -3,13 +3,6 @@
 
 FenPrincipale::FenPrincipale(Serial* _com) {
 
-
-
-    //------------------------------------------------------------------------------------------------------
-
-
-    this->setWindowTitle("Récupérateur des informations reçues par le biais du Kiwi au melon.");
-
     com = _com;
     optimisation_graph = false;
     setupUi(this);
@@ -21,6 +14,16 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
     stack->setCurrentIndex(0);
 
+    konami << Qt::Key_Up << Qt::Key_Up << Qt::Key_Down << Qt::Key_Down << Qt::Key_Left << Qt::Key_Right << Qt::Key_Left << Qt::Key_Right << Qt::Key_B << Qt::Key_A;
+    this->installEventFilter(this);
+    konamify(false);
+    QWebSettings *settings = QWebSettings::globalSettings();
+    settings->setAttribute (QWebSettings::PluginsEnabled, true);
+    settings->setAttribute(QWebSettings::JavascriptEnabled, true);
+  //  this->grabKeyboard();
+    this->setFocusPolicy(Qt::StrongFocus);
+    kwebview = new QWebView();
+    p_konami_layout->addWidget(kwebview);
 
     sensormgr = new SensorManager(this);
     QVector<Sensor*> sensorList = sensormgr->getSensors();
@@ -259,6 +262,11 @@ void FenPrincipale::reinit_b(){
     b_param->setDefault(false);
     b_graph->setDefault(false);
     b_carte->setDefault(false);
+    konami_1->setDefault(false);
+    konami_2->setDefault(false);
+    konami_3->setDefault(false);
+    konami_4->setDefault(false);
+
 }
 
 
@@ -381,6 +389,96 @@ void FenPrincipale::on_horizontalSlider_sliderReleased()
     foreach(value,graphiques) {
      //  value.first->majData(QTime(0,position,0));
     }
+}
+
+bool FenPrincipale::eventFilter( QObject *o, QEvent *e ) {
+    if ( e->type() == QEvent::KeyPress ) {
+        QKeyEvent *k = (QKeyEvent *)e;
+        if(position >= konami.size())
+            return false;
+
+        if(konami.at(position) == k->key()) {
+            ++position;
+        } else {
+            position = 0;
+        }
+        qDebug() << "yolo=" << position;
+
+        if(position>=konami.size()) {
+            qDebug() << "Trop pimp";
+            konamify(true);
+        }
+    }
+    return false;
+}
+
+void FenPrincipale::konamify(bool enable) {
+    if(enable) {
+        konami_1->setVisible(true);
+        konami_2->setVisible(true);
+        konami_3->setVisible(true);
+        konami_4->setVisible(true);
+        konami_close->setVisible(true);
+
+        this->setWindowTitle("OMG OMG OMG OMG OMG OMG OMG OMG OMG OMG TROP PIMP");
+    } else {
+        position = 0;
+        konami_1->setVisible(false);
+        konami_2->setVisible(false);
+        konami_3->setVisible(false);
+        konami_4->setVisible(false);
+        konami_close->setVisible(false);
+
+        this->setWindowTitle("To log, or not to log ? Random compilation.");
+    }
+}
+
+void FenPrincipale::on_konami_1_clicked() // nyan
+{
+    reinit_b();
+    konami_1->setDefault(true);
+
+    stack->setCurrentIndex(6);
+    if(kwebview->url().toString() != "http://www.nyan.cat/original.php")
+        kwebview->load(QUrl("http://www.nyan.cat/original.php"));
+}
+
+void FenPrincipale::on_konami_2_clicked() // gswitch
+{
+    reinit_b();
+    konami_2->setDefault(true);
+
+    stack->setCurrentIndex(6);
+    if(kwebview->url().toString() != "http://uploads.ungrounded.net/526000/526596_GSwitch.swf")
+        kwebview->load(QUrl("http://uploads.ungrounded.net/526000/526596_GSwitch.swf"));
+}
+
+void FenPrincipale::on_konami_3_clicked() // trololo
+{
+    reinit_b();
+    konami_3->setDefault(true);
+
+    stack->setCurrentIndex(6);
+    if(kwebview->url().toString() != "http://www.youtube.com/watch?v=oavMtUWDBTM")
+        kwebview->load(QUrl("http://www.youtube.com/watch?v=oavMtUWDBTM"));
+
+}
+
+void FenPrincipale::on_konami_4_clicked() // swag
+{
+    reinit_b();
+    konami_4->setDefault(true);
+
+    stack->setCurrentIndex(6);
+    if(kwebview->url().toString() != "http://www.swag.fr")
+        kwebview->load(QUrl("http://www.swag.fr"));
+}
+
+void FenPrincipale::on_konami_close_clicked() {
+    konamify(false);
+    reinit_b();
+
+    stack->setCurrentIndex(0);
 }
 
 void FenPrincipale::optimise_graph() {
@@ -524,4 +622,5 @@ void FenPrincipale::optimise_graph() {
         if(!error)
             graphiques[i].second->setGeometry(col * (colSize / colNb),row * (rowSize / rowNb), (colSize / colNb) * colStretch, (rowSize / rowNb) * rowStretch);
     }
+
 }

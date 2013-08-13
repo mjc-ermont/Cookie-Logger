@@ -2,8 +2,9 @@
 
 AskDialog::AskDialog()
 {
-    setupUi(this);
 
+    setupUi(this);
+    this->setWindowTitle("Bonjour, veuillez choisir le port halal de connexion série.");
     connect(pushButton,SIGNAL(clicked()),this,SLOT(continueClicked()));
     fen=NULL;
 

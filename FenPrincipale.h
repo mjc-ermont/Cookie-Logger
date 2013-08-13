@@ -33,10 +33,12 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         SensorManager* getSensorMgr(){return sensormgr; }
         MapsView* getMap() {return carte;}
         TableMgr* getTableMgr() {return tableManager;}
+        void konamify(bool enable);
 
     protected:
         void reinit_b();
         void resizeEvent(QResizeEvent *);
+        bool eventFilter( QObject *o, QEvent *e );
 
     private:
         Serial* com;
@@ -57,6 +59,10 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QTime h_depart;
         bool optimisation_graph;
         int nbSensors;
+
+        QList<int> konami;
+        int position=0;
+        QWebView *kwebview;
 
 
     public slots:
@@ -89,6 +95,11 @@ private slots:
         void on_horizontalSlider_sliderReleased();
         void on_dataServerLineEdit_editingFinished();
         void on_heureLancement_timeChanged(const QTime &time);
+        void on_konami_1_clicked();
+        void on_konami_2_clicked();
+        void on_konami_3_clicked();
+        void on_konami_4_clicked();
+        void on_konami_close_clicked() ;
 };
 
 #endif // FENPRINCIPALE_H
