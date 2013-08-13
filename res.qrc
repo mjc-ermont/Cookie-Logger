@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/html">
         <file alias="chart.html">html/chart.html</file>
+        <file alias="maps.html">html/maps.html</file>
     </qresource>
     <qresource prefix="/js">
         <file alias="exporting.js">js/exporting.js</file>

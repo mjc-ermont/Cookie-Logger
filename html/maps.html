@@ -15,14 +15,14 @@
 			var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 99, attribution: osmAttrib});		
 			map.addLayer(osm);
 
-			map.setView([48, 2], 13);
+			map.setView([46, 4], 7);
 
 			var polyline = L.polyline([], {color: 'red'}).addTo(map);
 
 
 			function newPos(x,y) {
-		    	polyline.addLatLng( new L.LatLng(x, y));
-				//map.fitBounds(polyline.getBounds());
+		    		polyline.addLatLng( new L.LatLng(x, y));
+				map.setView([x,y], map.getZoom());
 			}
 
 	       		function height(bloc){

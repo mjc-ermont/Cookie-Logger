@@ -27,9 +27,9 @@ SOURCES += \
     InPut/sensormanager.cpp \
     InPut/sensor.cpp \
     InPut/fileimportdialog.cpp \
-    ../cookie-ChronoReaderWidget/chronoreaderwidget.cpp \
-    ../cookie-ChronoReaderWidget/TimeCalc/timecalcs.cpp \
-    ../cookie-ChronoReaderWidget/eventbox.cpp \
+    ChronoReader/chronoreaderwidget.cpp \
+    ChronoReader/TimeCalcs/timecalcs.cpp \
+    ChronoReader/eventbox.cpp \
     UI/graphicview.cpp
 
 HEADERS  += \
@@ -44,17 +44,17 @@ HEADERS  += \
     InPut/sensormanager.h \
     InPut/sensor.h \
     InPut/fileimportdialog.h \
-    ../cookie-ChronoReaderWidget/chronoreaderwidget.h \
-    ../cookie-ChronoReaderWidget/TimeCalc/timecalcs.h \
-    ../cookie-ChronoReaderWidget/eventbox.h \
+    ChronoReader/chronoreaderwidget.h \
+    ChronoReader/TimeCalcs/timecalcs.h \
+    ChronoReader/eventbox.h \
     UI/graphicview.h
 
 FORMS += \
     FenPrincipale.ui \
     dialog.ui \
     InPut/fileimportdialog.ui \
-    ../cookie-ChronoReaderWidget/chronoreaderwidget.ui \
-    ../cookie-ChronoReaderWidget/eventbox.ui
+    ChronoReader/chronoreaderwidget.ui \
+    ChronoReader/eventbox.ui
 
 RESOURCES += \
     res.qrc
