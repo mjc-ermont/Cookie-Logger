@@ -235,6 +235,10 @@ void Serial::readData() {
 
     QString data = skipped_buf + s;
 
+    if(data == "" || data == "\n")
+        return;
+
+
     trames = data.split('@');
     int nbTrames = trames.size();
     if(nbTrames >= 2) {

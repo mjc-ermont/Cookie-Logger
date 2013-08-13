@@ -47,6 +47,7 @@ Sensor* SensorManager::getSensor(int id) {
 
 
 Data* SensorManager::addData(QString trame) {
+
     QStringList elements = trame.split("$");
     if(elements.size() < 6) {
          qDebug() << "Trame incomplete";

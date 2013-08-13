@@ -157,9 +157,8 @@ void FenPrincipale::syncTime() {
 
 void FenPrincipale::informationsReceived(QStringList trames) {
     if(trames.size() > 0) {
-
-
         for(int i=0;i<trames.size();i++) {
+            this->message("[DATA] " + trames[i]);
             sensormgr->addData(trames[i]);
         }
 
