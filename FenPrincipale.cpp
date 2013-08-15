@@ -20,7 +20,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     QWebSettings *settings = QWebSettings::globalSettings();
     settings->setAttribute (QWebSettings::PluginsEnabled, true);
     settings->setAttribute(QWebSettings::JavascriptEnabled, true);
-  //  this->grabKeyboard();
+
     this->setFocusPolicy(Qt::StrongFocus);
     kwebview = new QWebView();
     p_konami_layout->addWidget(kwebview);
@@ -111,6 +111,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
         chronoWidget->laucherCounter(QTime::currentTime());
     }
 
+
 }
 
 FenPrincipale::~FenPrincipale(){
@@ -198,7 +199,11 @@ void FenPrincipale::message(QString message){
 
 void FenPrincipale::on_actionQuitter_triggered()
 {
-    qApp->quit();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this,"Pourquoi la vie? Pourquoi la mort?","Êtes vous sûr de ce que vous faites?", QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+      QApplication::quit();
+    }
 }
 
 void FenPrincipale::on_actionOuvrir_triggered()
@@ -408,6 +413,10 @@ bool FenPrincipale::eventFilter( QObject *o, QEvent *e ) {
             qDebug() << "Trop pimp";
             konamify(true);
         }
+    } else if(e->type() == QEvent::Close) {
+        e->ignore();
+        this->on_actionQuitter_triggered();
+        return true;
     }
     return false;
 }

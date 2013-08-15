@@ -4,7 +4,7 @@ FileImportDialog::FileImportDialog(FenPrincipale *parent) : QDialog(parent)
 {
     m_parent = parent;
     setupUi(this);
-    this->setWindowTitle("Y'en a du log, dans ces petites boîtes!");
+    this->setWindowTitle("Il faut plus de données !");
 }
 
 FileImportDialog::~FileImportDialog()
