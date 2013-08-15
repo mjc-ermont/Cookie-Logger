@@ -9,6 +9,9 @@ MapsView::MapsView(QVBoxLayout *parent) : QWebView()
     QString s= QString(fichier.readAll());
     this->setHtml(s);
     this->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+    this->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+    this->settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
+    this->settings()->setAttribute(QWebSettings::OfflineWebApplicationCacheEnabled, true);
     fichier.close();
 
 }

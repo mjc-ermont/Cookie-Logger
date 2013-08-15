@@ -3,15 +3,16 @@
 	<head>
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
  		<script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
-
+		<meta charset="UTF-8"/>
 
 	</head>
-	<body>
+	<body style="margin:0">
  		<div id="map" style="height: 500px;"></div>
 		<script>
 			var map = L.map('map');
-			var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-			var osmAttrib='Map data © OpenStreetMap contributors';
+			//var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+			var osmUrl='http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg';
+			var osmAttrib='Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"> — Map data © <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
 			var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 99, attribution: osmAttrib});		
 			map.addLayer(osm);
 
