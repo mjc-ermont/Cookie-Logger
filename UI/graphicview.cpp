@@ -1,5 +1,6 @@
 #include "graphicview.h"
 
+
 GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *parent) :
     QwtPlot(parent), m_capteur(indexCapteur), m_valeur(indexValeur) {
     m_parent = parent;
@@ -20,6 +21,7 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
     this->setAxisTitle(QwtPlot::xBottom, "Temps");
     this->setAxisTitle(QwtPlot::yLeft, value->getName());
 
+    zoomer = new MyQwtPlotZoomer(this->canvas());
 
     courbe = new QwtPlotCurve("Courbe");
     courbe->setStyle(QwtPlotCurve::Lines);
@@ -84,3 +86,5 @@ void GraphicView::calculateCurve(QTime maxTime) {
     xValues.append(3000);
     yValues.append(2);
 }
+
+

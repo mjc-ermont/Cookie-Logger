@@ -7,6 +7,7 @@
 #include <Qwt/qwt_plot_curve.h>
 #include <Qwt/qwt_curve_fitter.h>
 #include <Qwt/qwt_legend.h>
+#include <Qwt/qwt_plot_zoomer.h>
 
 //#include <Donnees.h>
 #include <FenPrincipale.h>
@@ -18,6 +19,22 @@ class FenPrincipale;
 namespace Ui {
 class FenPrincipale;
 }
+
+class MyQwtPlotZoomer : public QwtPlotZoomer{
+public:
+    MyQwtPlotZoomer(QwtPlotCanvas* cnv) : QwtPlotZoomer(cnv){
+
+    }
+
+    void zoom(const QRectF &rect)
+    {
+        QRectF newRect;
+        const QRectF & baseRect = zoomBase();
+        newRect.setCoords( rect.left(), baseRect.top(), rect.right(), baseRect.bottom());
+        QwtPlotZoomer::zoom( newRect );
+    }
+};
+
 
 class GraphicView : public QwtPlot
 {
@@ -40,6 +57,8 @@ class GraphicView : public QwtPlot
         FenPrincipale *m_parent;
 
         QwtPlotCurve* courbe;
+        MyQwtPlotZoomer* zoomer;
+
         QVector<double> xValues;
         QVector<double> yValues;
 
