@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>792</width>
-    <height>698</height>
+    <height>702</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -286,7 +286,7 @@
          <item>
           <widget class="QPushButton" name="konami_4">
            <property name="text">
-            <string>Swag.fr</string>
+            <string>Google</string>
            </property>
           </widget>
          </item>
@@ -571,7 +571,7 @@
      <x>0</x>
      <y>0</y>
      <width>792</width>
-     <height>29</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFichier">

@@ -20,6 +20,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     QWebSettings *settings = QWebSettings::globalSettings();
     settings->setAttribute (QWebSettings::PluginsEnabled, true);
     settings->setAttribute(QWebSettings::JavascriptEnabled, true);
+    settings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
 
     this->setFocusPolicy(Qt::StrongFocus);
     kwebview = new QWebView();
@@ -367,16 +368,21 @@ void FenPrincipale::on_heureLancement_timeChanged(const QTime &time)
 
 void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
 {
+    int heures = 0;
+    int minutes = 0;
+
     if(position<60) {
         if(position == 1)
             bowltext->setText(QString::number(position) + " minute");
         else
             bowltext->setText(QString::number(position) + " minutes");
+
+        minutes = position;
     } else  {
-        int heures = (position-position%60)/60;
+        heures = (position-position%60)/60;
         QString heureMsg = heures>1 ? " heures ":" heure ";
 
-        int minutes = position%60;
+        minutes = position%60;
         QString minutesMsg = minutes>1 ? " minutes ":" minute ";
 
         if(minutes == 0)
@@ -384,15 +390,10 @@ void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
         else
             bowltext->setText(QString::number(heures) + heureMsg + QString::number(minutes) + minutesMsg);
     }
-}
-
-void FenPrincipale::on_horizontalSlider_sliderReleased()
-{
-    int position = horizontalSlider->value();
 
     QPair<GraphicView*,QMdiSubWindow*> value;
     foreach(value,graphiques) {
-     //  value.first->majData(QTime(0,position,0));
+       value.first->majData(QTime(heures,minutes,0));
     }
 }
 
@@ -473,14 +474,14 @@ void FenPrincipale::on_konami_3_clicked() // trololo
 
 }
 
-void FenPrincipale::on_konami_4_clicked() // swag
+void FenPrincipale::on_konami_4_clicked() // google
 {
     reinit_b();
     konami_4->setDefault(true);
 
     stack->setCurrentIndex(6);
-    if(kwebview->url().toString() != "http://www.swag.fr")
-        kwebview->load(QUrl("http://www.swag.fr"));
+    if(kwebview->url().toString() != "http://www.google.fr")
+        kwebview->load(QUrl("http://www.google.fr"));
 }
 
 void FenPrincipale::on_konami_close_clicked() {

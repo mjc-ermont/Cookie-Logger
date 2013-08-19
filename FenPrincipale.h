@@ -92,7 +92,6 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
 private slots:
         void on_actualizeTableButton_clicked();
         void on_horizontalSlider_sliderMoved(int position);
-        void on_horizontalSlider_sliderReleased();
         void on_dataServerLineEdit_editingFinished();
         void on_heureLancement_timeChanged(const QTime &time);
         void on_konami_1_clicked();

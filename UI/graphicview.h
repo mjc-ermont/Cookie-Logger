@@ -6,6 +6,7 @@
 #include <Qwt/qwt_plot.h>
 #include <Qwt/qwt_plot_curve.h>
 #include <Qwt/qwt_curve_fitter.h>
+#include <Qwt/qwt_legend.h>
 
 //#include <Donnees.h>
 #include <FenPrincipale.h>
