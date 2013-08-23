@@ -71,7 +71,7 @@ void GraphicView::calculateCurve(QTime maxTime) {
        // }
     }
 
-    xValues.append(0);
+ /*   xValues.append(0);
     yValues.append(12);
     xValues.append(10);
     yValues.append(13);
@@ -84,7 +84,7 @@ void GraphicView::calculateCurve(QTime maxTime) {
     xValues.append(900);
     yValues.append(-5);
     xValues.append(3000);
-    yValues.append(2);
+    yValues.append(2);*/
 }
 
 

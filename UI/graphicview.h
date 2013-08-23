@@ -33,6 +33,39 @@ public:
         newRect.setCoords( rect.left(), baseRect.top(), rect.right(), baseRect.bottom());
         QwtPlotZoomer::zoom( newRect );
     }
+
+    void rescale()
+    {
+        QwtPlot *plt = plot();
+        if ( !plt )
+            return;
+
+        QwtPlotZoomer::rescale();
+
+        plt->setAxisAutoScale(yAxis(), true);
+        plt->replot();
+    }
+
+    QPolygon adjustedPoints(const QPolygon &points) const
+    {
+
+        QPolygon adjusted;
+
+        const QwtPlot *plt = plot();
+        if ( !plt )
+            return adjusted;
+
+        if ( points.size() == 2 )
+        {
+            const int width = points[1].x() - points[0].x();
+
+            QRect rect(points[0].x(), 0, width, plt->height());
+
+            adjusted += rect.topLeft();
+            adjusted += rect.bottomRight();
+        }
+        return adjusted;
+    }
 };
 
 
