@@ -78,6 +78,8 @@ class GraphicView : public QwtPlot
         void majData(QTime n_duration);
         void majData();
 
+        int getCapteur() { return m_capteur; }
+        int getValeur () { return m_valeur ; }
     protected:
         void calculateCurve(QTime maxTime = QTime(0,1));
         void majCurve();

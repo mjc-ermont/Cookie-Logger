@@ -276,17 +276,39 @@ void FenPrincipale::reinit_b(){
 }
 
 
+bool FenPrincipale::already_added(int capteur, int valeur) {
+    for(int i=0;i<graphiques.size();i++) {
+        if((graphiques.at(i).first->getCapteur() == capteur) && (graphiques.at(i).first->getValeur() == valeur))
+            return true;
+    }
+    return false;
+}
+
 void FenPrincipale::on_sel_capteur_currentIndexChanged(int index)
 {
     sel_valeur->clear();
+    bool added_something=false;
 
-    foreach(SensorValue *v, sensormgr->getSensor(index)->getValues())
-        sel_valeur->addItem(v->getName());
+    foreach(SensorValue *v, sensormgr->getSensor(index)->getValues()) {
+        if(!already_added(index, v->getID())) {
+            sel_valeur->addItem(v->getName(), QVariant(v->getID()));
+            added_something=true;
+        }
+    }
+
+    add_graph->setEnabled(added_something);
+}
+
+void FenPrincipale::on_sel_valeur_currentIndexChanged(int index) {
+    // Je voulais faire quelque chose ici, mais je ne me rappelle plus de quoi.
+    // Alors j'ai fait ça.
+    if(index==42)
+        qApp->quit();
 }
 
 void FenPrincipale::on_add_graph_clicked()
 {
-    GraphicView* g = new GraphicView(sel_capteur->currentIndex(), sel_valeur->currentIndex(),this);
+    GraphicView* g = new GraphicView(sel_capteur->currentIndex(), sel_valeur->itemData(sel_valeur->currentIndex()).toInt(),this);
 
     QPair<GraphicView*,QMdiSubWindow*> group;
     QMdiSubWindow *w = zone_graph->addSubWindow(g);
@@ -303,11 +325,15 @@ void FenPrincipale::on_add_graph_clicked()
     if(optimisation_graph) {
         optimise_graph();
     }
-    g->setWindowTitle(g->windowTitle() + " (" + QString::number(graphiques.size() - 1) + ")");
+    g->setWindowTitle(g->windowTitle());
+    on_sel_capteur_currentIndexChanged(sel_capteur->currentIndex());
 }
 
 void FenPrincipale::graphClosed() {
     GraphicView* g = (GraphicView *)sender();
+
+    int capteur=g->getCapteur();
+
     for(int i=0;i<graphiques.size();i++) {
         if(g == graphiques[i].first)
             graphiques.remove(i);
@@ -316,6 +342,8 @@ void FenPrincipale::graphClosed() {
     if(optimisation_graph) {
         optimise_graph();
     }
+
+    on_sel_capteur_currentIndexChanged(capteur);
 }
 
 void FenPrincipale::on_btn_optimiser_clicked()

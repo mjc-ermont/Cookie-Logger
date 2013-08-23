@@ -39,6 +39,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void reinit_b();
         void resizeEvent(QResizeEvent *);
         bool eventFilter( QObject *o, QEvent *e );
+        bool already_added(int capteur, int valeur);
 
     private:
         Serial* com;
@@ -83,6 +84,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void on_b_carte_clicked();
         void on_b_graph_clicked();
         void on_sel_capteur_currentIndexChanged(int index);
+        void on_sel_valeur_currentIndexChanged(int index);
 
         void on_add_graph_clicked();
 
