@@ -58,12 +58,12 @@ void SensorManager::getSensorsFromFile() {
             qDebug() << "New sensor:" << s->getName();
         }
         if((reader.name() == "value")&&(reader.attributes().value("name").toString() != "")) {
-            int coef=1;
+            QString coef="x";
             QString params = reader.attributes().value("param").toString();
             SensorValue *sv = new SensorValue(reader.attributes().value("name").toString() ,reader.attributes().value("unit").toString(),reader.attributes().value("id").toString().toInt(),curSensor,coef,params);
 
-            if(reader.attributes().value("coef").toString().toFloat() != 0)
-                sv->setCoef(reader.attributes().value("coef").toString().toDouble());
+            if(reader.attributes().value("coef").toString() != "")
+                sv->setCoef(reader.attributes().value("coef").toString());
 
             if(curSensor != NULL)
                 curSensor->addSensorValue(sv);

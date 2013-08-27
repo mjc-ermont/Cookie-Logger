@@ -76,5 +76,6 @@ robotik {
 linusque {
     LIBS += /usr/lib/libqwt.so
     LIBS += -lqjson
+    LIBS += -lmuparser
 }
 

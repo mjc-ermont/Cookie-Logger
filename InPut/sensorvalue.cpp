@@ -1,20 +1,29 @@
 #include "sensorvalue.h"
 
 
-SensorValue::SensorValue(QString i_name, QString i_unit, int i_id, Sensor *i_parent, double i_coef, QString i_param) {
+SensorValue::SensorValue(QString i_name, QString i_unit, int i_id, Sensor *i_parent, QString i_function, QString i_param) {
     name = i_name;
     unit = i_unit;
     id = i_id;
     parent = i_parent;
-    coef = i_coef;
+    function = i_function;
     param = i_param;
+
+    parser.SetExpr(function.toStdString());
 }
 
 Data* SensorValue::addData(double d) {
+    parser.DefineVar("x", &d);
+
     Data *newData = new Data;
     newData->time = QTime::currentTime();
-    newData->value = d;
-
+    try {
+        newData->value = parser.Eval();
+    }
+    catch (mu::Parser::exception_type &e)
+    {
+      std::cout << e.GetMsg() << std::endl;
+    }
     datalist.append(newData);
     qDebug()<<"Param: " << param;
     if(param == "xmap") {
