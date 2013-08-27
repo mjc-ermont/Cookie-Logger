@@ -4,12 +4,43 @@
 SensorManager::SensorManager(FenPrincipale* _parent) {
     getSensorsFromFile();
     parent = _parent;
-    precIdCapteur=0;
-    precIdValeur=0;
 }
 
-SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
-    getSensor(id_valeur)->getValues().at(id_capteur)->addData(valeur);
+void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
+    if(id_capteur < sensorList.size()) {
+        if(id_valeur < sensorList[id_capteur]->getValues().size()) {
+
+            // TODO: Parse equation.
+            valeur = valeur * sensorList[id_capteur]->getValues()[id_valeur]->getCoef();
+
+            Data* d = sensorList[id_capteur]->getValues()[id_valeur]->addData(valeur);
+            parent->getBT()->update(sensorList[id_capteur]->getValues()[id_valeur]);
+
+            parent->setIndicatorRx();
+            getSensor(id_valeur)->getValues().at(id_capteur)->addData(valeur);
+
+            QString url = parent->dataServerLineEdit->text();
+            QStringList split = url.split("||");
+            if(split.size() == 2) {
+                QHttp *serveur_search = new QHttp(split[0]);
+                serveur_search->setHost(split[0]);
+
+                serveur_search->get(split[1]+"?t=token&nc="+QString::number(id_capteur)+"&nv="+QString::number(id_valeur)+"&v="+QString::number(valeur, 'f'));
+            } else {
+                QHttp *serveur_search = new QHttp("home.konfiot.net");
+                serveur_search->setHost("home.konfiot.net");
+
+                serveur_search->get("/Cookie-WebUI-Server/bin/add.php?t=token&nc="+QString::number(id_capteur)+"&nv="+QString::number(id_valeur)+"&v="+QString::number(valeur, 'f'));
+            }
+
+            QFile log("log.dan"); // DAN = Data ANalysis
+            log.open(QFile::Append);
+            log.write((QString::number(id_capteur) + ";" + QString::number(id_valeur) + ";" + QString::number(valeur) + ";" + QTime::currentTime().toString()).toStdString().c_str());
+            log.write("!!"); // Separator
+            log.flush();
+            log.close();
+        }
+    }
 }
 
 void SensorManager::getSensorsFromFile() {
@@ -47,75 +78,4 @@ void SensorManager::getSensorsFromFile() {
 
 Sensor* SensorManager::getSensor(int id) {
     return sensorList[id];
-}
-
-
-Data* SensorManager::addData(QString trame) {
-
-
-    QStringList elements = trame.split("$");
-    if(elements.size() < 6) {
-         qDebug() << "Trame incomplete";
-        return NULL;
-    }
-
-    QString firstPart = elements[0] + "$" + elements[1] + "$" + elements[2] + "$" + elements[3] + "$";
-    QString checkSum = get_checksum(firstPart);
-
-    qDebug() << "Trame:" << trame;
-    qDebug() << "CS: "<< QString(checkSum).toInt(NULL, 10) << " | "  << elements[4].toInt(NULL, 16) ;
-
-    bool checkLeSum = true;
-    Data *d=NULL;
-    int numCapteur = elements[1].toInt();
-    double valeur = elements[3].toDouble();
-    int numValeur = elements[2].toInt();
-
-    if(((QString(checkSum).toInt(NULL, 10) == elements[4].toInt(NULL, 16))||(!checkLeSum))&&((numCapteur!=precIdCapteur)||(precIdValeur!=numValeur))){
-        if(numCapteur < sensorList.size()) {
-            if(numValeur < sensorList[numCapteur]->getValues().size()) {
-                precIdCapteur=numCapteur;
-                precIdValeur=numValeur;
-
-                valeur = valeur * sensorList[numCapteur]->getValues()[numValeur]->getCoef();
-
-                d = sensorList[numCapteur]->getValues()[numValeur]->addData(valeur);
-                parent->getBT()->update(sensorList[numCapteur]->getValues()[numValeur]);
-
-                parent->setIndicatorRx();
-
-                QString url = parent->dataServerLineEdit->text();
-                QStringList split = url.split("||");
-                if(split.size() == 2) {
-                    QHttp *serveur_search = new QHttp(split[0]);
-                    serveur_search->setHost(split[0]);
-
-                    serveur_search->get(split[1]+"?t=token&nc="+QString::number(numCapteur)+"&nv="+QString::number(numValeur)+"&v="+QString::number(valeur, 'f'));
-                } else {
-                    QHttp *serveur_search = new QHttp("home.konfiot.net");
-                    serveur_search->setHost("home.konfiot.net");
-
-                    serveur_search->get("/Cookie-WebUI-Server/bin/add.php?t=token&nc="+QString::number(numCapteur)+"&nv="+QString::number(numValeur)+"&v="+QString::number(valeur, 'f'));
-                }
-
-                QFile log("log.dan"); // DAN = Data ANalysis
-                log.open(QFile::Append);
-                log.write((QString::number(numCapteur) + ";" + QString::number(numValeur) + ";" + QString::number(valeur) + ";" + QTime::currentTime().toString()).toStdString().c_str());
-                log.write("!!"); // Separator
-                log.flush();
-                log.close();
-            }
-        }
-    }
-    return d;
-}
-
-QString SensorManager::get_checksum(QString trame) {
-
-    char XOR = 0;
-    for (int i = 0; i < trame.length() ; i++) {
-       XOR = XOR ^ trame.toStdString()[i];
-    }
-
-    return QString::number(XOR);
 }

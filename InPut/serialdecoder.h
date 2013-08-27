@@ -2,24 +2,18 @@
 #define SERIALDECODER_H
 
 #include <QString>
+#include <QObject>
 #include "sensormanager.h"
 
-class SerialDecoder
+class SerialDecoder : public QObject
 {
-    Q_OBJECT
 
 public:
-    SerialDecoder(SensorManager* s_);
-    virtual QString splitCharacter();
+    SerialDecoder();
+    QString splitCharacter();
 
 public slots:
-    virtual decodeString(QString &str) = 0;
-
-signals:
-    void newValue(int id_capteur, int id_valeur, double valeur);
-
-protected:
-    SensorManager* sensorManager;
+    void decodeString(QString &str);
 };
 
 #endif // SERIALDECODER_H

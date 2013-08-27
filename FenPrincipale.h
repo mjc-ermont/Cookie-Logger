@@ -5,6 +5,7 @@
 #include "ui_FenPrincipale.h"
 #include "ChronoReader/chronoreaderwidget.h"
 #include "InPut/sensormanager.h"
+#include "InPut/cookiedecoder.h"
 #include "InPut/serial.h"
 #include "UI/boardingtable.h"
 #include "UI/graphicview.h"
@@ -47,7 +48,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QTimer *actTemps;
         QTimer *resetIndicator;
 
-        SerialDecoder* myDecoder;
+        CookieDecoder* myDecoder;
         BoardingTable* tableauBord;
         MapsView* carte;
         TableMgr* tableManager;

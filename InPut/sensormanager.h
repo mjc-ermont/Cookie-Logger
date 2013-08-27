@@ -14,25 +14,23 @@ class FenPrincipale;
 class Sensor;
 
 
-class SensorManager
+class SensorManager : public QObject
 {
 public:
     SensorManager(FenPrincipale *_parent);
     Sensor* getSensor(int id);
     QVector<Sensor*> getSensors() {return sensorList;}
-    Data* addData(QString trame);
     FenPrincipale* getParent(){return parent;}
 
 public slots:
-    newValue(int id_capteur, int id_valeur, double valeur);
+    void newValue(int id_capteur, int id_valeur, double valeur);
 protected:
     void getSensorsFromFile();
-    QString get_checksum(QString);
 private:
     QVector<Sensor*> sensorList;
     FenPrincipale* parent;
-    int precIdCapteur;
-    int precIdValeur;
+
+    Q_OBJECT
 };
 
 #endif // SENSORMANAGER_H

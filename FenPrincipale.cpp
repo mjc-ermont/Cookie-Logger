@@ -73,6 +73,8 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
     actTemps->start(1000);
 
+
+    myDecoder = new CookieDecoder();
     connect(myDecoder, SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
 
     message("[INFO] All started !");
@@ -166,7 +168,8 @@ void FenPrincipale::informationsReceived(QStringList trames) {
     if(trames.size() > 0) {
         for(int i=0;i<trames.size();i++) {
             this->message("[DATA] " + trames[i]);
-            sensormgr->addData(trames[i]);
+            myDecoder->decodeString(trames[i]);
+          //  sensormgr->addData(trames[i]);
         }
 
         QPair<GraphicView*,QMdiSubWindow*> value;
