@@ -1,3 +1,4 @@
+#include "serialdecoder.h"
 #include "serial.h"
 
 #ifdef WIN32
@@ -69,23 +70,21 @@ void Serial::readData() {
     char buf[67];
     QStringList trames;
 
-    #ifndef DEBUG
 
-        ReadCOM(buf,66,&size);
+    ReadCOM(buf,66,&size);
 
-        buf[size]='\0';
-        QString data = QString::fromStdString(skipped_buf + std::string(buf));
+    buf[size]='\0';
+    QString data = QString::fromStdString(skipped_buf + std::string(buf));
 
-        trames = data.split('@');
-        int nbTrames = trames.size();
-        if(nbTrames >= 2) {
-            if(trames.last().size() != trames[nbTrames - 2].size()) {
-                skipped_buf = trames.last().toStdString();
-                trames.removeLast();
+    trames = data.split(SerialDecoder::splitCharacter());
+    int nbTrames = trames.size();
+    if(nbTrames >= 2) {
+        if(trames.last().size() != trames[nbTrames - 2].size()) {
+            skipped_buf = trames.last().toStdString();
+            trames.removeLast();
 
-            }
         }
-    #endif
+    }
     emit dataRead(trames);
 }
 

@@ -47,6 +47,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QTimer *actTemps;
         QTimer *resetIndicator;
 
+        SerialDecoder* myDecoder;
         BoardingTable* tableauBord;
         MapsView* carte;
         TableMgr* tableManager;

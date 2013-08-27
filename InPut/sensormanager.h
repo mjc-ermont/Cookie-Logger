@@ -6,6 +6,7 @@
 #include "sensorvalue.h"
 #include "FenPrincipale.h"
 #include "tablemgr.h"
+#include "serialdecoder.h"
 #include <QHttp>
 #include <QUrl>
 
@@ -21,6 +22,9 @@ public:
     QVector<Sensor*> getSensors() {return sensorList;}
     Data* addData(QString trame);
     FenPrincipale* getParent(){return parent;}
+
+public slots:
+    newValue(int id_capteur, int id_valeur, double valeur);
 protected:
     void getSensorsFromFile();
     QString get_checksum(QString);

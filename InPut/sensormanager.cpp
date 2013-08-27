@@ -8,6 +8,10 @@ SensorManager::SensorManager(FenPrincipale* _parent) {
     precIdValeur=0;
 }
 
+SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
+    getSensor(id_valeur)->getValues().at(id_capteur)->addData(valeur);
+}
+
 void SensorManager::getSensorsFromFile() {
     QXmlStreamReader reader;
     QFile* cptConfig = new QFile("conf/cplist.xml");
@@ -47,6 +51,7 @@ Sensor* SensorManager::getSensor(int id) {
 
 
 Data* SensorManager::addData(QString trame) {
+
 
     QStringList elements = trame.split("$");
     if(elements.size() < 6) {

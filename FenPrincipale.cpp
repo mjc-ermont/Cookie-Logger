@@ -73,6 +73,8 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
     actTemps->start(1000);
 
+    connect(myDecoder, SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
+
     message("[INFO] All started !");
 
 

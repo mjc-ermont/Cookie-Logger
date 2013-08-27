@@ -30,7 +30,8 @@ SOURCES += \
     ChronoReader/chronoreaderwidget.cpp \
     ChronoReader/TimeCalcs/timecalcs.cpp \
     ChronoReader/eventbox.cpp \
-    UI/graphicview.cpp
+    UI/graphicview.cpp \
+    InPut/serialdecoder.cpp
 
 HEADERS  += \
     tablemgr.h \
@@ -47,7 +48,8 @@ HEADERS  += \
     ChronoReader/chronoreaderwidget.h \
     ChronoReader/TimeCalcs/timecalcs.h \
     ChronoReader/eventbox.h \
-    UI/graphicview.h
+    UI/graphicview.h \
+    InPut/serialdecoder.h
 
 FORMS += \
     FenPrincipale.ui \
