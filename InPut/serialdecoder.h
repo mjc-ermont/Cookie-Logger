@@ -8,12 +8,12 @@
 class SerialDecoder : public QObject
 {
 
-public:
-    SerialDecoder();
-    QString splitCharacter();
+    public:
+        SerialDecoder();
+        QString splitCharacter();
 
-public slots:
-    void decodeString(QString &str);
+    public slots:
+        void decodeString(QString &str);
 };
 
 #endif // SERIALDECODER_H
