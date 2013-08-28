@@ -12,7 +12,12 @@ public:
 
 signals:
     void newValue(int id_capteur, int id_valeur, double valeur);
+    void error_frame();
 private:
+    QByteArray tramePrecedente;
+    int nTrameRepeat=1;
+    bool trameValidee=false;
+
     Q_OBJECT
 
 };

@@ -212,9 +212,17 @@ bool Serial::init() {
     return true;
 }
 
+QString Serial::toString(QByteArray str) {
+    QString hex = "0x";
+    for(int j=0;j<str.size();j++) {
+        hex += QString("%1").arg(str.at(j)& 0xff, 2,16).toUpper();
+    }
+    return hex;
+}
 
 void Serial::readData() {
 
+    qDebug("===== lecture série ======");
     QList<QByteArray> trames;
     for(int i=0;i<1024;++i)
         buffer[i] = 0x00;
@@ -222,30 +230,26 @@ void Serial::readData() {
     nb_read = read(tty_fd, buffer, 1024);
     int eol=0;
 
-    for(int i=0;(i<1024)&&(eol==0);++i)
+    /*for(int i=0;(i<1024)&&(eol==0);++i)
         if(buffer[i] == 0x00)
-            eol = i;
+            eol = i;*/
 
 
     QByteArray data(skipped_buf);
-    for(int i=0;i<eol;i++) {
+    for(int i=0;i<1024;i++) {
         data.append(buffer[i]);
+        qDebug() << "[" << buffer [i] << "]";
     }
-
-    if(data.size() == 0)
-        return;
-
 
     trames = data.split(0xFF);
-    int nbTrames = trames.size();
-    if(nbTrames >= 2) {
-        if(trames.last().size() != trames[nbTrames - 2].size()) {
-            skipped_buf = trames.last();
-            trames.removeLast();
-        }
+
+    if(trames.last().size() < 10) {
+        skipped_buf = trames.last();
+        trames.removeLast();
     }
 
-    qDebug() << "Data read" << trames;
+   // qDebug() << "Data read" << trames;
+    qDebug() << "===== fin lecture série =====";
     emit dataRead(trames);
 }
 

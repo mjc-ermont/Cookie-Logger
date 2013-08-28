@@ -32,7 +32,7 @@ public:
     ~Serial();
     void run();
     bool init();
-
+    static QString toString(QByteArray str);
 
 protected:
     bool OpenCOM (int nId);

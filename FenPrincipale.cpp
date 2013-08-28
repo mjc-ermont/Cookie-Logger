@@ -8,8 +8,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     setupUi(this);
 
     indicator_rx->setEnabled(false);
-    QPalette p = indicator_rx->palette();
-    indicator_rx->setPalette(p);
+
     resetIndicator=NULL;
 
     stack->setCurrentIndex(0);
@@ -74,19 +73,21 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     actTemps->start(1000);
 
 
+    reset_errors_timer = new QTimer();
+    connect(reset_errors_timer,SIGNAL(timeout()),this,SLOT(reset_error()));
+    reset_error();
+    reset_errors_timer->start(60000);
+
+
     myDecoder = new YoloDecoder();
     connect(myDecoder, SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
-
+    connect(myDecoder,SIGNAL(error_frame()), this, SLOT(error_frame()));
     message("[INFO] All started !");
 
 
 
     connect(com,SIGNAL(dataRead(QList<QByteArray>)),this,SLOT(informationsReceived(QList<QByteArray>)));
     requestAct();
-
-    #ifdef DEBUG
-        message("[WARNING] !! DEBUG MODE ACTIVATED !! SERIAL COMMUNICATIONS ARE NOT ENABLED.");
-    #endif
 
     h_depart = QTime::currentTime();
     chronoWidget = new ChronoReaderWidget;
@@ -116,6 +117,9 @@ FenPrincipale::FenPrincipale(Serial* _com) {
         chronoWidget->laucherCounter(QTime::currentTime());
     }
 
+    QPalette p = indicator_rx->palette();
+    p.setColor(QPalette::Disabled, QPalette::Background, QColor(255,0,0));
+    indicator_rx->setPalette(p);
 
 }
 
@@ -165,9 +169,16 @@ void FenPrincipale::syncTime() {
 }
 
 void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
+    setIndicatorRx();
     if(trames.size() > 0) {
         for(int i=0;i<trames.size();i++) {
-            this->message("[DATA] " + trames[i]);
+
+            QString hex = "0x";
+            for(int j=0;j<trames[i].size();j++) {
+                hex += QString("%1").arg(trames[i].at(j)& 0xff, 2,16).toUpper();
+            }
+
+            this->message("[DATA] " + hex);
             myDecoder->decodeString(trames[i]);
           //  sensormgr->addData(trames[i]);
         }
@@ -179,19 +190,35 @@ void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
     }
 }
 
+void FenPrincipale::reset_error() {//TODO: Ne pas hardcoder ça.
+    this->sensormgr->getSensor(9)->getValues().at(0)->addData(0);
+    this->getBT()->update(this->sensormgr->getSensor(9)->getValues().at(0));
+}
+
+void FenPrincipale::error_frame() {
+    SensorValue* sv =  this->sensormgr->getSensor(9)->getValues().at(0);
+    Data* d = sv->getData().last();
+    d->value++;
+    this->getBT()->update(sv);
+    this->message("[ERROR] Checksum failed.");
+}
+
 void FenPrincipale::setIndicatorRx() {
 
 
     resetIndicator = new QTimer();
+    n++;
     connect(resetIndicator,SIGNAL(timeout()),this,SLOT(resetIndicatorRx()));
 
-    resetIndicator->start(1000);
+    resetIndicator->start(500);
 
     indicator_rx->setChecked(true);
 }
 
 void FenPrincipale::resetIndicatorRx() {
-    indicator_rx->setChecked(false);
+    n--;
+    if(n==0)
+        indicator_rx->setChecked(false);
 }
 
 void FenPrincipale::message(QString message){

@@ -1,3 +1,4 @@
+#include "serial.h"
 #include "yolodecoder.h"
 
 YoloDecoder::YoloDecoder()
@@ -9,12 +10,14 @@ char YoloDecoder::splitCharacter() {
 }
 
 void YoloDecoder::decodeString(QByteArray &str) {
-    for(int i=0; i<str.size();i++) {
-        qDebug() << "[" << i << "] " << (u_int8_t) str.at(i);
+    qDebug() << "Décodage de la trame: " << Serial::toString(str);
+    if(str == tramePrecedente) {
+        qDebug() << "trame déjà reçue:";
+        return;
     }
 
     if(str.size() < 10) {
-        qDebug() << "c'est pas peu cher ici";
+        qDebug() << "trame trop courte: " << str.size();
         return;
     }
 
@@ -22,15 +25,16 @@ void YoloDecoder::decodeString(QByteArray &str) {
 
     unsigned char check = 0x00;
     for(int i=0; i<9; i++) {
-
-
         check += str.at(i);
     }
 
     check >>= 1;
 
     if(check == checkSum) {
+        tramePrecedente = str;
+
         qDebug() << "checksum success";
+        trameValidee=true;
         for(int i=0; i<9; i++) {
             double value = 0;
             value += (unsigned char)str.at(i);
@@ -39,6 +43,8 @@ void YoloDecoder::decodeString(QByteArray &str) {
         }
     } else {
         qDebug() << "checksum fail: " << check << "|" << checkSum;
+        emit error_frame();
     }
 
 }
+

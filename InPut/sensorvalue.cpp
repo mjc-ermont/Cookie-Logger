@@ -16,7 +16,7 @@ SensorValue::SensorValue(QString i_name, QString i_unit, int i_id, Sensor *i_par
     expression.register_symbol_table(symbol_table);
 }
 
-Data* SensorValue::addData(double d) {
+Data* SensorValue::addData(double d, bool parse) {
  //   parser.DefineVar("x", &d);
     valeur = d;
 
@@ -24,8 +24,10 @@ Data* SensorValue::addData(double d) {
     newData->time = QTime::currentTime();
 
     parser.compile(function.toStdString(),expression);
-    newData->value =  expression.value();
-
+    if(parse)
+        newData->value =  expression.value();
+    else
+        newData->value=d;
     qDebug() << "v: " << d << " parser: " << newData->value;
    /* try {
         newData->value = parser.Eval();

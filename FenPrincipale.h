@@ -47,6 +47,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QTimer *timerAct;
         QTimer *actTemps;
         QTimer *resetIndicator;
+        QTimer *reset_errors_timer;
 
         YoloDecoder* myDecoder;
         BoardingTable* tableauBord;
@@ -66,9 +67,12 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QList<int> konami;
         int position=0;
         QWebView *kwebview;
-
+        int n=0;
 
     public slots:
+        void error_frame();
+        void reset_error();
+
         void message(QString message);
         void requestAct();
         void informationsReceived(QList<QByteArray>);
