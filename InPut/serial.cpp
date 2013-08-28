@@ -215,30 +215,28 @@ bool Serial::init() {
 
 void Serial::readData() {
 
-    QStringList trames;
+    QList<QByteArray> trames;
     for(int i=0;i<1024;++i)
-        buffer[i] = '\n';
+        buffer[i] = 0x00;
 
     nb_read = read(tty_fd, buffer, 1024);
     int eol=0;
 
     for(int i=0;(i<1024)&&(eol==0);++i)
-        if(buffer[i] == '\n')
+        if(buffer[i] == 0x00)
             eol = i;
 
 
-    QString s;
-    for(int i=0;i<eol;i++)
-        s += buffer[i];
+    QByteArray data(skipped_buf);
+    for(int i=0;i<eol;i++) {
+        data.append(buffer[i]);
+    }
 
-
-    QString data = skipped_buf + s;
-
-    if(data == "" || data == "\n")
+    if(data.size() == 0)
         return;
 
 
-    trames = data.split('@');
+    trames = data.split(0xFF);
     int nbTrames = trames.size();
     if(nbTrames >= 2) {
         if(trames.last().size() != trames[nbTrames - 2].size()) {

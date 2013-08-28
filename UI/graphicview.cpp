@@ -19,6 +19,7 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
 
     // axis
     this->setAxisTitle(QwtPlot::xBottom, "Temps");
+    this->setAxisScaleDraw(QwtPlot::xBottom, new TimeScaleDraw(QTime(0,0)));
     this->setAxisTitle(QwtPlot::yLeft, value->getName());
 
     zoomer = new MyQwtPlotZoomer(this->canvas());
@@ -26,7 +27,8 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
     courbe = new QwtPlotCurve("Courbe");
     courbe->setStyle(QwtPlotCurve::Lines);
     courbe->setPen(QPen(QBrush(Qt::black),2));
-  //  courbe->setCurveAttribute(QwtPlotCurve::Fitted);
+   // if(parent->interpol_curve->isChecked())
+        courbe->setCurveAttribute(QwtPlotCurve::Fitted);
 
     setWindowTitle(value->getCapteur()->getName() + " - " + value->getName());
 
@@ -46,6 +48,12 @@ void GraphicView::majData(QTime n_duration) {
 
 void GraphicView::majCurve() {
     calculateCurve(duration);
+    QwtSplineCurveFitter* fitter = new QwtSplineCurveFitter;
+
+       fitter->setFitMode(fitter->Auto);
+       fitter->setSplineSize(50);
+
+       courbe->setCurveFitter(fitter);
 
     courbe->setRawSamples(xValues.data(),yValues.data(),xValues.size());
     if(xValues.size() == 0) {
@@ -70,21 +78,6 @@ void GraphicView::calculateCurve(QTime maxTime) {
             yValues.append(d->value);
        // }
     }
-
- /*   xValues.append(0);
-    yValues.append(12);
-    xValues.append(10);
-    yValues.append(13);
-    xValues.append(30);
-    yValues.append(10);
-    xValues.append(60);
-    yValues.append(15);
-    xValues.append(180);
-    yValues.append(-9);
-    xValues.append(900);
-    yValues.append(-5);
-    xValues.append(3000);
-    yValues.append(2);*/
 }
 
 

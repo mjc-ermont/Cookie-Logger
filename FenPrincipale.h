@@ -5,7 +5,7 @@
 #include "ui_FenPrincipale.h"
 #include "ChronoReader/chronoreaderwidget.h"
 #include "InPut/sensormanager.h"
-#include "InPut/cookiedecoder.h"
+#include "InPut/yolodecoder.h"
 #include "InPut/serial.h"
 #include "UI/boardingtable.h"
 #include "UI/graphicview.h"
@@ -48,7 +48,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QTimer *actTemps;
         QTimer *resetIndicator;
 
-        CookieDecoder* myDecoder;
+        YoloDecoder* myDecoder;
         BoardingTable* tableauBord;
         MapsView* carte;
         TableMgr* tableManager;
@@ -71,7 +71,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
     public slots:
         void message(QString message);
         void requestAct();
-        void informationsReceived(QStringList);
+        void informationsReceived(QList<QByteArray>);
         void syncTime();
         void resetIndicatorRx();
         void setIndicatorRx();

@@ -74,14 +74,14 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     actTemps->start(1000);
 
 
-    myDecoder = new CookieDecoder();
+    myDecoder = new YoloDecoder();
     connect(myDecoder, SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
 
     message("[INFO] All started !");
 
 
 
-    connect(com,SIGNAL(dataRead(QStringList)),this,SLOT(informationsReceived(QStringList)));
+    connect(com,SIGNAL(dataRead(QList<QByteArray>)),this,SLOT(informationsReceived(QList<QByteArray>)));
     requestAct();
 
     #ifdef DEBUG
@@ -164,7 +164,7 @@ void FenPrincipale::syncTime() {
     lcd_sec->display(QString("%1").arg(s, 10, 10, QChar('0').toUpper()));
 }
 
-void FenPrincipale::informationsReceived(QStringList trames) {
+void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
     if(trames.size() > 0) {
         for(int i=0;i<trames.size();i++) {
             this->message("[DATA] " + trames[i]);

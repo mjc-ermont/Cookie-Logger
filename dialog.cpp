@@ -129,7 +129,8 @@ AskDialog::AskDialog()
 
     nItems++;
     selectEntry->addItem("Autre");
-    textEntry->setVisible(false);
+    if(nItems > 1)
+        textEntry->setVisible(false);
 }
 
 AskDialog::~AskDialog()

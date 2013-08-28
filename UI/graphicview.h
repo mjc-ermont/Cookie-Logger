@@ -8,17 +8,40 @@
 #include <Qwt/qwt_curve_fitter.h>
 #include <Qwt/qwt_legend.h>
 #include <Qwt/qwt_plot_zoomer.h>
+#include <Qwt/qwt_scale_draw.h>
 
 //#include <Donnees.h>
 #include <FenPrincipale.h>
 #include <InPut/sensorvalue.h>
 #include <InPut/sensor.h>
 
+
 class FenPrincipale;
 
 namespace Ui {
 class FenPrincipale;
 }
+
+
+class TimeScaleDraw: public QwtScaleDraw
+{
+public:
+    TimeScaleDraw(const QTime &base):
+        baseTime(base)
+    {
+    }
+    virtual QwtText label(double v) const
+    {
+        QTime upTime = baseTime.addSecs((int)v);
+        if((upTime.minute() == 0) && (upTime.hour() == 0))
+            return QString::number(upTime.second())+"s";
+        else
+            return QString::number(upTime.hour()*60+upTime.minute())+"m";
+    }
+private:
+    QTime baseTime;
+};
+
 
 class MyQwtPlotZoomer : public QwtPlotZoomer{
 public:

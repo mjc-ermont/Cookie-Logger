@@ -7,8 +7,8 @@ class YoloDecoder : public QObject
 {
 public:
     YoloDecoder();
-    QString splitCharacter();
-    void decodeString(QString &str);
+    static char splitCharacter();
+    void decodeString(QByteArray &str);
 
 signals:
     void newValue(int id_capteur, int id_valeur, double valeur);

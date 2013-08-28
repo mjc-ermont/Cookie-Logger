@@ -7,17 +7,15 @@ SensorManager::SensorManager(FenPrincipale* _parent) {
 }
 
 void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
+    qDebug() << "Valeur: " << valeur;
     if(id_capteur < sensorList.size()) {
         if(id_valeur < sensorList[id_capteur]->getValues().size()) {
-
-            // TODO: Parse equation.
-            valeur = valeur * sensorList[id_capteur]->getValues()[id_valeur]->getCoef();
 
             Data* d = sensorList[id_capteur]->getValues()[id_valeur]->addData(valeur);
             parent->getBT()->update(sensorList[id_capteur]->getValues()[id_valeur]);
 
             parent->setIndicatorRx();
-            getSensor(id_valeur)->getValues().at(id_capteur)->addData(valeur);
+            sensorList[id_capteur]->getValues().at(id_valeur)->addData(valeur);
 
             QString url = parent->dataServerLineEdit->text();
             QStringList split = url.split("||");

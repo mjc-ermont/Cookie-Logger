@@ -1,28 +1,29 @@
 <sensorlist>
-	<sensor name="GPS" id="0">
-		<value name="Longitude" unit="°" id="0" param="ymap" coef="0.00001"/>
-		<value name="Latitude" unit="°" id="1" param="xmap" coef="0.00001" />
-		<value name="Vitesse" unit="noeuds" id="2" />
-		<value name="Heure" unit="" id="3" />
-		<value name="Altitude" unit="" id="4" />
+	<sensor name="Humidité" id="0">
+		<value name="Valeur" unit="%" id="0" coef="160*x/255 - 25.6"/>
 	</sensor>
-	<sensor name="Accéléromètre" id="1">
-		<value name="Valeur" unit="" id="0" />	
+	<sensor name="Capteur 2" id="1">
+		<value name="Valeur" unit="" id="0" coef="x" />	
 	</sensor>
-	<sensor name="Humidité" id="2">
-		<value name="Humidité" unit="%" id="0" coef="0.01" />
-		<value name="Température" unit="°C" id="1" coef="0.01" />	
+	<sensor name="Capteur 3" id="2">
+		<value name="Valeur" unit="" id="0" coef="x"/>	
 	</sensor>
-	<sensor name="Pression" id="3">
-		<value name="Valeur" unit="hPa" id="0" />	
+	<sensor name="Capteur 4" id="3">
+		<value name="Valeur" unit="" id="0" coef="x"/>	
 	</sensor>
-	<sensor name="Température" id="4">
-		<value name="Valeur" unit="°C" id="0" coef="0.01" />	
+	<sensor name="Capteur 5" id="4">
+		<value name="Valeur" unit="" id="0" coef="x"/>	
 	</sensor>
-	<sensor name="Pile" id="5">
-		<value name="Tension" unit="V" id="0" coef="0.053763441"/>	
+	<sensor name="Capteur 6" id="5">
+		<value name="Valeur" unit="" id="0" coef="x"/>	
 	</sensor>
-	<sensor name="Pression Extérieure" id="6">
-		<value name="Valeur" unit="hPa" id="0" />	
+	<sensor name="Capteur 7" id="6">
+		<value name="Valeur" unit="" id="0" coef="x"/>	
+	</sensor>
+	<sensor name="Capteur 8" id="7">
+		<value name="Valeur" unit="" id="0" coef="x"/>	
+	</sensor>
+	<sensor name="Pile" id="8">
+		<value name="Tension" unit="" id="0" coef="x"/>	
 	</sensor>
 </sensorlist>

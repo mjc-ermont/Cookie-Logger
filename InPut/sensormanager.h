@@ -29,6 +29,7 @@ protected:
 private:
     QVector<Sensor*> sensorList;
     FenPrincipale* parent;
+    double valeur=0;
 
     Q_OBJECT
 };

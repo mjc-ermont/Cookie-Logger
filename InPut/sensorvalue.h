@@ -4,11 +4,11 @@
 #include <QString>
 #include <QVector>
 #include <defines.h>
-#include <muParser.h>
+#include <exprtk.hpp>
 
 #include "sensor.h"
 class Sensor;
-class SensorValue
+class SensorValue : public QObject
 {
 public:
     SensorValue(QString i_name, QString i_unit, int i_id,Sensor* i_parent, QString function="x", QString i_param="");
@@ -19,9 +19,7 @@ public:
     Sensor* getCapteur() {return parent;}
     double getCoef() { return coef;}
     QString getFunction() { return function;}
-    void setCoef(QString p_coef) {
-        parser.SetExpr(function.toStdString());
-        function=p_coef;}
+    void setCoef(QString p_coef) { function=p_coef;}
     QString getParam() { return param;}
 
     QString getUnit() { return unit;}
@@ -36,7 +34,11 @@ private:
     QString param;
     QVector<Data*> datalist;
     Sensor* parent;
-    mu::Parser parser;
+
+    exprtk::symbol_table<double> symbol_table;
+    exprtk::expression<double> expression;
+    exprtk::parser<double> parser;
+    double valeur=0;
 };
 
 #endif // VALUE_H

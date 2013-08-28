@@ -46,7 +46,7 @@ public slots:
     void readData();
 
 signals:
-    void dataRead(QStringList);
+    void dataRead(QList<QByteArray>);
 
 private:
     QString port;
@@ -57,7 +57,7 @@ private:
     DCB g_dcb;
 */
 
-    QString skipped_buf;
+    QByteArray skipped_buf;
 
     void setspeed(speed_t vitesse)
     {
