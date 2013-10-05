@@ -238,10 +238,10 @@ void Serial::readData() {
     QByteArray data(skipped_buf);
     for(int i=0;i<1024;i++) {
         data.append(buffer[i]);
-        qDebug() << "[" << buffer [i] << "]";
+    //    qDebug() << "[" << buffer [i] << "]";
     }
 
-    trames = data.split(0xFF);
+    trames = data.split('@');
 
     if(trames.last().size() < 10) {
         skipped_buf = trames.last();
