@@ -9,7 +9,8 @@ QString CookieDecoder::splitCharacter() {
     return "@";
 }
 
-void CookieDecoder::decodeString(QString &str) {
+void CookieDecoder::decodeString(QByteArray(&data)) {
+    QString str(data);
 
     QStringList elements = str.split("$");
     if(elements.size() < 6) {

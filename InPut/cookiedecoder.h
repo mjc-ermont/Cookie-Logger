@@ -11,7 +11,7 @@ class CookieDecoder : public QObject
 public:
     CookieDecoder();
     QString splitCharacter();
-    void decodeString(QString &str);
+    void decodeString(QByteArray &str);
 
 signals:
     void newValue(int id_capteur, int id_valeur, double valeur);

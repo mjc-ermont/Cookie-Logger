@@ -72,14 +72,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
     actTemps->start(1000);
 
-
-    reset_errors_timer = new QTimer();
-    connect(reset_errors_timer,SIGNAL(timeout()),this,SLOT(reset_error()));
-    reset_error();
-    reset_errors_timer->start(60000);
-
-
-    myDecoder = new YoloDecoder();
+    myDecoder = new CookieDecoder();
     connect(myDecoder, SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
     connect(myDecoder,SIGNAL(error_frame()), this, SLOT(error_frame()));
     message("[INFO] All started !");

@@ -28,7 +28,7 @@ SOURCES += \
     InPut/sensor.cpp \
     InPut/fileimportdialog.cpp \
     ChronoReader/chronoreaderwidget.cpp \
-    ChronoReader/TimeCalcs/timecalcs.cpp \
+    ChronoReader/TimeCalc/timecalcs.cpp \
     ChronoReader/eventbox.cpp \
     UI/graphicview.cpp \
     InPut/cookiedecoder.cpp \
@@ -47,7 +47,7 @@ HEADERS  += \
     InPut/sensor.h \
     InPut/fileimportdialog.h \
     ChronoReader/chronoreaderwidget.h \
-    ChronoReader/TimeCalcs/timecalcs.h \
+    ChronoReader/TimeCalc/timecalcs.h \
     ChronoReader/eventbox.h \
     UI/graphicview.h \
     InPut/cookiedecoder.h \
@@ -76,6 +76,5 @@ robotik {
 linusque {
     LIBS += /usr/lib/libqwt.so
     LIBS += -lqjson
-    LIBS += -lmuparser
 }
 
