@@ -10,7 +10,6 @@ class CookieDecoder : public QObject
 {
 public:
     CookieDecoder();
-    QString splitCharacter();
     void decodeString(QByteArray &str);
 
 signals:

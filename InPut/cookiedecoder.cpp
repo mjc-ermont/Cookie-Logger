@@ -5,9 +5,6 @@ CookieDecoder::CookieDecoder()
 
 }
 
-QString CookieDecoder::splitCharacter() {
-    return "@";
-}
 
 void CookieDecoder::decodeString(QByteArray(&data)) {
     QString str(data);

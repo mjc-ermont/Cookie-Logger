@@ -29,12 +29,12 @@ void MapsView::addPoint() {
 
 void MapsView::updateX(double x) {
     mX = x;
-    if((mX != 42)&&(mY != 42))
+    if((mX != 42)&&(mX != 99999999)&&(mY != 42)&&(mY != 99999999))
         addPoint();
 }
 
 void MapsView::updateY(double y) {
     mY = y;
-    if((mX != 42)&&(mY != 42))
+    if((mX != 42)&&(mX != 99999999)&&(mY != 42)&&(mY != 99999999))
         addPoint();
 }

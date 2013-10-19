@@ -166,12 +166,12 @@ void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
     if(trames.size() > 0) {
         for(int i=0;i<trames.size();i++) {
 
-            QString hex = "0x";
+         /*   QString hex = "0x";
             for(int j=0;j<trames[i].size();j++) {
                 hex += QString("%1").arg(trames[i].at(j)& 0xff, 2,16).toUpper();
             }
 
-            this->message("[DATA] " + hex);
+            this->message("[DATA] " + hex);*/
             myDecoder->decodeString(trames[i]);
           //  sensormgr->addData(trames[i]);
         }
