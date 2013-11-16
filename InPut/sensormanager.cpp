@@ -4,10 +4,14 @@
 SensorManager::SensorManager(FenPrincipale* _parent) {
     getSensorsFromFile();
     parent = _parent;
+
+    bdd = new DatabaseController();
 }
 
 void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
     qDebug() << "Valeur: " << valeur;
+    if(!bdd->isSetup())
+        bdd->setup();
     if(id_capteur < sensorList.size()) {
         if(id_valeur < sensorList[id_capteur]->getValues().size()) {
 
@@ -15,7 +19,9 @@ void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
             parent->getBT()->update(sensorList[id_capteur]->getValues()[id_valeur]);
 
             parent->setIndicatorRx();
-            sensorList[id_capteur]->getValues().at(id_valeur)->addData(valeur);
+            SensorValue *sv = sensorList[id_capteur]->getValues().at(id_valeur);
+            sv->addData(valeur);
+            bdd->write(sv,valeur);
 
             QString url = parent->dataServerLineEdit->text();
             QStringList split = url.split("||");

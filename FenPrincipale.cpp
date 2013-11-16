@@ -414,7 +414,7 @@ void FenPrincipale::on_heureLancement_timeChanged(const QTime &time)
     QFile file("conf/datedepart.ini");
     file.open(QIODevice::ReadWrite);
     file.resize(0);
-    file.write((QString::number(heureLancement->time().hour())+":"+QString::number(heureLancement->time().minute())+":"+QString::number(heureLancement->time().second())).toStdString().c_str());
+    file.write((QString::number(time.hour())+":"+QString::number(time.minute())+":"+QString::number(time.second())).toStdString().c_str());
     file.close();
 
 }
@@ -451,6 +451,7 @@ void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
 }
 
 bool FenPrincipale::eventFilter( QObject *o, QEvent *e ) {
+
     if ( e->type() == QEvent::KeyPress ) {
         QKeyEvent *k = (QKeyEvent *)e;
         if(position >= konami.size())

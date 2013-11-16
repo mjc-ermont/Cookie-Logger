@@ -11,7 +11,8 @@ void CookieDecoder::decodeString(QByteArray(&data)) {
 
     QStringList elements = str.split("$");
     if(elements.size() < 6) {
-         qDebug() << "Trame incomplete";
+        if(elements.size()>1)
+            qDebug() << "Trame incomplete";
         return;
     }
 

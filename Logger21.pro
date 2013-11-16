@@ -32,7 +32,8 @@ SOURCES += \
     ChronoReader/eventbox.cpp \
     UI/graphicview.cpp \
     InPut/cookiedecoder.cpp \
-    InPut/yolodecoder.cpp
+    InPut/yolodecoder.cpp \
+    InPut/databasecontroller.cpp
 
 HEADERS  += \
     tablemgr.h \
@@ -51,7 +52,8 @@ HEADERS  += \
     ChronoReader/eventbox.h \
     UI/graphicview.h \
     InPut/cookiedecoder.h \
-    InPut/yolodecoder.h
+    InPut/yolodecoder.h \
+    InPut/databasecontroller.h
 
 FORMS += \
     FenPrincipale.ui \

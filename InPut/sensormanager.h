@@ -9,10 +9,11 @@
 #include "serialdecoder.h"
 #include <QHttp>
 #include <QUrl>
+#include "databasecontroller.h"
 
 class FenPrincipale;
 class Sensor;
-
+class DatabaseController;
 
 class SensorManager : public QObject
 {
@@ -29,6 +30,7 @@ protected:
 private:
     QVector<Sensor*> sensorList;
     FenPrincipale* parent;
+    DatabaseController* bdd;
     double valeur=0;
 
     Q_OBJECT

@@ -6,7 +6,7 @@ TableMgr::TableMgr(QVector<QTableView*> *tab_historique)
 }
 
 void TableMgr::addData(SensorValue *valeur) {
-    SensorManager* sensormgr = valeur->getCapteur()->getParent();
+   // SensorManager* sensormgr = valeur->getCapteur()->getParent();
     int idcapteur = valeur->getCapteur()->getId();
     int idvaleur = valeur->getID();
 

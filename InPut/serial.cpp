@@ -228,7 +228,7 @@ void Serial::readData() {
         buffer[i] = 0x00;
 
     nb_read = read(tty_fd, buffer, 1024);
-    int eol=0;
+    //int eol=0;
 
     /*for(int i=0;(i<1024)&&(eol==0);++i)
         if(buffer[i] == 0x00)
@@ -257,6 +257,7 @@ void Serial::readData() {
 
 bool Serial::OpenCOM(int nId) {
 
+    return true;
 }
 
 bool Serial::CloseCOM()
