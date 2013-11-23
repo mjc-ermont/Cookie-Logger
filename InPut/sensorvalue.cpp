@@ -21,7 +21,7 @@ Data* SensorValue::addData(double d, bool parse) {
     valeur = d;
 
     Data *newData = new Data;
-    newData->time = QTime::currentTime();
+    newData->time = QDateTime::currentDateTime();
 
     parser.compile(function.toStdString(),expression);
     if(parse)

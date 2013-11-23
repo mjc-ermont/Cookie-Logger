@@ -82,7 +82,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     connect(com,SIGNAL(dataRead(QList<QByteArray>)),this,SLOT(informationsReceived(QList<QByteArray>)));
     requestAct();
 
-    h_depart = QTime::currentTime();
+    h_depart = QDateTime::currentDateTime();
     chronoWidget = new ChronoReaderWidget;
     chronolayout->addWidget(chronoWidget);
 
@@ -384,18 +384,18 @@ void FenPrincipale::on_actualizeTableButton_clicked()
     if(check_all_values->isChecked()) {
         //TODO: Travailler
     } else {
-        QTime start = time_start->time();
+       /* QTime start = time_start->time();
         QTime end   =   time_end->time();
 
-        if(TimeCalcs::toMs(start) < TimeCalcs::toMs(end)) {
-            start = TimeCalcs::fromMs(TimeCalcs::toMs(start) + TimeCalcs::toMs(h_depart));
-            end   = TimeCalcs::fromMs(TimeCalcs::toMs(end) + TimeCalcs::toMs(h_depart));
+        if(start.toMSecsSinceEpoch() < end.toMSecsSinceEpoch()) {
+            start = start + h_depart;
+            end   = end + h_depart;
             tableManager->actualisay(start,end,sensormgr);
         } else {
             start = TimeCalcs::fromMs(TimeCalcs::toMs(QTime::currentTime()) - TimeCalcs::toMs(time_start->time()));
             end   = TimeCalcs::fromMs(TimeCalcs::toMs(QTime::currentTime()) - TimeCalcs::toMs(time_end->time()));
             tableManager->actualisay(start,end,sensormgr);
-        }
+        } TODO: BOSSER*/
     }
 }
 

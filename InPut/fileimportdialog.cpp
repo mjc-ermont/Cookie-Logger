@@ -30,7 +30,7 @@ void FileImportDialog::on_buttonBox_accepted() {
             int numCapteur = spl.at(0).toInt();
             int numValeur = spl.at(1).toInt();
             double valeur = spl.at(2).toDouble();
-            QTime t = QTime::fromString(spl.at(3));
+            QDateTime t = QDateTime::fromString(spl.at(3),"yyyy-MM-dd hh:mm:ss");
             qDebug() << "c: " << numCapteur << " v:" << numValeur << " vv:"<<valeur;
             if(m_parent->getSensorMgr()->getSensors().size() > numCapteur)
             {

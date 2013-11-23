@@ -36,14 +36,14 @@ void TableMgr::addData(SensorValue *valeur) {
     }
 }
 
-void TableMgr::actualisay(QTime start,QTime end,SensorManager* sensormgr) {
+void TableMgr::actualisay(QDateTime start,QDateTime end,SensorManager* sensormgr) {
     // C'est parti, mon kiki.
     for(int i_capteur=0;i_capteur<sensormgr->getSensors().size();i_capteur++) {
 
         for(int i_valeur=0;i_valeur<sensormgr->getSensor(i_capteur)->getValues().size();i_valeur++) {
             QVector<Data*> d = sensormgr->getSensor(i_capteur)->getValues()[i_valeur]->getData();
             for(int i_data=0;i_data<d.size();i_data++) {
-               if((TimeCalcs::toMs(d[i_data]->time) > TimeCalcs::toMs(start))&&(TimeCalcs::toMs(d[i_data]->time) < TimeCalcs::toMs(end))) {
+                if((d[i_data]->time.toMSecsSinceEpoch() > start.toMSecsSinceEpoch())&&(d[i_data]->time.toMSecsSinceEpoch() < end.toMSecsSinceEpoch())) {
                    if(i_valeur==0) {
                        QList<QStandardItem*> items;
                        for(int i=0;i<sensormgr->getSensor(i_capteur)->getValues().size();i++) {

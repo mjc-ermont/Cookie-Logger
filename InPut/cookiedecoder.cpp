@@ -22,7 +22,7 @@ void CookieDecoder::decodeString(QByteArray(&data)) {
     qDebug() << "Trame:" << str;
     qDebug() << "CS: "<< QString(checkSum).toInt(NULL, 10) << " | "  << elements[4].toInt(NULL, 16) ;
 
-    bool checkLeSum = true;
+    bool checkLeSum = false;
     int numCapteur = elements[1].toInt();
     double valeur = elements[3].toDouble();
     int numValeur = elements[2].toInt();

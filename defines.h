@@ -30,7 +30,7 @@
 #define MAX_WAIT_READ 5000 /* temps max d'attente pour lecture (en ms) */
 
 typedef struct Data_ {
-    QTime time;
+    QDateTime time;
     double value;
 } Data;
 

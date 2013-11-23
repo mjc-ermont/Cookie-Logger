@@ -28,7 +28,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
     public:
         explicit FenPrincipale(Serial *com);
         ~FenPrincipale();
-        QTime getDepart() { return h_depart;}
+        QDateTime getDepart() { return h_depart;}
 
         BoardingTable* getBT() {return tableauBord;}
         SensorManager* getSensorMgr(){return sensormgr; }
@@ -60,7 +60,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QVector<QTableView*> tableauxHist;
         QVector<QPair<GraphicView*,QMdiSubWindow*> > graphiques;
 
-        QTime h_depart;
+        QDateTime h_depart;
         bool optimisation_graph;
         int nbSensors;
 
