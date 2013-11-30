@@ -22,6 +22,7 @@ public:
     Sensor* getSensor(int id);
     QVector<Sensor*> getSensors() {return sensorList;}
     FenPrincipale* getParent(){return parent;}
+    DatabaseController* getDB() { return bdd;}
 
 public slots:
     void newValue(int id_capteur, int id_valeur, double valeur);

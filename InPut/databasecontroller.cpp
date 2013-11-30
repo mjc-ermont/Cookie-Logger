@@ -17,12 +17,18 @@ void DatabaseController::run() {
             QString idv = req.at(2);
 
             if(req.at(0) == "get") {
-                if(req.size() < 5)
+                if(req.size() < 7)
                     break;
                 QString from = req.at(3);
                 QString to = req.at(4);
+                qDebug() << req.at(6);
+                bool last = req.at(6) == "1";
+                QSqlQuery rep;
+                if(!last)
+                    rep = db.exec("SELECT value,time FROM data WHERE sensor=\""+idc+"\" AND sensorvalue=\""+idv+"\" AND time>\""+from+"\" AND time<\""+to+"\"");
+                else
+                    rep = db.exec("SELECT value,time FROM data WHERE sensor=\""+idc+"\" AND sensorvalue=\""+idv+"\" ORDER BY time DESC LIMIT 0,1");
 
-                QSqlQuery rep = db.exec("SELECT value,time FROM data WHERE sensor=\""+idc+"\" AND sensorvalue=\""+idv+"\" AND time>\""+from+"\" AND time<\""+to+"\"");
                 QVector<Data> dataset;
                 qDebug() << "READ";
                 while(rep.next()) {
@@ -36,8 +42,9 @@ void DatabaseController::run() {
                     qDebug() << "[" << time.toString("yyyy-MM-dd hh:mm:ss") << "|" << value << "]";
                 }
                 qDebug() << "FINREAD";
+                qDebug() << "req=" << req.at(5) << ";" << last;
 
-                emit dataRead(idc.toInt(),idv.toInt(),dataset);
+                emit dataRead(idc.toInt(),idv.toInt(),dataset,req.at(5));
             } else if(req.at(0) == "set") {
                 QString value = req.at(3);
 
@@ -52,8 +59,8 @@ void DatabaseController::run() {
 void DatabaseController::write(int idc, int idv, double v) {
     work.push_back("set;"+QString::number(idc)+";"+QString::number(idv)+";"+QString::number(v));
 }
-void DatabaseController::read(int idc, int idv, QDateTime from, QDateTime to) {
-    work.push_back("get;"+QString::number(idc)+";"+QString::number(idv)+";"+from.toString("yyyy-MM-dd hh:mm:ss")+";"+to.toString("yyyy-MM-dd hh:mm:ss"));
+void DatabaseController::read(int idc, int idv, QDateTime from, QDateTime to,QString reason,bool last) {
+    work.push_back("get;"+QString::number(idc)+";"+QString::number(idv)+";"+from.toString("yyyy-MM-dd hh:mm:ss")+";"+to.toString("yyyy-MM-dd hh:mm:ss")+";"+reason+(last==true?";1":";0"));
 }
 
 void DatabaseController::setup() {

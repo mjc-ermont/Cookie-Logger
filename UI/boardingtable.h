@@ -18,7 +18,8 @@ public:
     ~BoardingTable();
 
     void init(SensorManager* );
-    void update(SensorValue *sv);
+    void update(int idc, int idv, double value);
+    void requestUpdate(SensorValue *value);
 
 private:
     QGridLayout *m_container;

@@ -36,8 +36,8 @@ void FileImportDialog::on_buttonBox_accepted() {
             {
                 if(m_parent->getSensorMgr()->getSensor(numCapteur)->getValues().size() > numValeur) {
 
-                    Data* d = m_parent->getSensorMgr()->getSensor(numCapteur)->getValues().at(numValeur)->addData(valeur);
-                    d->time = t;
+                   // Data* d = m_parent->getSensorMgr()->getSensor(numCapteur)->getValues().at(numValeur)->addData(valeur);
+                  //  d->time = t;
                 } else {
                     qDebug() << "bad id value";
                 }
@@ -50,7 +50,7 @@ void FileImportDialog::on_buttonBox_accepted() {
     }
 
     for(int i=0; i<m_parent->getSensorMgr()->getSensors().size();i++) {
-        m_parent->getBT()->update(m_parent->getSensorMgr()->getSensors().at(i)->getValues().at(0));
+        m_parent->getBT()->requestUpdate(m_parent->getSensorMgr()->getSensors().at(i)->getValues().at(0));
     }
 
 }

@@ -96,6 +96,8 @@ class GraphicView : public QwtPlot
         void majData(QTime n_duration);
         void majData();
 
+
+        void setData(QVector<Data> i_data) { data = i_data; majCurve();}
         int getCapteur() { return m_capteur; }
         int getValeur () { return m_valeur ; }
     protected:
@@ -114,6 +116,7 @@ class GraphicView : public QwtPlot
 
         QVector<double> xValues;
         QVector<double> yValues;
+        QVector<Data>   data;
 
         SensorValue *value;
         QTime duration;

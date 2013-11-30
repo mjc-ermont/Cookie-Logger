@@ -48,8 +48,10 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
         t->setModel(modele);
     }
+    qRegisterMetaType<QVector<Data> > ("QVector<Data>");
+    connect(sensormgr->getDB(),SIGNAL(dataRead(int,int,QVector<Data>,QString)), this,SLOT(data_read(int,int,QVector<Data>,QString)));
 
-    tableManager = new TableMgr(&tableauxHist);
+    tableManager = new TableMgr(&tableauxHist,sensormgr);
     carte = new MapsView(c_maps);
 
 
@@ -183,17 +185,38 @@ void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
     }
 }
 
+void FenPrincipale::data_read(int idc, int idv, QVector<Data> data, QString reason) {
+
+    qDebug() << "data read "<< idc << ";" << idv  << ";" << reason;
+    if(reason == "graph") {
+        for(int i=0;i<graphiques.size();i++) {
+            GraphicView* g = graphiques.at(i).first;
+            if(g->getCapteur() == idc && g->getValeur() == idv) {
+                g->setData(data);
+            }
+        }
+    } else if(reason == "bt") {
+        this->getBT()->update(idc,idv,data.last().value);
+    } else if(reason == "map") {
+
+    } else if(reason == "tab") {
+        this->getTableMgr()->actualisay(idc,idv,data);
+    } else {
+        qDebug() << "couille dans le paté";
+    }
+}
+
 void FenPrincipale::reset_error() {//TODO: Ne pas hardcoder ça.
-    this->sensormgr->getSensor(9)->getValues().at(0)->addData(0);
-    this->getBT()->update(this->sensormgr->getSensor(9)->getValues().at(0));
+    //this->sensormgr->getSensor(9)->getValues().at(0)->addData(0);
+   // this->getBT()->update(this->sensormgr->getSensor(9)->getValues().at(0));
 }
 
 void FenPrincipale::error_frame() {
-    SensorValue* sv =  this->sensormgr->getSensor(9)->getValues().at(0);
+  /*  SensorValue* sv =  this->sensormgr->getSensor(9)->getValues().at(0);
     Data* d = sv->getData().last();
     d->value++;
     this->getBT()->update(sv);
-    this->message("[ERROR] Checksum failed.");
+    this->message("[ERROR] Checksum failed.");*/
 }
 
 void FenPrincipale::setIndicatorRx() {
@@ -382,20 +405,9 @@ void FenPrincipale::on_btn_optimiser_clicked()
 void FenPrincipale::on_actualizeTableButton_clicked()
 {
     if(check_all_values->isChecked()) {
-        //TODO: Travailler
+        tableManager->requestActualization(QDateTime::fromMSecsSinceEpoch(0),QDateTime::currentDateTime());
     } else {
-       /* QTime start = time_start->time();
-        QTime end   =   time_end->time();
-
-        if(start.toMSecsSinceEpoch() < end.toMSecsSinceEpoch()) {
-            start = start + h_depart;
-            end   = end + h_depart;
-            tableManager->actualisay(start,end,sensormgr);
-        } else {
-            start = TimeCalcs::fromMs(TimeCalcs::toMs(QTime::currentTime()) - TimeCalcs::toMs(time_start->time()));
-            end   = TimeCalcs::fromMs(TimeCalcs::toMs(QTime::currentTime()) - TimeCalcs::toMs(time_end->time()));
-            tableManager->actualisay(start,end,sensormgr);
-        } TODO: BOSSER*/
+        tableManager->requestActualization(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
     }
 }
 

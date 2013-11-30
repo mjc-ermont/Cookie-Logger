@@ -20,7 +20,7 @@ class DatabaseController : public QThread
         void setup();
 
         void write(int idc, int idv, double v);
-        void read(int idc, int idv, QDateTime from, QDateTime to);
+        void read(int idc, int idv, QDateTime from, QDateTime to, QString reason="", bool last=false);
 
     private:
         QSqlDatabase db;
@@ -28,7 +28,7 @@ class DatabaseController : public QThread
 
     signals:
         void dataWritten(int idc, int idv);
-        void dataRead(int idc, int idv, QVector<Data>);
+        void dataRead(int idc, int idv, QVector<Data> data, QString reason);
 };
 
 #endif // DATABASECONTROLLER_H

@@ -38,12 +38,12 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
 }
 
 void GraphicView::majData() {
-    majCurve();
+    value->getData("graph",false,QDateTime::currentDateTime().addMSecs(-TimeCalcs::toMs(duration)));
 }
 
 void GraphicView::majData(QTime n_duration) {
     duration=n_duration;
-    majCurve();
+    majData();
 }
 
 void GraphicView::majCurve() {
@@ -72,10 +72,11 @@ void GraphicView::majCurve() {
 void GraphicView::calculateCurve(QTime maxTime) {
     yValues.clear();
     xValues.clear();
-    foreach(Data *d, value->getData()) {
+
+    foreach(Data d, data) {
        // if(QTime(0,0).secsTo(d->time) >=  maxTime.secsTo(QTime::currentTime())) {
-            xValues.append(m_parent->getDepart().secsTo(d->time));
-            yValues.append(d->value);
+            xValues.append(m_parent->getDepart().secsTo(d.time));
+            yValues.append(d.value);
        // }
     }
 }

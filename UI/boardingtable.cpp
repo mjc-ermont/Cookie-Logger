@@ -45,9 +45,12 @@ void BoardingTable::init(SensorManager* mgr) {
     }
 }
 
-void BoardingTable::update(SensorValue* newSV) {
-    QGridLayout* layout = capteurs_layouts[newSV->getCapteur()->getId()];
-    QLCDNumber *lcd = (QLCDNumber*)layout->itemAtPosition(newSV->getID(),1)->widget();
-    double v =(newSV->getData()[newSV->getData().size()-1])->value;
-    lcd->display(QString::number(v));
+void BoardingTable::requestUpdate(SensorValue* value) {
+    value->getData("bt",1);
+}
+
+void BoardingTable::update(int idc, int idv, double value) {
+    QGridLayout* layout = capteurs_layouts[idc];
+    QLCDNumber *lcd = (QLCDNumber*)layout->itemAtPosition(idv,1)->widget();
+    lcd->display(QString::number(value));
 }

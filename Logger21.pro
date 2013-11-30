@@ -23,9 +23,7 @@ SOURCES += \
     UI/mapsview.cpp \
     UI/boardingtable.cpp \
     InPut/serial.cpp \
-    InPut/sensorvalue.cpp \
     InPut/sensormanager.cpp \
-    InPut/sensor.cpp \
     InPut/fileimportdialog.cpp \
     ChronoReader/chronoreaderwidget.cpp \
     ChronoReader/TimeCalc/timecalcs.cpp \
@@ -33,7 +31,9 @@ SOURCES += \
     UI/graphicview.cpp \
     InPut/cookiedecoder.cpp \
     InPut/yolodecoder.cpp \
-    InPut/databasecontroller.cpp
+    InPut/databasecontroller.cpp \
+    InPut/sensor.cpp \
+    InPut/sensorvalue.cpp
 
 HEADERS  += \
     tablemgr.h \

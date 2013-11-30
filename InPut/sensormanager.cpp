@@ -16,13 +16,12 @@ void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
     if(id_capteur < sensorList.size()) {
         if(id_valeur < sensorList[id_capteur]->getValues().size()) {
 
-            Data* d = sensorList[id_capteur]->getValues()[id_valeur]->addData(valeur);
-            parent->getBT()->update(sensorList[id_capteur]->getValues()[id_valeur]);
+            sensorList[id_capteur]->getValues()[id_valeur]->addData(valeur);
+            parent->getBT()->requestUpdate(sensorList[id_capteur]->getValues()[id_valeur]);
 
             parent->setIndicatorRx();
             SensorValue *sv = sensorList[id_capteur]->getValues().at(id_valeur);
             sv->addData(valeur);
-            bdd->write(id_capteur,id_valeur,valeur);
 
             QString url = parent->dataServerLineEdit->text();
             QStringList split = url.split("||");

@@ -16,34 +16,30 @@ SensorValue::SensorValue(QString i_name, QString i_unit, int i_id, Sensor *i_par
     expression.register_symbol_table(symbol_table);
 }
 
-Data* SensorValue::addData(double d, bool parse) {
+void SensorValue::addData(double d, bool parse) {
  //   parser.DefineVar("x", &d);
     valeur = d;
 
-    Data *newData = new Data;
-    newData->time = QDateTime::currentDateTime();
+    Data newData;
+    newData.time = QDateTime::currentDateTime();
 
     parser.compile(function.toStdString(),expression);
     if(parse)
-        newData->value =  expression.value();
+        newData.value =  expression.value();
     else
-        newData->value=d;
-    qDebug() << "v: " << d << " parser: " << newData->value;
-   /* try {
-        newData->value = parser.Eval();
-    }
-    catch (mu::Parser::exception_type &e)
-    {
-        string_type& s = e.GetMsg();
-        str.
-        qDebug() << "uluru:" << ;
-    }*/
-    datalist.append(newData);
+        newData.value=d;
+    qDebug() << "v: " << d << " parser: " << newData.value;
+
+    parent->getParent()->getDB()->write(parent->getId(),id,valeur);
 
     if(param == "xmap") {
         parent->getParent()->getParent()->getMap()->updateX(d);
     } else if(param == "ymap") {
         parent->getParent()->getParent()->getMap()->updateY(d);
     }
-    return newData;
 }
+
+void SensorValue::getData(QString reason, bool last, QDateTime from, QDateTime to) {
+    parent->getParent()->getDB()->read(parent->getId(),id,from,to,reason, last);
+}
+
