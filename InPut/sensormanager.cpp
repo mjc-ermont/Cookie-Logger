@@ -20,8 +20,6 @@ void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
             parent->getBT()->requestUpdate(sensorList[id_capteur]->getValues()[id_valeur]);
 
             parent->setIndicatorRx();
-            SensorValue *sv = sensorList[id_capteur]->getValues().at(id_valeur);
-            sv->addData(valeur);
 
             QString url = parent->dataServerLineEdit->text();
             QStringList split = url.split("||");

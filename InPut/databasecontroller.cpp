@@ -49,7 +49,7 @@ void DatabaseController::run() {
                 QString value = req.at(3);
 
                 db.exec("INSERT INTO data (sensor,sensorvalue,value,time) VALUES (\""+idc+"\",\""+idv+"\",\""+value+"\",\""+QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+"\")");
-                qDebug() << "written";
+                qDebug() << "INSERT (" << idc << ";" << idv<<") " << value << " [" << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss") << "]";
                 emit dataWritten(idc.toInt(),idv.toInt());
             }
         }
