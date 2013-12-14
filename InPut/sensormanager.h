@@ -32,7 +32,7 @@ private:
     QVector<Sensor*> sensorList;
     FenPrincipale* parent;
     DatabaseController* bdd;
-    double valeur=0;
+    double valeur;
 
     Q_OBJECT
 };

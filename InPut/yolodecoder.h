@@ -15,8 +15,8 @@ signals:
     void error_frame();
 private:
     QByteArray tramePrecedente;
-    int nTrameRepeat=1;
-    bool trameValidee=false;
+    int nTrameRepeat;
+    bool trameValidee;
 
     Q_OBJECT
 

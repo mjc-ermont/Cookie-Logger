@@ -36,7 +36,7 @@ private:
     exprtk::symbol_table<double> symbol_table;
     exprtk::expression<double> expression;
     exprtk::parser<double> parser;
-    double valeur=0;
+    double valeur;
 };
 
 #endif // VALUE_H

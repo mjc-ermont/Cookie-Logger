@@ -65,9 +65,9 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         int nbSensors;
 
         QList<int> konami;
-        int position=0;
+        int position;
         QWebView *kwebview;
-        int n=0;
+        int n;
 
     public slots:
         void data_read(int idc, int idv, QVector<Data> data, QString reason);

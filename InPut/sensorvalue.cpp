@@ -9,6 +9,8 @@ SensorValue::SensorValue(QString i_name, QString i_unit, int i_id, Sensor *i_par
     function = i_function;
     param = i_param;
 
+    valeur = 0;
+
   //  parser.SetExpr(function.toStdString());
     symbol_table.add_constants();
     symbol_table.add_variable("x",valeur);

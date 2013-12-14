@@ -372,15 +372,15 @@
                   <day>1</day>
                  </datetime>
                 </property>
-                <property name="currentSection">
-                 <enum>QDateTimeEdit::HourSection</enum>
-                </property>
                 <property name="time">
                  <time>
                   <hour>0</hour>
                   <minute>10</minute>
                   <second>0</second>
                  </time>
+                </property>
+                <property name="currentSection">
+                 <enum>QDateTimeEdit::HourSection</enum>
                 </property>
                </widget>
               </item>
@@ -552,7 +552,7 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5">
+         <layout class="QGridLayout" name="gridLayout_51">
           <item row="0" column="0">
            <layout class="QVBoxLayout" name="p_konami_layout"/>
           </item>

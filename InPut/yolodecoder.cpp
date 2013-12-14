@@ -3,6 +3,8 @@
 
 YoloDecoder::YoloDecoder()
 {
+    nTrameRepeat=1;
+    trameValidee=false;
 }
 
 char YoloDecoder::splitCharacter() {

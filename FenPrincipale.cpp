@@ -2,7 +2,8 @@
 #include "InPut/fileimportdialog.h"
 
 FenPrincipale::FenPrincipale(Serial* _com) {
-
+    position=0;
+    n=0;
     com = _com;
     optimisation_graph = false;
     setupUi(this);
