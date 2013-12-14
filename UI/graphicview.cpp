@@ -27,11 +27,10 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
     courbe = new QwtPlotCurve("Courbe");
     courbe->setStyle(QwtPlotCurve::Lines);
     courbe->setPen(QPen(QBrush(Qt::black),2));
-   // if(parent->interpol_curve->isChecked())
-        courbe->setCurveAttribute(QwtPlotCurve::Fitted);
+   /* if(parent->interpol_curve->isChecked())
+        courbe->setCurveAttribute(QwtPlotCurve::Fitted);*/
 
     setWindowTitle(value->getCapteur()->getName() + " - " + value->getName());
-
     duration = QTime(0,5,0);
     courbe->attach(this);
     majCurve();

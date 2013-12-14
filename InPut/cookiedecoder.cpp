@@ -29,7 +29,6 @@ void CookieDecoder::decodeString(QByteArray(&data)) {
 
 
     if(((QString(checkSum).toInt(NULL, 10) == elements[4].toInt(NULL, 16))||(!checkLeSum))&&((numCapteur!=precIdCapteur)||(precIdValeur!=numValeur))){
-
         emit newValue(numCapteur, numValeur, valeur);
 
         precIdCapteur=numCapteur;
