@@ -22,7 +22,7 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
     this->setAxisScaleDraw(QwtPlot::xBottom, new TimeScaleDraw(QTime(0,0)));
     this->setAxisTitle(QwtPlot::yLeft, value->getName());
 
-    zoomer = new MyQwtPlotZoomer(this->canvas());
+    zoomer = new MyQwtPlotZoomer(this->canvas(),this);
 
     courbe = new QwtPlotCurve("Courbe");
     courbe->setStyle(QwtPlotCurve::Lines);
@@ -60,12 +60,20 @@ void GraphicView::majCurve() {
         return;
     }
 
-    double min = xValues.at(xValues.size()-1)-duration.hour()*3600 - duration.minute()* 60-duration.second();
-    min = min < 0.0 ? 0 : min;
-    this->setAxisScale(QwtPlot::xBottom, min, xValues.at(xValues.size()-1));
+    this->setAxisScale(QwtPlot::xBottom, getMin(), getMax());
    // this->setAxisAutoScale(QwtPlot::xBottom, false);
    // this->setAxisScale(, 42, 142);
     replot();
+}
+
+double GraphicView::getMin() {
+    double min = xValues.at(xValues.size()-1)-duration.hour()*3600 - duration.minute()* 60-duration.second();
+    min = min < 0.0 ? 0 : min;
+    return min;
+}
+
+double GraphicView::getMax() {
+    return xValues.at(xValues.size()-1);
 }
 
 void GraphicView::calculateCurve(QTime maxTime) {

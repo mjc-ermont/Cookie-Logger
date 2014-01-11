@@ -237,6 +237,7 @@ void Serial::readData() {
 
     QByteArray data(skipped_buf);
     for(int i=0;i<1024;i++) {
+
         data.append(buffer[i]);
     }
 
@@ -247,7 +248,6 @@ void Serial::readData() {
         trames.removeLast();
     }
 
-   // qDebug() << "Data read" << trames;
     qDebug() << "===== fin lecture série =====";
     emit dataRead(trames);
 }

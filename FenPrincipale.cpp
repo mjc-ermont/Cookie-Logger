@@ -432,7 +432,7 @@ void FenPrincipale::on_heureLancement_timeChanged(const QTime &time)
 
 }
 
-void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
+void FenPrincipale::on_horizontalSlider_valueChanged(int position)
 {
     int heures = 0;
     int minutes = 0;
@@ -700,4 +700,9 @@ void FenPrincipale::optimise_graph() {
             graphiques[i].second->setGeometry(col * (colSize / colNb),row * (rowSize / rowNb), (colSize / colNb) * colStretch, (rowSize / rowNb) * rowStretch);
     }
 
+}
+
+void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
+{
+    this->on_horizontalSlider_valueChanged(position);
 }
