@@ -32,7 +32,7 @@ void SensorValue::addData(double d, bool parse) {
         newData.value=d;
     qDebug() << "v: " << d << " parser: " << newData.value;
 
-    parent->getParent()->getDB()->write(parent->getId(),id,valeur);
+    parent->getParent()->getDB()->write(parent->getId(),id,newData.value);
 
     if(param == "xmap") {
         parent->getParent()->getParent()->getMap()->updateX(d);
