@@ -6,33 +6,6 @@ TableMgr::TableMgr(QVector<QTableView*> *tab_historique, SensorManager *sensormg
       sensormgr = sensormgr_;
 }
 
-void TableMgr::addData(SensorValue *valeur) {
-   // SensorManager* sensormgr = valeur->getCapteur()->getParent();
-  /*  int idcapteur = valeur->getCapteur()->getId();
-    int idvaleur = valeur->getID();
-
-    while(line.size() <= idcapteur) {
-        QVector<QString> v;
-        v.push_back("null");
-        line.push_back(v);
-        bef_line.push_back(v);
-    }
-
-    while(line[idcapteur].size() <= idvaleur+1) {
-        line[idcapteur].push_back("null");
-        bef_line[idcapteur].push_back("null");
-    }
-
-    line[idcapteur][idvaleur+1] = QString::number(valeur->getData().last()->value);
-    line[idcapteur][0] = valeur->getData().last()->time.toString();
-
-
-
-    if(lineFull(idcapteur)) {
-        update(idcapteur);*/
-        qDebug() << "test";
-   // }
-}
 
 void TableMgr::requestActualization(QDateTime start,QDateTime end) {
     for(int i_capteur=0;i_capteur<sensormgr->getSensors().size();i_capteur++) {
@@ -47,7 +20,7 @@ void TableMgr::actualisay(int idc, int idv, QVector<Data> data) {
     for(int i_data=0;i_data<data.size();i_data++) {
        if(idv==0) {
            QList<QStandardItem*> items;
-           for(int i=0;i<sensormgr->getSensor(idc)->getValues().size();i++) {
+           for(int i=0;i<=sensormgr->getSensor(idc)->getValues().size();i++) {
                QStandardItem* curElement  = new QStandardItem;
 
                curElement->setText("nul");
@@ -58,11 +31,17 @@ void TableMgr::actualisay(int idc, int idv, QVector<Data> data) {
        }
 
        QString dataValue = QString::number(data[i_data].value);
+       QString dataTime  = data[i_data].time.toString("dd/MM/yy hh:mm:ss");
        QStandardItemModel* curModel = ((QStandardItemModel*)m_tab_historique->at(idc)->model());
-       QStandardItem* item = curModel->item(i_data,idv);
+       QStandardItem* itemValue = curModel->item(i_data,idv);
+       QStandardItem* itemTime  = curModel->item(i_data,sensormgr->getSensor(idc)->getValues().size());
 
-       if(item != NULL)
-            item->setText(dataValue);
+       if(itemValue != NULL)
+            itemValue->setText(dataValue);
+
+       if(itemTime != NULL) {
+           itemTime->setText(dataTime);
+       }
     }
 
     if(idv == sensormgr->getSensor(idc)->getValues().size()-1) {

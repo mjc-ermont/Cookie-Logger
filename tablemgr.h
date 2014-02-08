@@ -13,7 +13,6 @@ class TableMgr
 {
 public:
     TableMgr(QVector<QTableView*>* tab_historique, SensorManager* sensormgr_i);
-    void addData(SensorValue *valeur);
     void addData(SensorValue *valeur,int index,QTime start, QTime end);
     void actualisay(int idc, int idv, QVector<Data> data);
     void requestActualization(QDateTime start, QDateTime end);

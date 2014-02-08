@@ -46,7 +46,8 @@ FenPrincipale::FenPrincipale(Serial* _com) {
             modele->setHorizontalHeaderItem(v,new QStandardItem(s->getName()));
             v++;
         }
-
+        modele->setHorizontalHeaderItem(v,new QStandardItem("Temps"));
+        t->horizontalHeader()->setStretchLastSection(true);
         t->setModel(modele);
     }
     qRegisterMetaType<QVector<Data> > ("QVector<Data>");
