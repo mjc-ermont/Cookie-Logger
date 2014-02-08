@@ -4,7 +4,7 @@
 		<value name="Latitude" unit="°" id="1" param="xmap" coef="0.00001x" />
 		<value name="Vitesse" unit="km/h" id="2" coef="0.01851999999984x" />
 		<value name="Heure" unit="" id="3" />
-		<value name="Altitude" unit="m" id="4" coef="0.01"/>
+		<value name="Altitude" unit="m" id="4" coef="0.01x"/>
 	</sensor>
 	<sensor name="Accéléromètre" id="1">
 		<value name="Valeur" unit="" id="0" />	
