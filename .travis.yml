@@ -3,5 +3,6 @@ compiler : gcc
 before_script:
   - sudo apt-get update
   - sudo apt-get install qt4-dev-tools libqjson-dev
-  - cd ChronoReader && git pull origin master && git submodule init && git submodule update && cd ..
+  - cd ChronoReader && git pull origin master && git submodule init && git submodule update && cd .. && git clone git://gitorious.org/qt/qtserialport.git && qmake qtserialport.pro && make && sudo make install
+
 script : qmake Logger21.pro && make
