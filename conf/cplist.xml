@@ -2,9 +2,9 @@
 	<sensor name="GPS" id="0">
 		<value name="Longitude" unit="°" id="0" param="ymap" coef="0.00001x"/>
 		<value name="Latitude" unit="°" id="1" param="xmap" coef="0.00001x" />
-		<value name="Vitesse" unit="noeuds" id="2" />
+		<value name="Vitesse" unit="km/h" id="2" coef="0.01851999999984x" />
 		<value name="Heure" unit="" id="3" />
-		<value name="Altitude" unit="" id="4" />
+		<value name="Altitude" unit="m" id="4" coef="0.01x"/>
 	</sensor>
 	<sensor name="Accéléromètre" id="1">
 		<value name="Valeur" unit="" id="0" />	
@@ -26,5 +26,3 @@
 		<value name="Valeur" unit="hPa" id="0" coef="((x*107.4396437)+11336.0291415)/100" />	
 	</sensor>
 </sensorlist>
-
-<!--  -->
