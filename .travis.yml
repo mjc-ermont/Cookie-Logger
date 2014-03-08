@@ -2,5 +2,5 @@ language : cpp
 compiler : gcc
 before_script:
   - sudo apt-get update
-  - sudo apt-get install qt4-dev-tools
+  - sudo apt-get install qt4-dev-tools libqjson-dev
 script : qmake Logger21.pro && make
