@@ -65,7 +65,7 @@ FORMS += \
 RESOURCES += \
     res.qrc
 
-CONFIG += linusque
+CONFIG += linusque serialport
 
 lucas {
     LIBS += C:\QtSDK\Desktop\Qt\4.8.1\mingw\lib\libqwtd.a

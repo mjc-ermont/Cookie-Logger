@@ -110,6 +110,9 @@ private slots:
         void on_konami_4_clicked();
         void on_konami_close_clicked() ;
         void on_horizontalSlider_valueChanged(int value);
+        void on_actionHaut_parleurs_toggled(bool arg1);
+        void on_action137050_triggered();
+        void on_action137500_triggered();
 };
 
 #endif // FENPRINCIPALE_H

@@ -23,22 +23,22 @@
 #include <pthread.h>
 
 
+#include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
+
 class Serial : public QThread
 {
     Q_OBJECT
 
 public:
-    Serial(QString _port="/dev/TTYUSB0",speed_t _baudrate=B600,QThread * parent = 0);
+    Serial(QString _port="TTYUSB0",qint32 _baudrate=600,QThread * parent = 0);
     ~Serial();
     void run();
     bool init();
     static QString toString(QByteArray str);
 
-protected:
-    bool OpenCOM (int nId);
-    bool CloseCOM ();
-    bool ReadCOM (void* buffer, int nBytesToRead, int* pBytesRead);
-    bool WriteCOM (void* buffer, int nBytesToWrite, int* pBytesWritten);
+    void setChannel(int id);
+    void setSpeakersEnabled(bool enabled);
 
 
 public slots:
@@ -50,27 +50,19 @@ signals:
 
 private:
     QString port;
-/*
-    HANDLE g_hCOM;
-    COMMTIMEOUTS g_cto;
+    bool speakers_enabled;
+    int current_channel;
 
-    DCB g_dcb;
-*/
+    QSerialPort* serial_port;
 
     QByteArray skipped_buf;
 
-    void setspeed(speed_t vitesse)
-    {
-      cfsetospeed(&tio, vitesse);
-      cfsetispeed(&tio, vitesse);
-      tcsetattr(tty_fd,TCSANOW,&tio);
-    }
 
     int nb_read;
     unsigned char buffer[1024];
     struct termios tio;
     int tty_fd;
-    speed_t baudrate;
+    qint32 baudrate;
 
 };
 

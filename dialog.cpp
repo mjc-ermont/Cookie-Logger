@@ -40,7 +40,7 @@ static void register_comport( list<string>& comList, list<string>& comList8250, 
 
     // Skip devices without a driver
     if (driver.size() > 0) {
-        string devfile = string("/dev/") + basename(dir.c_str());
+        string devfile = basename(dir.c_str());
 
         // Put serial8250-devices in a seperate list
         if (driver == "serial8250") {
@@ -148,21 +148,8 @@ void AskDialog::continueClicked()
         port = selectEntry->currentText();
 
     Serial* com;
-    switch (baudrate->currentText().toInt()) {
-    case 600:
-        com = new Serial(port, B600);
-        break;
-    case 4800:
-        com = new Serial(port, B4800);
-        break;
-    case 9600:
-        com = new Serial(port, B9600);
-        break;
-    case 57600:
-    default:
-        com = new Serial(port, B57600);
-        break;
-    }
+    com = new Serial(port, baudrate->currentText().toInt());
+
 
 
     com->start();

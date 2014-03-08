@@ -562,6 +562,16 @@
       </item>
      </layout>
     </item>
+    <item>
+     <widget class="QFrame" name="frame_4">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QStatusBar" name="barreStatus"/>
@@ -574,15 +584,24 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFichier">
+   <widget class="QMenu" name="menuLogger">
     <property name="title">
-     <string>Fichier</string>
+     <string>Logger</string>
     </property>
+    <widget class="QMenu" name="menuFrequence">
+     <property name="title">
+      <string>Fréquence</string>
+     </property>
+     <addaction name="action137050"/>
+     <addaction name="action137500"/>
+    </widget>
     <addaction name="actionOuvrir"/>
+    <addaction name="menuFrequence"/>
+    <addaction name="actionHaut_parleurs"/>
     <addaction name="separator"/>
     <addaction name="actionQuitter"/>
    </widget>
-   <addaction name="menuFichier"/>
+   <addaction name="menuLogger"/>
   </widget>
   <action name="actionQuitter">
    <property name="text">
@@ -595,6 +614,33 @@
   <action name="actionOuvrir">
    <property name="text">
     <string>Ouvrir</string>
+   </property>
+  </action>
+  <action name="action137500">
+   <property name="text">
+    <string>137.500 MHz</string>
+   </property>
+  </action>
+  <action name="action137050">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>137.050 MHz</string>
+   </property>
+  </action>
+  <action name="actionHaut_parleurs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Haut-parleurs</string>
    </property>
   </action>
  </widget>

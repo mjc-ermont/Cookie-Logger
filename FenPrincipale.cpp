@@ -5,6 +5,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     position=0;
     n=0;
     com = _com;
+
     optimisation_graph = false;
     setupUi(this);
 
@@ -21,6 +22,15 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     settings->setAttribute (QWebSettings::PluginsEnabled, true);
     settings->setAttribute(QWebSettings::JavascriptEnabled, true);
     settings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+
+    QActionGroup* group = new QActionGroup( this );
+
+    this->action137050->setCheckable(true);
+    this->action137500->setCheckable(true);
+    this->action137500->setChecked(true);
+
+    this->action137050->setActionGroup(group);
+    this->action137500->setActionGroup(group);
 
     this->setFocusPolicy(Qt::StrongFocus);
     kwebview = new QWebView();
@@ -39,8 +49,6 @@ FenPrincipale::FenPrincipale(Serial* _com) {
         tab_historique->addTab(t,sensormgr->getSensor(i)->getName());
 
         QStandardItemModel *modele = new QStandardItemModel;
-       // int v=1;
-       // modele->setHorizontalHeaderItem(0,new QStandardItem("Temps"));
         int v=0;
         foreach(SensorValue* s,  sensormgr->getSensor(i)->getValues()) {
             modele->setHorizontalHeaderItem(v,new QStandardItem(s->getName()));
@@ -118,6 +126,20 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     p.setColor(QPalette::Disabled, QPalette::Background, QColor(255,0,0));
     indicator_rx->setPalette(p);
 
+}
+
+void FenPrincipale::on_actionHaut_parleurs_toggled(bool arg1) {
+    com->setSpeakersEnabled(arg1);
+}
+
+void FenPrincipale::on_action137050_triggered()
+{
+    com->setChannel(21);
+}
+
+void FenPrincipale::on_action137500_triggered()
+{
+    com->setChannel(30);
 }
 
 FenPrincipale::~FenPrincipale(){
@@ -707,3 +729,5 @@ void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
 {
     this->on_horizontalSlider_valueChanged(position);
 }
+
+
