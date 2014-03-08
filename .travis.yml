@@ -3,5 +3,5 @@ compiler : gcc
 before_script:
   - sudo apt-get update
   - sudo apt-get install qt4-dev-tools libqjson-dev
-  - cd ChronoReader && git submodule init && git submodule update && cd TimeCalc && git submodule init && git submodule update && cd
+  - git submodule init && git submodule update && cd ChronoReader && git submodule init && git submodule update && cd
 script : qmake Logger21.pro && make
