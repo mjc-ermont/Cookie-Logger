@@ -6,7 +6,7 @@ git submodule init &&
 git submodule update &&
 cd .. &&
 
-if [$OS -eq "LINUX"]
+if [ $OS == "LINUX" ];
 then
 	sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev &&
 	git clone git://gitorious.org/qt/qtserialport.git &&
@@ -17,7 +17,7 @@ then
 	cd ..
 	qmake Logger21.pro &&
 	make
-elif [$OS -eq "WIN"]
+elif [ $OS == "WIN" ];
 then
 	git clone https://github.com/mxe/mxe.git &&
 	cd mxe &&
@@ -29,4 +29,4 @@ then
 	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
 	mxe/usr/i686-pc-mingw32/qt/bin/qmake Logger21.pro &&
 	make
-
+fi
