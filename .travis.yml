@@ -5,6 +5,6 @@ before_script:
 
 script : build.sh
 env :
-	matrix :
-		- OS=LINUX
-		- OS=WIN
+  matrix :
+    - OS=LINUX
+    - OS=WIN
