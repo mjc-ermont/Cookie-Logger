@@ -19,7 +19,7 @@ then
 	make
 elif [ $OS == "WIN" ];
 then
-	sudo apt-get install autopoint
+	sudo apt-get install autopoint libtool
 	git clone https://github.com/mxe/mxe.git &&
 	cd mxe &&
 	make qt &&
