@@ -22,10 +22,7 @@ then
 	sudo apt-get install autopoint intltool
 	git clone https://github.com/mxe/mxe.git &&
 	cd mxe &&
-	make qt &&
-	make qwt &&
-	make qjson &&
-	make qtserialport &&	
+	make --jobs=8 qt qwt qjson qtserialport &&
 	cd .. &&
 	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
 	mxe/usr/i686-pc-mingw32/qt/bin/qmake Logger21.pro &&
