@@ -33,7 +33,9 @@ SOURCES += \
     InPut/yolodecoder.cpp \
     InPut/databasecontroller.cpp \
     InPut/sensor.cpp \
-    InPut/sensorvalue.cpp
+    InPut/sensorvalue.cpp \
+    balaifrequenciel.cpp \
+    UI/histogram.cpp
 
 HEADERS  += \
     tablemgr.h \
@@ -53,14 +55,17 @@ HEADERS  += \
     UI/graphicview.h \
     InPut/cookiedecoder.h \
     InPut/yolodecoder.h \
-    InPut/databasecontroller.h
+    InPut/databasecontroller.h \
+    balaifrequenciel.h \
+    UI/histogram.h
 
 FORMS += \
     FenPrincipale.ui \
     dialog.ui \
     InPut/fileimportdialog.ui \
     ChronoReader/chronoreaderwidget.ui \
-    ChronoReader/eventbox.ui
+    ChronoReader/eventbox.ui \
+    balaifrequenciel.ui
 
 RESOURCES += \
     res.qrc

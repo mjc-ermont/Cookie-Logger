@@ -5,6 +5,7 @@
 #include "ui_dialog.h"
 #include "InPut/serial.h"
 #include "FenPrincipale.h"
+#include "QtSerialPort/QSerialPort"
 
 class AskDialog : public QDialog, public Ui::Dialog
 {

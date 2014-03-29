@@ -3,12 +3,13 @@
 
 
 
-#include <Qwt/qwt_plot.h>
-#include <Qwt/qwt_plot_curve.h>
-#include <Qwt/qwt_curve_fitter.h>
-#include <Qwt/qwt_legend.h>
-#include <Qwt/qwt_plot_zoomer.h>
-#include <Qwt/qwt_scale_draw.h>
+#include <qwt/qwt_plot_canvas.h>
+#include <qwt/qwt_plot.h>
+#include <qwt/qwt_plot_curve.h>
+#include <qwt/qwt_curve_fitter.h>
+#include <qwt/qwt_legend.h>
+#include <qwt/qwt_plot_zoomer.h>
+#include <qwt/qwt_scale_draw.h>
 
 #include <FenPrincipale.h>
 #include <InPut/sensorvalue.h>

@@ -10,6 +10,7 @@
 #include "UI/boardingtable.h"
 #include "UI/graphicview.h"
 #include "UI/mapsview.h"
+#include "balaifrequenciel.h"
 #include "defines.h"
 #include "tablemgr.h"
 
@@ -113,6 +114,7 @@ private slots:
         void on_actionHaut_parleurs_toggled(bool arg1);
         void on_action137050_triggered();
         void on_action137500_triggered();
+        void on_actionBalayage_frequentiel_triggered();
 };
 
 #endif // FENPRINCIPALE_H

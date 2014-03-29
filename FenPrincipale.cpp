@@ -86,7 +86,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
     myDecoder = new CookieDecoder();
     connect(myDecoder, SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
-    connect(myDecoder,SIGNAL(error_frame()), this, SLOT(error_frame()));
+    //connect(myDecoder,SIGNAL(error_frame()), this, SLOT(error_frame()));
     message("[INFO] All started !");
 
 
@@ -153,8 +153,31 @@ void FenPrincipale::resizeEvent(QResizeEvent *) {
 }
 
 void FenPrincipale::requestAct() {
-    if(get_infos->isChecked())
-        com->readData();
+ /*   if(get_infos->isChecked())
+        com->readData();*/
+}
+
+
+class BalayageDialog : QDialog {
+public:
+    BalayageDialog(BalaiFrequenciel* b);
+    void show();
+};
+
+BalayageDialog::BalayageDialog(BalaiFrequenciel* b) {
+    QGridLayout *layout = new QGridLayout;
+    layout->addWidget(b);
+    setLayout(layout);
+}
+
+void BalayageDialog::show() {
+    QDialog::show();
+}
+
+void FenPrincipale::on_actionBalayage_frequentiel_triggered()
+{
+    BalayageDialog* tamer = new BalayageDialog(new BalaiFrequenciel(com,this));
+    tamer->show();
 }
 
 void FenPrincipale::syncTime() {

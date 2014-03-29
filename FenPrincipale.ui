@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>792</width>
-    <height>702</height>
+    <height>718</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -601,7 +601,29 @@
     <addaction name="separator"/>
     <addaction name="actionQuitter"/>
    </widget>
+   <widget class="QMenu" name="menuS_rie">
+    <property name="title">
+     <string>Série</string>
+    </property>
+    <widget class="QMenu" name="menuPort">
+     <property name="title">
+      <string>Port</string>
+     </property>
+     <addaction name="actionTodo_bosser"/>
+    </widget>
+    <widget class="QMenu" name="menuBaudrate">
+     <property name="title">
+      <string>Baudrate</string>
+     </property>
+     <addaction name="actionTodo_bosser_2"/>
+    </widget>
+    <addaction name="menuPort"/>
+    <addaction name="menuBaudrate"/>
+    <addaction name="separator"/>
+    <addaction name="actionBalayage_frequentiel"/>
+   </widget>
    <addaction name="menuLogger"/>
+   <addaction name="menuS_rie"/>
   </widget>
   <action name="actionQuitter">
    <property name="text">
@@ -641,6 +663,21 @@
    </property>
    <property name="text">
     <string>Haut-parleurs</string>
+   </property>
+  </action>
+  <action name="actionBalayage_frequentiel">
+   <property name="text">
+    <string>Balayage fréquentiel</string>
+   </property>
+  </action>
+  <action name="actionTodo_bosser">
+   <property name="text">
+    <string>Todo: bosser</string>
+   </property>
+  </action>
+  <action name="actionTodo_bosser_2">
+   <property name="text">
+    <string>Todo: bosser</string>
    </property>
   </action>
  </widget>
