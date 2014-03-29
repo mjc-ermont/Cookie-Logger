@@ -64,62 +64,57 @@ void Serial::setSpeakersEnabled(bool enabled) {
  //  }
 }
 
-QVector<double> Serial::balayageFrequenciel() {
+void Serial::balayageFrequenciel() {
     qDebug() << "Balayage en cours";
 
     doingBalayage = true;
-    QVector<double> data;
 
-    int nvalues = 9;
 
     QString str = "$S";
     str = str+  QChar(0x0D) + QChar(0x0A);
     serial_port->write(str.toStdString().c_str());
-    bool finished = false;
+    serial_port->waitForBytesWritten(2000);
+    data.clear();
 
-    QByteArray buffer;
-    QByteArray data_read;
-
-    QList<QByteArray> content;
-
-    QTime time;
     time.start();
-
-
-    while(!finished) {
-        if(serial_port->bytesAvailable() > 0) {
-            data_read = serial_port->readAll();
-            qDebug() << "read:";
-            qDebug() << data_read;
-        }
-
-        buffer.append(data_read);
-        content = buffer.split('#');
-
-        if(content.last().size() < 2) {
-            buffer = content.last();
-            content.removeLast();
-        }
-
-        for(int i=0;i<content.size();i++)
-            data.append((content.at(i).toDouble()));
-
-        if(data.size() >= nvalues) {
-            finished = true;
-        } else if(time.elapsed() > 15000) {
-            finished = true;
-            qDebug() << " timeout";
-        }
-    }
-
-    doingBalayage = false;
-    qDebug() << "fin balayage";
-    return data;
 }
 
+void Serial::readDataBalayage() {
+    int nvalues = 9;
+
+
+    data_read = serial_port->readAll();
+    qDebug() << "read:";
+    qDebug() << data_read;
+
+    balayage_buffer.append(data_read);
+    content = balayage_buffer.split('#');
+
+    if(content.last().size() < 2) {
+        balayage_buffer = content.last();
+        content.removeLast();
+    }
+
+    for(int i=0;i<content.size();i++)
+        data.append((content.at(i).toDouble()));
+
+    if(data.size() >= nvalues) {
+        doingBalayage = false;
+        emit balayageDone(data);
+    } else if(time.elapsed() > 5000) {
+        doingBalayage = false;
+        emit balayageDone(data);
+        qDebug() << " timeout";
+    }
+}
+
+
+
 void Serial::readData() {
-    if(doingBalayage)
+    if(doingBalayage) {
+        readDataBalayage();
         return;
+    }
 
   //  qDebug("l");
     QList<QByteArray> trames;

@@ -34,13 +34,19 @@ BalaiFrequenciel::BalaiFrequenciel(Serial *com_, QWidget *parent) :
     histogram = new Histogram("",Qt::red);
     histogram->attach(this);
     replot();
+    connect(com, SIGNAL(balayageDone(QVector<double>)), this, SLOT(balayageDone(QVector<double>)));
 
     startBalayage();
+
+
+}
+
+void BalaiFrequenciel::balayageDone(QVector<double> values) {
+    setData(values);
 }
 
 void BalaiFrequenciel::startBalayage() {
-    QVector<double> values = com->balayageFrequenciel();
-    setData(values);
+    com->balayageFrequenciel();
 }
 
 void BalaiFrequenciel::setData(QVector<double> values) {

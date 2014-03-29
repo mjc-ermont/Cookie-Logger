@@ -22,8 +22,8 @@ public:
 
     void setChannel(int id);
     void setSpeakersEnabled(bool enabled);
-    QVector<double> balayageFrequenciel();
-
+    void balayageFrequenciel();
+    void readDataBalayage();
 
 public slots:
 
@@ -31,8 +31,17 @@ public slots:
 
 signals:
     void dataRead(QList<QByteArray>);
+    void balayageDone(QVector<double>);
 
 private:
+
+    QByteArray balayage_buffer;
+    QByteArray data_read;
+    QList<QByteArray> content;
+    QVector<double> data;
+    QTime time;
+
+
     QString port;
     bool speakers_enabled;
     int current_channel;

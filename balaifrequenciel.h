@@ -19,7 +19,10 @@ public:
     ~BalaiFrequenciel();
     void startBalayage();
     void setData(QVector<double> values);
-    
+
+public slots:
+    void balayageDone(QVector<double> values);
+
 private:
     Serial* com;
     Histogram* histogram;
