@@ -1,0 +1,10 @@
+language : cpp
+compiler : gcc
+before_script:
+  - sudo apt-get update
+
+script : ./build.sh
+env :
+  matrix :
+    - OS=LINUX
+    - OS=WIN
