@@ -115,6 +115,9 @@ private slots:
         void on_action137050_triggered();
         void on_action137500_triggered();
         void on_actionBalayage_frequentiel_triggered();
+        void on_action600_triggered();
+        void on_action9600_triggered();
+        void on_action57600_triggered();
 };
 
 #endif // FENPRINCIPALE_H

@@ -609,13 +609,14 @@
      <property name="title">
       <string>Port</string>
      </property>
-     <addaction name="actionTodo_bosser"/>
     </widget>
     <widget class="QMenu" name="menuBaudrate">
      <property name="title">
       <string>Baudrate</string>
      </property>
-     <addaction name="actionTodo_bosser_2"/>
+     <addaction name="action600"/>
+     <addaction name="action9600"/>
+     <addaction name="action57600"/>
     </widget>
     <addaction name="menuPort"/>
     <addaction name="menuBaudrate"/>
@@ -675,9 +676,19 @@
     <string>Todo: bosser</string>
    </property>
   </action>
-  <action name="actionTodo_bosser_2">
+  <action name="action600">
    <property name="text">
-    <string>Todo: bosser</string>
+    <string>600</string>
+   </property>
+  </action>
+  <action name="action9600">
+   <property name="text">
+    <string>9600</string>
+   </property>
+  </action>
+  <action name="action57600">
+   <property name="text">
+    <string>57600</string>
    </property>
   </action>
  </widget>

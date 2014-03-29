@@ -72,11 +72,6 @@
      </item>
      <item>
       <property name="text">
-       <string>4800</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string>9600</string>
       </property>
      </item>

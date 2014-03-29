@@ -25,6 +25,9 @@ public:
     void balayageFrequenciel();
     void readDataBalayage();
 
+    void setBaudrate(qint32 bd);
+    qint32 getBaudrate();
+
 public slots:
 
     void readData();

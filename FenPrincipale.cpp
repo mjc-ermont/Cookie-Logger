@@ -32,6 +32,29 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     this->action137050->setActionGroup(group);
     this->action137500->setActionGroup(group);
 
+    QActionGroup* group_ports = new QActionGroup( this );
+
+    this->action600->setCheckable(true);
+    this->action9600->setCheckable(true);
+    this->action57600->setCheckable(true);
+    switch(com->getBaudrate()) {
+        case 600:
+            this->action600->setChecked(true);
+            break;
+        case 9600:
+            this->action9600->setChecked(true);
+            break;
+        case 57600:
+            this->action57600->setChecked(true);
+            break;
+    }
+
+    this->action137500->setChecked(true);
+
+    this->action600->setActionGroup(group_ports);
+    this->action9600->setActionGroup(group_ports);
+    this->action57600->setActionGroup(group_ports);
+
     this->setFocusPolicy(Qt::StrongFocus);
     kwebview = new QWebView();
     p_konami_layout->addWidget(kwebview);
@@ -132,19 +155,24 @@ void FenPrincipale::on_actionHaut_parleurs_toggled(bool arg1) {
     com->setSpeakersEnabled(arg1);
 }
 
-void FenPrincipale::on_action137050_triggered()
-{
-    com->setChannel(21);
-}
 
-void FenPrincipale::on_action137500_triggered()
-{
-    com->setChannel(30);
-}
-
-FenPrincipale::~FenPrincipale(){
+void FenPrincipale::on_action600_triggered() {
+    com->setBaudrate(600);
 
 }
+
+void FenPrincipale::on_action57600_triggered() {
+    com->setBaudrate(57600);
+}
+
+void FenPrincipale::on_action9600_triggered() {
+    com->setBaudrate(9600);
+}
+
+void FenPrincipale::on_action137050_triggered() {com->setChannel(21);}
+void FenPrincipale::on_action137500_triggered(){ com->setChannel(30);}
+
+FenPrincipale::~FenPrincipale(){}
 
 void FenPrincipale::resizeEvent(QResizeEvent *) {
     if(optimisation_graph)
@@ -752,5 +780,6 @@ void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
 {
     this->on_horizontalSlider_valueChanged(position);
 }
+
 
 

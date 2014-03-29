@@ -64,6 +64,14 @@ void Serial::setSpeakersEnabled(bool enabled) {
  //  }
 }
 
+qint32 Serial::getBaudrate() {
+    return serial_port->baudRate();
+}
+
+void Serial::setBaudrate(qint32 bd) {
+    serial_port->setBaudRate(bd);
+}
+
 void Serial::balayageFrequenciel() {
     qDebug() << "Balayage en cours";
 
