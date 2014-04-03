@@ -19,7 +19,7 @@ then
 	make
 elif [ $OS == "WIN" ];
 then
-	sudo apt-get install autopoint intltool liblzma-dev &
+	sudo apt-get install autopoint intltool liblzma-dev &&
 	wget https://dl.dropboxusercontent.com/s/bhhvvbmfzy207rp/mxe.tar.xz && 
 	git clone https://github.com/jnovy/pxz && 
 	cd pxz && 
