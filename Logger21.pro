@@ -72,14 +72,6 @@ RESOURCES += \
 
 CONFIG += linusque serialport
 
-lucas {
-    LIBS += C:\QtSDK\Desktop\Qt\4.8.1\mingw\lib\libqwtd.a
-}
-
-robotik {
-    LIBS += C:\qwt-6.0.1\lib\libqwtd.a
-}
-
 linusque {
     LIBS += -lqwt
     LIBS += -lqjson
