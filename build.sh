@@ -19,6 +19,7 @@ then
 	make
 elif [ $OS == "WIN" ];
 then
+	sudo apt-get install autopoint intltool liblzma-dev &
 	wget https://dl.dropboxusercontent.com/s/bhhvvbmfzy207rp/mxe.tar.xz && 
 	git clone https://github.com/jnovy/pxz && 
 	cd pxz && 
@@ -27,7 +28,6 @@ then
 	cd .. &&
 	pxz mxe -d mxe.tar.xz &&
 	tar -zf mxe.tar &&
-	sudo apt-get install autopoint intltool &&
 	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
 	mxe/usr/i686-pc-mingw32/qt/bin/qmake Logger21.pro &&
 	make
