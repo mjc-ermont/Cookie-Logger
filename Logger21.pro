@@ -81,7 +81,7 @@ robotik {
 }
 
 linusque {
-    LIBS += /usr/lib/libqwt.so
+    LIBS += -lqwt
     LIBS += -lqjson
 }
 
