@@ -28,6 +28,8 @@ then
 	cd .. &&
 	pxz -d mxe.tar.xz &&
 	tar -xf mxe.tar &&
+	ls
+	pwd
 	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
 	mxe/usr/i686-pc-mingw32/qt/bin/qmake Logger21.pro &&
 	make
