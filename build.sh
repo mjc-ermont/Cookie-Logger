@@ -29,7 +29,7 @@ then
 	pxz -d mxe.tar.xz &&
 	tar xf mxe.tar &&
 	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
-	export QMAKESPEC="" &&
+	export QMAKESPEC=$TRAVIS_BUILD_DIR/mxe/usr/i686-w64-mingw32.shared/qt/mkspecs/win32-g++ &&
 	mxe/usr/i686-w64-mingw32.shared/qt/bin/qmake Logger21.pro &&
 	make
 fi
