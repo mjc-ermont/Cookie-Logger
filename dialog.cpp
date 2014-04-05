@@ -11,19 +11,12 @@ AskDialog::AskDialog()
     connect(pushButton,SIGNAL(clicked()),this,SLOT(continueClicked()));
     fen=NULL;
 
-    list<QString> l;
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-        l.push_back(info.portName());
+    QStringList portList = Serial::getPortList();
+
+    for(int i=0;i<portList.size();i++) {
+        selectEntry->addItem(portList.at(i));
+        nItems++;
     }
-
-
-   list<QString>::iterator it = l.begin();
-   while (it != l.end()) {
-       selectEntry->addItem(*it);
-       it++;
-       nItems++;
-   }
-
 
     nItems++;
     selectEntry->addItem("Autre");

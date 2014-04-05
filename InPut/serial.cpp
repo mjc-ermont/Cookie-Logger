@@ -64,13 +64,36 @@ void Serial::setSpeakersEnabled(bool enabled) {
  //  }
 }
 
+
+QStringList Serial::getPortList() {
+    QStringList portlist;
+    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+        portlist.push_back(info.portName());
+    }
+    return portlist;
+}
+
 qint32 Serial::getBaudrate() {
     return serial_port->baudRate();
 }
 
+
+
 void Serial::setBaudrate(qint32 bd) {
     serial_port->setBaudRate(bd);
 }
+
+void Serial::setPort(QString port) {
+    serial_port->setPortName(port);
+    serial_port->close();
+    serial_port->open(QIODevice::ReadWrite);
+
+}
+
+QString Serial::getPort() {
+    return serial_port->portName();
+}
+
 
 void Serial::balayageFrequenciel() {
     qDebug() << "Balayage en cours";

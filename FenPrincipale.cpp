@@ -55,6 +55,9 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     this->action9600->setActionGroup(group_ports);
     this->action57600->setActionGroup(group_ports);
 
+
+    group_ports_name = new QActionGroup( this );
+
     this->setFocusPolicy(Qt::StrongFocus);
     kwebview = new QWebView();
     p_konami_layout->addWidget(kwebview);
@@ -149,30 +152,49 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     p.setColor(QPalette::Disabled, QPalette::Background, QColor(255,0,0));
     indicator_rx->setPalette(p);
 
-}
-
-void FenPrincipale::on_actionHaut_parleurs_toggled(bool arg1) {
-    com->setSpeakersEnabled(arg1);
-}
-
-
-void FenPrincipale::on_action600_triggered() {
-    com->setBaudrate(600);
+    connect(this->menuPort, SIGNAL( aboutToShow()), this, SLOT( updatePortListMenu()));
 
 }
 
-void FenPrincipale::on_action57600_triggered() {
-    com->setBaudrate(57600);
-}
+void FenPrincipale::on_actionHaut_parleurs_toggled(bool arg1) {com->setSpeakersEnabled(arg1);}
 
-void FenPrincipale::on_action9600_triggered() {
-    com->setBaudrate(9600);
-}
 
+void FenPrincipale::on_action600_triggered() { com->setBaudrate(600);}
+void FenPrincipale::on_action57600_triggered() {com->setBaudrate(57600);}
+void FenPrincipale::on_action9600_triggered() {com->setBaudrate(9600);}
 void FenPrincipale::on_action137050_triggered() {com->setChannel(21);}
 void FenPrincipale::on_action137500_triggered(){ com->setChannel(30);}
 
 FenPrincipale::~FenPrincipale(){}
+
+
+void FenPrincipale::portTriggered() {
+    QObject* sender = QObject::sender();
+    QAction* act = qobject_cast<QAction*>(sender);
+    if(act) {
+        com->setPort(act->data().toString());
+        qDebug() << "Set port:" << act->data().toString();
+    }
+}
+
+
+void FenPrincipale::updatePortListMenu() {
+    this->menuPort->clear();
+    QStringList portList = Serial::getPortList();
+    for(int i=0;i<portList.size();i++) {
+        QString cur_port = portList.at(i);
+        QAction* portAction = new QAction(cur_port,this);
+        portAction->setData(QVariant(cur_port));
+        portAction->setCheckable(true);
+        group_ports_name->addAction(portAction);
+
+        if(com->getPort() == cur_port) {
+            portAction->setChecked(true);
+        }
+        connect(portAction,SIGNAL(triggered()),this,SLOT(portTriggered()));
+        this->menuPort->addAction(portAction);
+    }
+}
 
 void FenPrincipale::resizeEvent(QResizeEvent *) {
     if(optimisation_graph)

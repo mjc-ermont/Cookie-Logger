@@ -26,7 +26,12 @@ public:
     void readDataBalayage();
 
     void setBaudrate(qint32 bd);
+    void setPort(QString port);
     qint32 getBaudrate();
+    QString getPort();
+
+
+    static QStringList getPortList();
 
 public slots:
 

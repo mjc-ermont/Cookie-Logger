@@ -37,6 +37,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         TableMgr* getTableMgr() {return tableManager;}
         void konamify(bool enable);
 
+
     protected:
         void reinit_b();
         void resizeEvent(QResizeEvent *);
@@ -55,6 +56,8 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         MapsView* carte;
         TableMgr* tableManager;
 
+        QActionGroup* group_ports_name;
+
         SensorManager *sensormgr;
         ChronoReaderWidget* chronoWidget;
 
@@ -71,6 +74,8 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         int n;
 
     public slots:
+        void updatePortListMenu();
+        void portTriggered();
         void data_read(int idc, int idv, QVector<Data> data, QString reason);
 
         void error_frame();
