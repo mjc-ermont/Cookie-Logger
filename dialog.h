@@ -6,6 +6,7 @@
 #include "InPut/serial.h"
 #include "FenPrincipale.h"
 #include "QtSerialPort/QSerialPort"
+#include <QSettings>
 
 class AskDialog : public QDialog, public Ui::Dialog
 {
@@ -20,6 +21,9 @@ private slots:
     void on_selectEntry_currentIndexChanged(const QString &arg1);
 private:
     FenPrincipale* fen;
+
+
+    QSettings* settings;
     int nItems;
 };
 
