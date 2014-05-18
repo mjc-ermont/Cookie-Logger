@@ -1,7 +1,6 @@
 #include "dialog.h"
 
 using namespace std;
-
 AskDialog::AskDialog()
 {
     setupUi(this);
@@ -29,6 +28,8 @@ AskDialog::AskDialog()
     selectEntry->addItem("Autre");
     if(nItems > 1)
         textEntry->setVisible(false);
+    else
+        textEntry->setVisible(true);
 }
 
 AskDialog::~AskDialog()
