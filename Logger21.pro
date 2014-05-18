@@ -70,10 +70,15 @@ FORMS += \
 RESOURCES += \
     res.qrc
 
-CONFIG += linusque serialport
+CONFIG += windauws serialport
 
 linusque {
     LIBS += -lqwt
     LIBS += -lqjson
 }
 
+windauws {
+    LIBS += C:\Qwt-6.0.1\lib\libqwtd.a
+    LIBS += C:\qjson\lib\libqjson.dll.a
+    INCLUDEPATH += C:\Qwt-6.0.1\include C:\qjson\include
+}
