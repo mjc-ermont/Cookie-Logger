@@ -8,7 +8,7 @@ cd .. &&
 
 if [ $OS == "LINUX" ];
 then
-	sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev gperf &&
+	sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev &&
 	git clone git://gitorious.org/qt/qtserialport.git &&
 	cd qtserialport &&
 	qmake qtserialport.pro &&
@@ -19,7 +19,7 @@ then
 	make
 elif [ $OS == "WIN" ];
 then
-	sudo apt-get install autopoint intltool &&
+	sudo apt-get install autopoint intltool gperf &&
 	git clone https://github.com/mxe/mxe.git &&
 	cd mxe &&
 	curl http://arthurtoussaint.free.fr/qtserialport.patch | patch -p1
