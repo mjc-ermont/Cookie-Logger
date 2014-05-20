@@ -8,7 +8,7 @@ cd .. &&
 
 if [ $OS == "LINUX" ];
 then
-	sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev &&
+	sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev gperf &&
 	git clone git://gitorious.org/qt/qtserialport.git &&
 	cd qtserialport &&
 	qmake qtserialport.pro &&
