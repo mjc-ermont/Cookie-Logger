@@ -19,12 +19,12 @@ then
 	make
 elif [ $OS == "WIN" ];
 then
-	sudo apt-get install autopoint intltool &&
+	sudo apt-get install autopoint intltool gperf &&
 	git clone https://github.com/mxe/mxe.git &&
 	cd mxe &&
 	curl http://arthurtoussaint.free.fr/qtserialport.patch | patch -p1
 	curl http://arthurtoussaint.free.fr/qwt.patch | patch -p1
-	make --jobs=8 qt qwt_qt4 qjson qtserialport &&
+	make qt qwt_qt4 qjson qtserialport &&
 	cd .. &&
 	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
 	mxe/usr/i686-w64-mingw32.shared/qt/bin/qmake Logger21.pro &&
