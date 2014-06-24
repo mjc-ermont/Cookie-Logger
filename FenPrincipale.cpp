@@ -1,6 +1,7 @@
 #include "FenPrincipale.h"
 #include "InPut/fileimportdialog.h"
 
+
 FenPrincipale::FenPrincipale(Serial* _com) {
     position=0;
     n=0;
@@ -86,7 +87,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     }
     qRegisterMetaType<QVector<Data> > ("QVector<Data>");
     connect(sensormgr->getDB(),SIGNAL(dataRead(int,int,QVector<Data>,QString)), this,SLOT(data_read(int,int,QVector<Data>,QString)));
-
+    connect(sensormgr->getDB(), SIGNAL(rangeStartUpdate(QDateTime)),this,SLOT(onRangeStartUpdate(QDateTime)));
     tableManager = new TableMgr(&tableauxHist,sensormgr);
     carte = new MapsView(c_maps);
 
@@ -153,6 +154,16 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     indicator_rx->setPalette(p);
 
     connect(this->menuPort, SIGNAL( aboutToShow()), this, SLOT( updatePortListMenu()));
+
+
+    //p_graphics_range_selection_layout
+
+    //QxtSpanSlider* sl = new QxtSpanSlider(Qt::Orientation::Horizontal);
+   // sl->setRange(0,100);
+    //sl->show();
+
+    graphic_range_selector = new TimeRangeSelector();
+    p_graphics_range_selection_layout->addLayout(graphic_range_selector);
 
 }
 
@@ -230,7 +241,13 @@ void FenPrincipale::on_actionBalayage_frequentiel_triggered()
     tamer->show();
 }
 
+void FenPrincipale::onRangeStartUpdate(QDateTime range_start) {
+    graphic_range_selector->setMinimumDate(range_start);
+}
+
 void FenPrincipale::syncTime() {
+    graphic_range_selector->setMaximumDate(QDateTime::currentDateTime());
+
     int h,m,s;
     h = QTime::currentTime().hour();
     m = QTime::currentTime().minute();
@@ -455,6 +472,9 @@ void FenPrincipale::on_add_graph_clicked()
 {
     GraphicView* g = new GraphicView(sel_capteur->currentIndex(), sel_valeur->itemData(sel_valeur->currentIndex()).toInt(),this);
 
+
+    connect(graphic_range_selector, SIGNAL(startDateChanged(QDateTime)), g, SLOT(setStartDT(QDateTime)));
+    connect(graphic_range_selector, SIGNAL(endDateChanged(QDateTime)), g, SLOT(setEndDT(QDateTime)));
     QPair<GraphicView*,QMdiSubWindow*> group;
     QMdiSubWindow *w = zone_graph->addSubWindow(g);
     group.first = g;
@@ -489,6 +509,9 @@ void FenPrincipale::graphClosed() {
     }
 
     on_sel_capteur_currentIndexChanged(capteur);
+
+    disconnect(graphic_range_selector, SIGNAL(startDateChanged(QDateTime)), g, SLOT(setStartDT(QDateTime)));
+    disconnect(graphic_range_selector, SIGNAL(endDateChanged(QDateTime)), g, SLOT(setEndDT(QDateTime)));
 }
 
 void FenPrincipale::on_btn_optimiser_clicked()
@@ -527,7 +550,7 @@ void FenPrincipale::on_heureLancement_timeChanged(const QTime &time)
     file.close();
 
 }
-
+/*
 void FenPrincipale::on_horizontalSlider_valueChanged(int position)
 {
     int heures = 0;
@@ -557,7 +580,7 @@ void FenPrincipale::on_horizontalSlider_valueChanged(int position)
     foreach(value,graphiques) {
        value.first->majData(QTime(heures,minutes,0));
     }
-}
+}*/
 
 bool FenPrincipale::eventFilter( QObject *o, QEvent *e ) {
 
@@ -797,11 +820,11 @@ void FenPrincipale::optimise_graph() {
     }
 
 }
-
+/*
 void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
 {
     this->on_horizontalSlider_valueChanged(position);
 }
-
+*/
 
 

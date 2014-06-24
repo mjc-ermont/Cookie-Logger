@@ -324,7 +324,7 @@
       <item row="1" column="2" colspan="2">
        <widget class="QStackedWidget" name="stack">
         <property name="currentIndex">
-         <number>2</number>
+         <number>4</number>
         </property>
         <widget class="QWidget" name="p_tabl_bord">
          <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -372,15 +372,15 @@
                   <day>1</day>
                  </datetime>
                 </property>
+                <property name="currentSection">
+                 <enum>QDateTimeEdit::HourSection</enum>
+                </property>
                 <property name="time">
                  <time>
                   <hour>0</hour>
                   <minute>10</minute>
                   <second>0</second>
                  </time>
-                </property>
-                <property name="currentSection">
-                 <enum>QDateTimeEdit::HourSection</enum>
                 </property>
                </widget>
               </item>
@@ -486,49 +486,7 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <widget class="QSlider" name="horizontalSlider">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>180</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="bowltext">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>150</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>150</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>1 minute</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <layout class="QHBoxLayout" name="p_graphics_range_selection_layout"/>
           </item>
          </layout>
         </widget>
@@ -581,7 +539,7 @@
      <x>0</x>
      <y>0</y>
      <width>792</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLogger">

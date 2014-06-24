@@ -13,9 +13,6 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
     this->setAutoReplot(false);
 
 
-    /*QwtLegend *legend = new QwtLegend;
-    legend->setFrameStyle(QFrame::Box|QFrame::Sunken);
-    this->insertLegend(legend, QwtPlot::BottomLegend);*/
 
     // axis
     this->setAxisTitle(QwtPlot::xBottom, "Temps");
@@ -27,26 +24,23 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
     courbe = new QwtPlotCurve("Courbe");
     courbe->setStyle(QwtPlotCurve::Lines);
     courbe->setPen(QPen(QBrush(Qt::black),2));
-   /* if(parent->interpol_curve->isChecked())
-        courbe->setCurveAttribute(QwtPlotCurve::Fitted);*/
 
     setWindowTitle(value->getCapteur()->getName() + " - " + value->getName());
-    duration = QTime(0,5,0);
+
+
+    setRange(QDateTime::fromTime_t(0), QDateTime::currentDateTime());
+
     courbe->attach(this);
     majCurve();
 }
 
 void GraphicView::majData() {
-    value->getData("graph",false,QDateTime::currentDateTime().addMSecs(-TimeCalcs::toMs(duration)));
+    value->getData("graph",false,start_dt, end_dt);
 }
 
-void GraphicView::majData(QTime n_duration) {
-    duration=n_duration;
-    majData();
-}
 
 void GraphicView::majCurve() {
-    calculateCurve(duration);
+    calculateCurve();
     QwtSplineCurveFitter* fitter = new QwtSplineCurveFitter;
 
        fitter->setFitMode(fitter->Auto);
@@ -67,24 +61,21 @@ void GraphicView::majCurve() {
 }
 
 double GraphicView::getMin() {
-    double min = xValues.at(xValues.size()-1)-duration.hour()*3600 - duration.minute()* 60-duration.second();
-    min = min < 0.0 ? 0 : min;
-    return min;
+
+    return start_dt.toTime_t();
 }
 
 double GraphicView::getMax() {
     return xValues.at(xValues.size()-1);
 }
 
-void GraphicView::calculateCurve(QTime maxTime) {
+void GraphicView::calculateCurve() {
     yValues.clear();
     xValues.clear();
 
     foreach(Data d, data) {
-       // if(QTime(0,0).secsTo(d->time) >=  maxTime.secsTo(QTime::currentTime())) {
-            xValues.append(m_parent->getDepart().secsTo(d.time));
-            yValues.append(d.value);
-       // }
+        xValues.append(m_parent->getDepart().secsTo(d.time));
+        yValues.append(d.value);
     }
 }
 

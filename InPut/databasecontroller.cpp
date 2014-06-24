@@ -80,4 +80,15 @@ void DatabaseController::setup() {
 
     db.exec("CREATE TABLE IF NOT EXISTS data (id integer primary key, sensor INT, sensorvalue INT, value DOUBLE, time DATETIME)");
 
+
+    QSqlQuery rep;
+    rep = db.exec("SELECT time FROM data ORDER BY time ASC LIMIT 0,1");
+    QDateTime range_start;
+    if(rep.next()) {
+        range_start = QDateTime::fromString(rep.value(0).toString(),"yyyy-MM-dd hh:mm:ss");
+    } else {
+        range_start = QDateTime::currentDateTime();
+    }
+
+    emit rangeStartUpdate(range_start);
 }

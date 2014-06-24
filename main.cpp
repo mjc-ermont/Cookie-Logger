@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <ctime>
 
+
 #include "defines.h"
 #include "FenPrincipale.h"
 #include "InPut/serial.h"

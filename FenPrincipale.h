@@ -13,6 +13,7 @@
 #include "balaifrequenciel.h"
 #include "defines.h"
 #include "tablemgr.h"
+#include "UI/timerangeselector.h"
 
 
 
@@ -73,6 +74,9 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QWebView *kwebview;
         int n;
 
+
+        TimeRangeSelector* graphic_range_selector;
+
     public slots:
         void updatePortListMenu();
         void portTriggered();
@@ -107,7 +111,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void on_btn_optimiser_clicked();
 private slots:
         void on_actualizeTableButton_clicked();
-        void on_horizontalSlider_sliderMoved(int position);
+        //void on_horizontalSlider_sliderMoved(int position);
         void on_dataServerLineEdit_editingFinished();
         void on_heureLancement_timeChanged(const QTime &time);
         void on_konami_1_clicked();
@@ -115,7 +119,7 @@ private slots:
         void on_konami_3_clicked();
         void on_konami_4_clicked();
         void on_konami_close_clicked() ;
-        void on_horizontalSlider_valueChanged(int value);
+        //void on_horizontalSlider_valueChanged(int value);
         void on_actionHaut_parleurs_toggled(bool arg1);
         void on_action137050_triggered();
         void on_action137500_triggered();
@@ -123,6 +127,8 @@ private slots:
         void on_action600_triggered();
         void on_action9600_triggered();
         void on_action57600_triggered();
+
+        void onRangeStartUpdate(QDateTime range_start);
 };
 
 #endif // FENPRINCIPALE_H

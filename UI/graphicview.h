@@ -46,18 +46,23 @@ class GraphicView : public QwtPlot
 
     public:
         explicit GraphicView(int indexCapteur, int indexValeur, FenPrincipale *parent = 0);
-        void majData(QTime n_duration);
+
         void majData();
         double getMin();
         double getMax();
 
+        void setRange(QDateTime start, QDateTime end) {start_dt = start; end_dt = end; majData();}
 
         void setData(QVector<Data> i_data) { data = i_data; majCurve();}
         int getCapteur() { return m_capteur; }
         int getValeur () { return m_valeur ; }
     protected:
-        void calculateCurve(QTime maxTime = QTime(0,1));
+        void calculateCurve();
         void majCurve();
+
+     public slots:
+        void setStartDT(QDateTime start) { start_dt = start; majData();}
+        void setEndDT(QDateTime end) { end_dt = end; majData();}
 
 
     private:
@@ -74,7 +79,9 @@ class GraphicView : public QwtPlot
         QVector<Data>   data;
 
         SensorValue *value;
-        QTime duration;
+
+        QDateTime start_dt;
+        QDateTime end_dt;
 };
 
 

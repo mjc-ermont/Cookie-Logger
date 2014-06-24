@@ -35,7 +35,10 @@ SOURCES += \
     InPut/sensor.cpp \
     InPut/sensorvalue.cpp \
     balaifrequenciel.cpp \
-    UI/histogram.cpp
+    UI/histogram.cpp \
+    UI/qxt/qxtspanslider.cpp \
+    UI/qxt/qxtglobal.cpp \
+    UI/timerangeselector.cpp
 
 HEADERS  += \
     tablemgr.h \
@@ -57,7 +60,12 @@ HEADERS  += \
     InPut/yolodecoder.h \
     InPut/databasecontroller.h \
     balaifrequenciel.h \
-    UI/histogram.h
+    UI/histogram.h \
+    UI/qxt/qxtglobal.h \
+    UI/qxt/qxtnamespace.h \
+    UI/qxt/qxtspanslider.h \
+    UI/qxt/qxtspanslider_p.h \
+    UI/timerangeselector.h
 
 FORMS += \
     FenPrincipale.ui \
