@@ -3,8 +3,8 @@
 TimeRangeSelector::TimeRangeSelector(QWidget *parent) :
     QHBoxLayout(parent)
 {
-    min_date = QDateTime(QDate(2014,1,1),QTime(13,37,0));
-    max_date = QDateTime(QDate(2014,6,24),QTime(14,42,37));
+    min_date = QDateTime::currentDateTime();
+    max_date = QDateTime::currentDateTime();
 
 
     range_slider = new QxtSpanSlider(Qt::Orientation::Horizontal);
@@ -36,6 +36,7 @@ void TimeRangeSelector::onUpperValueChanged(int newValue) {
 void TimeRangeSelector::setMinimumDate(QDateTime min) {
     min_date = min;
     range_slider->setMinimum(min.toTime_t());
+    onLowerValueChanged(min.toTime_t());
 }
 
 void TimeRangeSelector::setMaximumDate(QDateTime max) {

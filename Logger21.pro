@@ -65,7 +65,8 @@ HEADERS  += \
     UI/qxt/qxtnamespace.h \
     UI/qxt/qxtspanslider.h \
     UI/qxt/qxtspanslider_p.h \
-    UI/timerangeselector.h
+    UI/timerangeselector.h \
+    exprtk.hpp
 
 FORMS += \
     FenPrincipale.ui \
@@ -79,6 +80,8 @@ RESOURCES += \
     res.qrc
 
 CONFIG += windauws serialport
+
+QMAKE_CXXFLAGS_DEBUG += -O2 #Sinon ça faire l'erreur "too many sections"
 
 linusque {
     LIBS += -lqwt

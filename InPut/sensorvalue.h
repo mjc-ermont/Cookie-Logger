@@ -4,7 +4,7 @@
 #include <QString>
 #include <QVector>
 #include <defines.h>
-#include <exprtk.hpp>
+#include "exprtk.hpp"
 
 #include "sensor.h"
 class Sensor;

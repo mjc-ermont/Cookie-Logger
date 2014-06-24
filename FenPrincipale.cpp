@@ -87,7 +87,8 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     }
     qRegisterMetaType<QVector<Data> > ("QVector<Data>");
     connect(sensormgr->getDB(),SIGNAL(dataRead(int,int,QVector<Data>,QString)), this,SLOT(data_read(int,int,QVector<Data>,QString)));
-    connect(sensormgr->getDB(), SIGNAL(rangeStartUpdate(QDateTime)),this,SLOT(onRangeStartUpdate(QDateTime)));
+
+
     tableManager = new TableMgr(&tableauxHist,sensormgr);
     carte = new MapsView(c_maps);
 
@@ -288,6 +289,7 @@ void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
             }
 
             this->message("[DATA] " + hex);*/
+           // qDebug() << "ici";
             myDecoder->decodeString(trames[i]);
           //  sensormgr->addData(trames[i]);
         }

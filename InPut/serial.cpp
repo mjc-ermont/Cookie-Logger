@@ -157,18 +157,15 @@ void Serial::readData() {
 
     QByteArray data(skipped_buf);
     data.append(dataread);
-    //qDebug() << "read: " << dataread;
-    qDebug() << "Buffer: " << skipped_buf;
+
+    qDebug() << "Données: " << data;
+    skipped_buf.clear();
 
     trames = data.split('@');
-
     if(trames.last().size() < 19) {
         skipped_buf = trames.last();
-    //    qDebug() << "Buffer: " << skipped_buf;
         trames.removeLast();
     }
-
-  //  qDebug() << "f";
     emit dataRead(trames);
 }
 

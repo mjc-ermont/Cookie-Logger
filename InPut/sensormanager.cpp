@@ -8,6 +8,8 @@ SensorManager::SensorManager(FenPrincipale* _parent) {
 
     valeur=0;
     bdd = new DatabaseController();
+    connect(bdd, SIGNAL(rangeStartUpdate(QDateTime)),parent,SLOT(onRangeStartUpdate(QDateTime)));
+
     bdd->start();
     bdd->read(1,0,QDateTime::currentDateTime().addDays(-1),QDateTime::currentDateTime());
 }

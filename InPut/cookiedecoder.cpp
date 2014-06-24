@@ -7,6 +7,7 @@ CookieDecoder::CookieDecoder()
 
 
 void CookieDecoder::decodeString(QByteArray(&data)) {
+
     QString str(data);
 
     QStringList elements = str.split("$");

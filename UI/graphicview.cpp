@@ -66,7 +66,7 @@ double GraphicView::getMin() {
 }
 
 double GraphicView::getMax() {
-    return xValues.at(xValues.size()-1);
+    return end_dt.toTime_t();
 }
 
 void GraphicView::calculateCurve() {
@@ -74,7 +74,7 @@ void GraphicView::calculateCurve() {
     xValues.clear();
 
     foreach(Data d, data) {
-        xValues.append(m_parent->getDepart().secsTo(d.time));
+        xValues.append(d.time.toTime_t());
         yValues.append(d.value);
     }
 }
