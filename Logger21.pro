@@ -79,16 +79,16 @@ FORMS += \
 RESOURCES += \
     res.qrc
 
-CONFIG += windauws serialport
+CONFIG += serialport
 
 QMAKE_CXXFLAGS_DEBUG += -O2 #Sinon ça faire l'erreur "too many sections"
 
-linusque {
+linux-g++ {
     LIBS += -lqwt
     LIBS += -lqjson
 }
 
-windauws {
+win32 {
     LIBS += C:\Qwt-6.0.1\lib\libqwtd.a
     LIBS += C:\qjson\lib\libqjson.dll.a
     INCLUDEPATH += C:\Qwt-6.0.1\include C:\qjson\include
