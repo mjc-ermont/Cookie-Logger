@@ -83,12 +83,14 @@ CONFIG += serialport
 
 QMAKE_CXXFLAGS_DEBUG += -O2 #Sinon ça faire l'erreur "too many sections"
 
-linux-g++ {
+unix {
+    message(*nix detected)
     LIBS += -lqwt
     LIBS += -lqjson
 }
 
 win32 {
+    message(win32 detected)
     LIBS += C:\Qwt-6.0.1\lib\libqwtd.a
     LIBS += C:\qjson\lib\libqjson.dll.a
     INCLUDEPATH += C:\Qwt-6.0.1\include C:\qjson\include
