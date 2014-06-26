@@ -19,7 +19,7 @@ then
 	make
 elif [ $OS == "WIN" ];
 then
-	sudo apt-get install autopoint intltool gperf &&
+	sudo apt-get install autopoint intltool gperf cmake scons &&
 	git clone https://github.com/mxe/mxe.git &&
 	cd mxe &&
 	curl http://arthurtoussaint.free.fr/qtserialport.patch | patch -p1
