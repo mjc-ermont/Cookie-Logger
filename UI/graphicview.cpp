@@ -16,7 +16,7 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
 
     // axis
     this->setAxisTitle(QwtPlot::xBottom, "Temps");
-    this->setAxisScaleDraw(QwtPlot::xBottom, new TimeScaleDraw(QTime(0,0)));
+    this->setAxisScaleDraw(QwtPlot::xBottom, new TimeScaleDraw());
     this->setAxisTitle(QwtPlot::yLeft, value->getName());
 
     zoomer = new MyQwtPlotZoomer(this->canvas(),this);

@@ -26,17 +26,13 @@ class FenPrincipale;
 class TimeScaleDraw: public QwtScaleDraw
 {
 public:
-    TimeScaleDraw(const QTime &base):
-        baseTime(base)
-    {
-    }
+    TimeScaleDraw(){}
+
     virtual QwtText label(double v) const
     {
-        QTime upTime = baseTime.addSecs((int)v);
-        return upTime.toString();
+        QDateTime upTime = QDateTime::fromTime_t((int)v);
+        return upTime.toString("yy/MM/dd hh:mm:ss");
     }
-private:
-    QTime baseTime;
 };
 class MyQwtPlotZoomer;
 
