@@ -25,6 +25,7 @@ class DatabaseController : public QThread
     private:
         QSqlDatabase db;
         QQueue<QString> work;
+        QMutex mutex;
 
     signals:
         void dataWritten(int idc, int idv);
