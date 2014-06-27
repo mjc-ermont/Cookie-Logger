@@ -31,7 +31,7 @@ public:
     virtual QwtText label(double v) const
     {
         QDateTime upTime = QDateTime::fromTime_t((int)v);
-        return upTime.toString("dd/MM/yy hh:mm:ss");
+        return upTime.toString("dd/MM hh:mm:ss");
     }
 };
 class MyQwtPlotZoomer;
@@ -52,6 +52,7 @@ class GraphicView : public QwtPlot
         void setData(QVector<Data> i_data) { data = i_data; majCurve();}
         int getCapteur() { return m_capteur; }
         int getValeur () { return m_valeur ; }
+        void setZoomed(bool zoomed_p) {zoomed = zoomed_p;}
     protected:
         void calculateCurve();
         void majCurve();
@@ -78,6 +79,8 @@ class GraphicView : public QwtPlot
 
         QDateTime start_dt;
         QDateTime end_dt;
+
+        bool zoomed;
 };
 
 
@@ -106,8 +109,8 @@ public:
 
         QwtPlotZoomer::rescale();
 
-        plt->setAxisAutoScale(yAxis(), true);
-       // plt->setAxisScale(xAxis(),parent->getMin(), parent->getMax());
+        plt->setAxisAutoScale(QwtPlot::yLeft, true);
+        plt->setAxisScale(xAxis(),parent->getMin(), parent->getMax());
         plt->replot();
     }
 

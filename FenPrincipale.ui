@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>792</width>
+    <width>857</width>
     <height>718</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
   <widget class="QWidget" name="widgetCentral">
    <layout class="QVBoxLayout" name="verticalLayout_5">
     <item>
-     <layout class="QGridLayout" name="gridLayout_2" rowstretch="5,0" columnstretch="1,0,0,0">
+     <layout class="QGridLayout" name="gridLayout_2" rowstretch="5,0" columnstretch="0,0,1,1">
       <item row="0" column="0">
        <widget class="QFrame" name="frame_2">
         <property name="minimumSize">
@@ -538,7 +538,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>792</width>
+     <width>857</width>
      <height>21</height>
     </rect>
    </property>

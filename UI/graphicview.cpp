@@ -12,12 +12,12 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
 
     this->setAutoReplot(false);
 
-
-
     // axis
     this->setAxisTitle(QwtPlot::xBottom, "Temps");
     this->setAxisScaleDraw(QwtPlot::xBottom, new TimeScaleDraw());
     this->setAxisTitle(QwtPlot::yLeft, value->getName());
+
+    this->setAxisAutoScale(QwtPlot::yLeft, true);
 
     zoomer = new MyQwtPlotZoomer(this->canvas(),this);
 
@@ -62,11 +62,11 @@ void GraphicView::majCurve() {
 
 double GraphicView::getMin() {
 
-    return start_dt.toTime_t();
+    return xValues.first();
 }
 
 double GraphicView::getMax() {
-    return end_dt.toTime_t();
+    return xValues.last();
 }
 
 void GraphicView::calculateCurve() {
