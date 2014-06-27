@@ -31,7 +31,7 @@ public:
     virtual QwtText label(double v) const
     {
         QDateTime upTime = QDateTime::fromTime_t((int)v);
-        return upTime.toString("yy/MM/dd hh:mm:ss");
+        return upTime.toString("dd/MM/yy hh:mm:ss");
     }
 };
 class MyQwtPlotZoomer;
