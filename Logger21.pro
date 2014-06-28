@@ -14,6 +14,7 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x
 
+ICON = icone.ico
 
 SOURCES += \
     FenPrincipale.cpp \

@@ -22,7 +22,7 @@ void MapsView::addPoint() {
 
     QWebFrame* f = this->page()->mainFrame();
     f->evaluateJavaScript("newPos(" + QString::number(mY) + "," + QString::number(mX) + ")");
-
+    qDebug() << "NOUVEAU POINT SUR LA CARTE : newPos(" << QString::number(mY) << "," << QString::number(mX) << ")";
     qDebug() << "FMap";
 
 }

@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>FenPrincipale</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/icon/icone.ico</normaloff>:/icon/icone.ico</iconset>
+  </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>false</bool>
   </property>
@@ -372,15 +376,15 @@
                   <day>1</day>
                  </datetime>
                 </property>
-                <property name="currentSection">
-                 <enum>QDateTimeEdit::HourSection</enum>
-                </property>
                 <property name="time">
                  <time>
                   <hour>0</hour>
                   <minute>10</minute>
                   <second>0</second>
                  </time>
+                </property>
+                <property name="currentSection">
+                 <enum>QDateTimeEdit::HourSection</enum>
                 </property>
                </widget>
               </item>
@@ -539,7 +543,7 @@
      <x>0</x>
      <y>0</y>
      <width>857</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLogger">
@@ -651,6 +655,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

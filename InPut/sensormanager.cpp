@@ -55,7 +55,7 @@ void SensorManager::getSensorsFromFile() {
     cptConfig->open(QIODevice::ReadOnly);
     reader.setDevice(cptConfig);
     reader.readNext();
-    Sensor* curSensor;
+    Sensor* curSensor = NULL;
     while(!reader.atEnd()) {
         if((reader.name() == "sensor")&&(reader.attributes().value("name").toString() != "")) {
             Sensor *s = new Sensor(this,reader.attributes().value("name").toString(),reader.attributes().value("id").toString().toInt());
