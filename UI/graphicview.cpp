@@ -12,6 +12,8 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
 
     this->setAutoReplot(false);
 
+    zoomed = false;
+
     // axis
     this->setAxisTitle(QwtPlot::xBottom, "Temps");
     this->setAxisScaleDraw(QwtPlot::xBottom, new TimeScaleDraw());
@@ -54,7 +56,8 @@ void GraphicView::majCurve() {
         return;
     }
 
-    this->setAxisScale(QwtPlot::xBottom, getMin(), getMax());
+    if(!zoomed)
+        this->setAxisScale(QwtPlot::xBottom, getMin(), getMax());
    // this->setAxisAutoScale(QwtPlot::xBottom, false);
    // this->setAxisScale(, 42, 142);
     replot();

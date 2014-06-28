@@ -94,11 +94,15 @@ public:
 
     void zoom(const QRectF &rect)
     {
-        QRectF newRect;
-        const QRectF & baseRect = zoomBase();
-        newRect.setCoords( rect.left(), baseRect.top(), rect.right(), baseRect.bottom());
-        QwtPlotZoomer::zoom( newRect );
+        QwtPlot *plt = plot();
+        if ( !plt )
+            return;
 
+        plt->setAxisAutoScale(yAxis(), true);
+        plt->setAxisScale(xAxis(),rect.left(), rect.right());
+        plt->replot();
+
+        parent->setZoomed(true);
     }
 
     void rescale()
@@ -112,6 +116,8 @@ public:
         plt->setAxisAutoScale(QwtPlot::yLeft, true);
         plt->setAxisScale(xAxis(),parent->getMin(), parent->getMax());
         plt->replot();
+
+        parent->setZoomed(false);
     }
 
     QPolygon adjustedPoints(const QPolygon &points) const
