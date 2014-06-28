@@ -1,7 +1,21 @@
 #ifndef FENPRINCIPALE_H
 #define FENPRINCIPALE_H
 
-#include <QtGui>
+#ifndef QWT_DLL
+#define QWT_DLL
+#endif
+
+#include <QMainWindow>
+#include <QDateTime>
+#include <QVector>
+#include <QTimer>
+#include <QActionGroup>
+#include <QWebView>
+#include <QString>
+#include <QList>
+#include <QPair>
+#include <QMdiSubWindow>
+
 #include "ui_FenPrincipale.h"
 #include "ChronoReader/chronoreaderwidget.h"
 #include "InPut/sensormanager.h"

@@ -588,7 +588,7 @@ void FenPrincipale::optimise_graph() {
     int colSize = zone_graph->geometry().width();
 
     for(int i=0;i<graphiques.size();i++) {
-        int row, rowStretch, col, colStretch;
+        int row, rowStretch, col=1, colStretch=1;
         bool error = false;
         switch(nbItems) {
             case 1:
