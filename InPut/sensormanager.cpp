@@ -25,19 +25,7 @@ void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
 
             parent->setIndicatorRx();
 
-            QString url = parent->dataServerLineEdit->text();
-            QStringList split = url.split("||");
-            if(split.size() == 2) {
-                QHttp *serveur_search = new QHttp(split[0]);
-                serveur_search->setHost(split[0]);
 
-                serveur_search->get(split[1]+"?t=token&nc="+QString::number(id_capteur)+"&nv="+QString::number(id_valeur)+"&v="+QString::number(valeur, 'f'));
-            } else {
-                QHttp *serveur_search = new QHttp("home.konfiot.net");
-                serveur_search->setHost("home.konfiot.net");
-
-                serveur_search->get("/Cookie-WebUI-Server/bin/add.php?t=token&nc="+QString::number(id_capteur)+"&nv="+QString::number(id_valeur)+"&v="+QString::number(valeur, 'f'));
-            }
 
             QFile log("log.dan"); // DAN = Data ANalysis
             log.open(QFile::Append);

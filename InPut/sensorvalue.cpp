@@ -35,9 +35,23 @@ void SensorValue::addData(double d, bool parse) {
     parent->getParent()->getDB()->write(parent->getId(),id,newData.value);
 
     if(param == "xmap") {
-        parent->getParent()->getParent()->getMap()->updateX(d);
+        parent->getParent()->getParent()->getMap()->updateX(newData.value);
     } else if(param == "ymap") {
-        parent->getParent()->getParent()->getMap()->updateY(d);
+        parent->getParent()->getParent()->getMap()->updateY(newData.value);
+    }
+
+    QString url = parent->getParent()->getParent()->dataServerLineEdit->text();
+    QStringList split = url.split("||");
+    if(split.size() == 2) {
+        QHttp *serveur_search = new QHttp(split[0]);
+        serveur_search->setHost(split[0]);
+        split[1] = split[1].remove('\n');
+        serveur_search->get(split[1]+"?t=token&nc="+QString::number(parent->getId())+"&nv="+QString::number(id)+"&v="+QString::number(newData.value));
+    } else {
+        QHttp *serveur_search = new QHttp("home.konfiot.net");
+        serveur_search->setHost("home.konfiot.net");
+
+        serveur_search->get("/Cookie-WebUI-Server/bin/add.php?t=token&nc="+QString::number(parent->getId())+"&nv="+QString::number(id)+"&v="+QString::number(newData.value));
     }
 }
 
