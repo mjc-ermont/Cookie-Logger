@@ -19,12 +19,12 @@ then
 	make
 elif [ $OS == "WIN" ];
 then
+	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev &&
 	git clone https://github.com/jnovy/pxz && 
 	cd pxz &&
 	make &&
 	sudo make install && 
 	cd .. &&
-	sudo apt-get install autopoint intltool gperf cmake scons &&
 	wget https://dl.dropboxusercontent.com/s/bhhvvbmfzy207rp/mxe.tar.xz &&
 	pxz mxe.tar.xz
 	tar zf mxe.tar
