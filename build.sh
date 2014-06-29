@@ -19,8 +19,13 @@ then
 	make
 elif [ $OS == "WIN" ];
 then
+	git clone https://github.com/jnovy/pxz && 
+	cd pxz &&
+	make &&
+	sudo make install && 
+	cd .. &&
 	sudo apt-get install autopoint intltool gperf cmake scons &&
-	wget https://dl.dropboxusercontent.com/content_link/mz7Ei4ao7lqEJg8pUrGyinv7GQuZvWE5EYWLYMFu7p9aFmkOL6JKwH0ErToR8rUj?dl=1 -O mxe.tar.xz
+	wget https://dl.dropboxusercontent.com/s/bhhvvbmfzy207rp/mxe.tar.xz &&
 	pxz mxe.tar.xz
 	tar zf mxe.tar
 	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
