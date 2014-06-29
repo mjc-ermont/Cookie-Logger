@@ -26,8 +26,8 @@ then
 	sudo make install && 
 	cd .. &&
 	wget https://dl.dropboxusercontent.com/s/bhhvvbmfzy207rp/mxe.tar.xz &&
-	pxz mxe.tar.xz
-	tar zf mxe.tar
+	pxz mxe.tar.xz &&
+	tar -zf mxe.tar aa
 	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
 	mxe/usr/i686-w64-mingw32.shared/qt/bin/qmake Logger21.pro &&
 	make
