@@ -1,7 +1,8 @@
 #ifndef YOLODECODER_H
 #define YOLODECODER_H
 #include <QString>
-#include <QtGui>
+#include <QObject>
+#include <QByteArray>
 
 class YoloDecoder : public QObject
 {

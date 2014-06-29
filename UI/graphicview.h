@@ -26,17 +26,13 @@ class FenPrincipale;
 class TimeScaleDraw: public QwtScaleDraw
 {
 public:
-    TimeScaleDraw(const QTime &base):
-        baseTime(base)
-    {
-    }
+    TimeScaleDraw(){}
+
     virtual QwtText label(double v) const
     {
-        QTime upTime = baseTime.addSecs((int)v);
-        return upTime.toString();
+        QDateTime upTime = QDateTime::fromTime_t((int)v);
+        return upTime.toString("dd/MM hh:mm:ss");
     }
-private:
-    QTime baseTime;
 };
 class MyQwtPlotZoomer;
 
@@ -56,6 +52,7 @@ class GraphicView : public QwtPlot
         void setData(QVector<Data> i_data) { data = i_data; majCurve();}
         int getCapteur() { return m_capteur; }
         int getValeur () { return m_valeur ; }
+        void setZoomed(bool zoomed_p) {zoomed = zoomed_p;}
     protected:
         void calculateCurve();
         void majCurve();
@@ -82,6 +79,8 @@ class GraphicView : public QwtPlot
 
         QDateTime start_dt;
         QDateTime end_dt;
+
+        bool zoomed;
 };
 
 
@@ -95,11 +94,15 @@ public:
 
     void zoom(const QRectF &rect)
     {
-        QRectF newRect;
-        const QRectF & baseRect = zoomBase();
-        newRect.setCoords( rect.left(), baseRect.top(), rect.right(), baseRect.bottom());
-        QwtPlotZoomer::zoom( newRect );
+        QwtPlot *plt = plot();
+        if ( !plt )
+            return;
 
+        plt->setAxisAutoScale(yAxis(), true);
+        plt->setAxisScale(xAxis(),rect.left(), rect.right());
+        plt->replot();
+
+        parent->setZoomed(true);
     }
 
     void rescale()
@@ -110,9 +113,11 @@ public:
 
         QwtPlotZoomer::rescale();
 
-        plt->setAxisAutoScale(yAxis(), true);
-       // plt->setAxisScale(xAxis(),parent->getMin(), parent->getMax());
+        plt->setAxisAutoScale(QwtPlot::yLeft, true);
+        plt->setAxisScale(xAxis(),parent->getMin(), parent->getMax());
         plt->replot();
+
+        parent->setZoomed(false);
     }
 
     QPolygon adjustedPoints(const QPolygon &points) const

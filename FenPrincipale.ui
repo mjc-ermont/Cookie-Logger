@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>792</width>
+    <width>857</width>
     <height>718</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>FenPrincipale</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/icon/icone.ico</normaloff>:/icon/icone.ico</iconset>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>false</bool>
@@ -19,7 +23,7 @@
   <widget class="QWidget" name="widgetCentral">
    <layout class="QVBoxLayout" name="verticalLayout_5">
     <item>
-     <layout class="QGridLayout" name="gridLayout_2" rowstretch="5,0" columnstretch="1,0,0,0">
+     <layout class="QGridLayout" name="gridLayout_2" rowstretch="5,0" columnstretch="0,0,1,1">
       <item row="0" column="0">
        <widget class="QFrame" name="frame_2">
         <property name="minimumSize">
@@ -372,15 +376,15 @@
                   <day>1</day>
                  </datetime>
                 </property>
-                <property name="currentSection">
-                 <enum>QDateTimeEdit::HourSection</enum>
-                </property>
                 <property name="time">
                  <time>
                   <hour>0</hour>
                   <minute>10</minute>
                   <second>0</second>
                  </time>
+                </property>
+                <property name="currentSection">
+                 <enum>QDateTimeEdit::HourSection</enum>
                 </property>
                </widget>
               </item>
@@ -538,8 +542,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>792</width>
-     <height>21</height>
+     <width>857</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLogger">
@@ -651,6 +655,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

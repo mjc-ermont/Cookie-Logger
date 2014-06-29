@@ -8,4 +8,7 @@
         <file alias="highstock.js">js/highstock.js</file>
         <file alias="jquery.js">js/jquery.js</file>
     </qresource>
+    <qresource prefix="/icon">
+        <file alias="icone.ico">icone.ico</file>
+    </qresource>
 </RCC>

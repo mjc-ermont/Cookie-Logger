@@ -3,19 +3,20 @@
 
 
 FenPrincipale::FenPrincipale(Serial* _com) {
+
+    // Initialisation paramètres
     position=0;
     n=0;
     com = _com;
-
     optimisation_graph = false;
-    setupUi(this);
-
-    indicator_rx->setEnabled(false);
-
     resetIndicator=NULL;
-
+    // --------------------
+    // Compilation de l'UI
+    setupUi(this);
+    indicator_rx->setEnabled(false);
     stack->setCurrentIndex(0);
-
+    // --------------------
+    // Code Konami (shhht)
     konami << Qt::Key_Up << Qt::Key_Up << Qt::Key_Down << Qt::Key_Down << Qt::Key_Left << Qt::Key_Right << Qt::Key_Left << Qt::Key_Right << Qt::Key_B << Qt::Key_A;
     this->installEventFilter(this);
     konamify(false);
@@ -23,18 +24,18 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     settings->setAttribute (QWebSettings::PluginsEnabled, true);
     settings->setAttribute(QWebSettings::JavascriptEnabled, true);
     settings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
-
+    this->setFocusPolicy(Qt::StrongFocus);
+    kwebview = new QWebView();
+    p_konami_layout->addWidget(kwebview);
+    // --------------------
+    // Initialisation radio buttons de la barre de menu (sélection port/baudrate)
     QActionGroup* group = new QActionGroup( this );
-
     this->action137050->setCheckable(true);
     this->action137500->setCheckable(true);
     this->action137500->setChecked(true);
-
     this->action137050->setActionGroup(group);
     this->action137500->setActionGroup(group);
-
     QActionGroup* group_ports = new QActionGroup( this );
-
     this->action600->setCheckable(true);
     this->action9600->setCheckable(true);
     this->action57600->setCheckable(true);
@@ -51,18 +52,14 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     }
 
     this->action137500->setChecked(true);
-
     this->action600->setActionGroup(group_ports);
     this->action9600->setActionGroup(group_ports);
     this->action57600->setActionGroup(group_ports);
+    group_ports_name = new QActionGroup(this);
 
-
-    group_ports_name = new QActionGroup( this );
-
-    this->setFocusPolicy(Qt::StrongFocus);
-    kwebview = new QWebView();
-    p_konami_layout->addWidget(kwebview);
-
+    connect(this->menuPort, SIGNAL( aboutToShow()), this, SLOT( updatePortListMenu()));
+    // -----------------
+    // Initialisation des capteurs disponibles
     sensormgr = new SensorManager(this);
     QVector<Sensor*> sensorList = sensormgr->getSensors();
     nbSensors = sensorList.size();
@@ -86,47 +83,39 @@ FenPrincipale::FenPrincipale(Serial* _com) {
         t->setModel(modele);
     }
     qRegisterMetaType<QVector<Data> > ("QVector<Data>");
+    // Connect entre la bdd et fenprincipale pour les réponses aux requêtes de lecture
     connect(sensormgr->getDB(),SIGNAL(dataRead(int,int,QVector<Data>,QString)), this,SLOT(data_read(int,int,QVector<Data>,QString)));
-
+    // -------------------
+    // Initialisation des différentes pages
+    graphic_range_selector = new TimeRangeSelector();
+    p_graphics_range_selection_layout->addLayout(graphic_range_selector);
 
     tableManager = new TableMgr(&tableauxHist,sensormgr);
     carte = new MapsView(c_maps);
-
-
     message("[INFO] Loading boarding table...");
-
     tableauBord = new BoardingTable(container,sensormgr);
     message("[INFO] Loaded !");
-
-
-    qDebug() << "pizzdrfa";
-    message("[INFO] Starting refreshing timers");
-
-    timerAct = new QTimer();
-    connect(timerAct,SIGNAL(timeout()),this,SLOT(requestAct()));
-
-    timerAct->start(UPDATE_TIME);
-
+    // ------------------------
+    // Démarrage du timer d'actualisation
+    message("[INFO] Starting refreshing timer");
     actTemps = new QTimer();
     connect(actTemps,SIGNAL(timeout()),this,SLOT(syncTime()));
-
     actTemps->start(1000);
-
+    // -----------------------------
+    // Démarrage du décodeur de trames
     myDecoder = new CookieDecoder();
     connect(myDecoder, SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
-    //connect(myDecoder,SIGNAL(error_frame()), this, SLOT(error_frame()));
     message("[INFO] All started !");
-
-
-
+    // -----------------------------
+    // Prise en charge du port série
     connect(com,SIGNAL(dataRead(QList<QByteArray>)),this,SLOT(informationsReceived(QList<QByteArray>)));
-    requestAct();
-
+    // -------------------
+    // Implémentation du chronoreader
     h_depart = QDateTime::currentDateTime();
     chronoWidget = new ChronoReaderWidget;
     chronolayout->addWidget(chronoWidget);
-
-
+    // --------------------
+    // Lecture des paramètres enregistrés
     QFile file("conf/url.ini");
     file.open(QIODevice::ReadOnly);
     QString url = QString(file.readAll());
@@ -149,77 +138,25 @@ FenPrincipale::FenPrincipale(Serial* _com) {
         heureLancement->setTime(QTime::currentTime());
         chronoWidget->laucherCounter(QTime::currentTime());
     }
-
+    // -------------------------
+    // Couleur custom pour l'indicateur de réception d'informations
     QPalette p = indicator_rx->palette();
     p.setColor(QPalette::Disabled, QPalette::Background, QColor(255,0,0));
     indicator_rx->setPalette(p);
-
-    connect(this->menuPort, SIGNAL( aboutToShow()), this, SLOT( updatePortListMenu()));
-
-
-    //p_graphics_range_selection_layout
-
-    //QxtSpanSlider* sl = new QxtSpanSlider(Qt::Orientation::Horizontal);
-   // sl->setRange(0,100);
-    //sl->show();
-
-    graphic_range_selector = new TimeRangeSelector();
-    p_graphics_range_selection_layout->addLayout(graphic_range_selector);
-
+    //---------------------------
 }
-
-void FenPrincipale::on_actionHaut_parleurs_toggled(bool arg1) {com->setSpeakersEnabled(arg1);}
-
-
-void FenPrincipale::on_action600_triggered() { com->setBaudrate(600);}
-void FenPrincipale::on_action57600_triggered() {com->setBaudrate(57600);}
-void FenPrincipale::on_action9600_triggered() {com->setBaudrate(9600);}
-void FenPrincipale::on_action137050_triggered() {com->setChannel(21);}
-void FenPrincipale::on_action137500_triggered(){ com->setChannel(30);}
 
 FenPrincipale::~FenPrincipale(){}
 
 
-void FenPrincipale::portTriggered() {
-    QObject* sender = QObject::sender();
-    QAction* act = qobject_cast<QAction*>(sender);
-    if(act) {
-        com->setPort(act->data().toString());
-        qDebug() << "Set port:" << act->data().toString();
-    }
-}
-
-
-void FenPrincipale::updatePortListMenu() {
-    this->menuPort->clear();
-    QStringList portList = Serial::getPortList();
-    for(int i=0;i<portList.size();i++) {
-        QString cur_port = portList.at(i);
-        QAction* portAction = new QAction(cur_port,this);
-        portAction->setData(QVariant(cur_port));
-        portAction->setCheckable(true);
-        group_ports_name->addAction(portAction);
-
-        if(com->getPort() == cur_port) {
-            portAction->setChecked(true);
-        }
-        connect(portAction,SIGNAL(triggered()),this,SLOT(portTriggered()));
-        this->menuPort->addAction(portAction);
-    }
-}
-
 void FenPrincipale::resizeEvent(QResizeEvent *) {
     if(optimisation_graph)
         optimise_graph();
-
 }
 
-void FenPrincipale::requestAct() {
- /*   if(get_infos->isChecked())
-        com->readData();*/
-}
-
-
+/*
+ * Outil de balayage fréquenciel
+ */
 class BalayageDialog : QDialog {
 public:
     BalayageDialog(BalaiFrequenciel* b);
@@ -246,6 +183,9 @@ void FenPrincipale::onRangeStartUpdate(QDateTime range_start) {
     graphic_range_selector->setMinimumDate(range_start);
 }
 
+/*
+ * Gestion de l'horloge
+ */
 void FenPrincipale::syncTime() {
     graphic_range_selector->setMaximumDate(QDateTime::currentDateTime());
 
@@ -278,20 +218,14 @@ void FenPrincipale::syncTime() {
     lcd_sec->display(QString("%1").arg(s, 10, 10, QChar('0').toUpper()));
 }
 
+/*
+ * Gestion des données
+ */
 void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
     setIndicatorRx();
     if(trames.size() > 0) {
         for(int i=0;i<trames.size();i++) {
-
-         /*   QString hex = "0x";
-            for(int j=0;j<trames[i].size();j++) {
-                hex += QString("%1").arg(trames[i].at(j)& 0xff, 2,16).toUpper();
-            }
-
-            this->message("[DATA] " + hex);*/
-           // qDebug() << "ici";
             myDecoder->decodeString(trames[i]);
-          //  sensormgr->addData(trames[i]);
         }
 
         QPair<GraphicView*,QMdiSubWindow*> value;
@@ -317,24 +251,12 @@ void FenPrincipale::data_read(int idc, int idv, QVector<Data> data, QString reas
 
     } else if(reason == "tab") {
         this->getTableMgr()->actualisay(idc,idv,data);
-    } else {
-        qDebug() << "couille dans le paté";
     }
 }
 
-void FenPrincipale::reset_error() {//TODO: Ne pas hardcoder ça.
-    //this->sensormgr->getSensor(9)->getValues().at(0)->addData(0);
-   // this->getBT()->update(this->sensormgr->getSensor(9)->getValues().at(0));
-}
-
-void FenPrincipale::error_frame() {
-  /*  SensorValue* sv =  this->sensormgr->getSensor(9)->getValues().at(0);
-    Data* d = sv->getData().last();
-    d->value++;
-    this->getBT()->update(sv);
-    this->message("[ERROR] Checksum failed.");*/
-}
-
+/*
+ * Quelques fonctions de display
+ */
 void FenPrincipale::setIndicatorRx() {
 
 
@@ -361,7 +283,9 @@ void FenPrincipale::message(QString message){
     console->appendPlainText(message);
 }
 
-
+/*
+ * Gestion des actions du menu supérieur (tout comme le jambon)
+ */
 void FenPrincipale::on_actionQuitter_triggered()
 {
     QMessageBox::StandardButton reply;
@@ -377,53 +301,50 @@ void FenPrincipale::on_actionOuvrir_triggered()
     fi_dialog->show();
 }
 
-void FenPrincipale::on_b_console_clicked()
-{
-    reinit_b();
-    b_console->setDefault(true);
-
-    stack->setCurrentIndex(1);
+void FenPrincipale::portTriggered() {
+    QObject* sender = QObject::sender();
+    QAction* act = qobject_cast<QAction*>(sender);
+    if(act) {
+        com->setPort(act->data().toString());
+        qDebug() << "Set port:" << act->data().toString();
+    }
 }
 
-void FenPrincipale::on_b_tb_clicked()
-{
-    reinit_b();
-    b_tb->setDefault(true);
 
-    stack->setCurrentIndex(0);
+void FenPrincipale::updatePortListMenu() {
+    this->menuPort->clear();
+    QStringList portList = Serial::getPortList();
+    for(int i=0;i<portList.size();i++) {
+        QString cur_port = portList.at(i);
+        QAction* portAction = new QAction(cur_port,this);
+        portAction->setData(QVariant(cur_port));
+        portAction->setCheckable(true);
+        group_ports_name->addAction(portAction);
+
+        if(com->getPort() == cur_port) {
+            portAction->setChecked(true);
+        }
+        connect(portAction,SIGNAL(triggered()),this,SLOT(portTriggered()));
+        this->menuPort->addAction(portAction);
+    }
 }
 
-void FenPrincipale::on_b_table_clicked()
-{
-    reinit_b();
-    b_table->setDefault(true);
+void FenPrincipale::on_actionHaut_parleurs_toggled(bool arg1) {com->setSpeakersEnabled(arg1);}
+void FenPrincipale::on_action600_triggered() { com->setBaudrate(600);}
+void FenPrincipale::on_action57600_triggered() {com->setBaudrate(57600);}
+void FenPrincipale::on_action9600_triggered() {com->setBaudrate(9600);}
+void FenPrincipale::on_action137050_triggered() {com->setChannel(21);}
+void FenPrincipale::on_action137500_triggered(){ com->setChannel(30);}
 
-    stack->setCurrentIndex(2);
-}
-
-void FenPrincipale::on_b_param_clicked()
-{
-    reinit_b();
-    b_param->setDefault(true);
-
-    stack->setCurrentIndex(3);
-}
-
-void FenPrincipale::on_b_graph_clicked()
-{
-    reinit_b();
-    b_graph->setDefault(true);
-
-    stack->setCurrentIndex(4);
-}
-
-void FenPrincipale::on_b_carte_clicked()
-{
-    reinit_b();
-    b_carte->setDefault(true);
-
-    stack->setCurrentIndex(5);
-}
+/*
+ * Gestion des boutons du menu de gauche
+ */
+void FenPrincipale::on_b_console_clicked(){reinit_b();b_console->setDefault(true);stack->setCurrentIndex(1);}
+void FenPrincipale::on_b_tb_clicked(){reinit_b();b_tb->setDefault(true);stack->setCurrentIndex(0);}
+void FenPrincipale::on_b_table_clicked(){reinit_b();b_table->setDefault(true);stack->setCurrentIndex(2);}
+void FenPrincipale::on_b_param_clicked(){reinit_b();b_param->setDefault(true);stack->setCurrentIndex(3);}
+void FenPrincipale::on_b_graph_clicked(){reinit_b();b_graph->setDefault(true);stack->setCurrentIndex(4);}
+void FenPrincipale::on_b_carte_clicked(){reinit_b();b_carte->setDefault(true);stack->setCurrentIndex(5);}
 
 void FenPrincipale::reinit_b(){
     b_tb->setDefault(false);
@@ -439,7 +360,19 @@ void FenPrincipale::reinit_b(){
 
 }
 
+/*
+ * Oh putain...
+ */
+void FenPrincipale::on_sel_valeur_currentIndexChanged(int index) {
+    // Je voulais faire quelque chose ici, mais je ne me rappelle plus de quoi.
+    // Alors j'ai fait ça.
+    if(index==42)
+        qApp->quit();
+}
 
+/*
+ * Actions liées aux graphiques
+ */
 bool FenPrincipale::already_added(int capteur, int valeur) {
     for(int i=0;i<graphiques.size();i++) {
         if((graphiques.at(i).first->getCapteur() == capteur) && (graphiques.at(i).first->getValeur() == valeur))
@@ -461,13 +394,6 @@ void FenPrincipale::on_sel_capteur_currentIndexChanged(int index)
     }
 
     add_graph->setEnabled(added_something);
-}
-
-void FenPrincipale::on_sel_valeur_currentIndexChanged(int index) {
-    // Je voulais faire quelque chose ici, mais je ne me rappelle plus de quoi.
-    // Alors j'ai fait ça.
-    if(index==42)
-        qApp->quit();
 }
 
 void FenPrincipale::on_add_graph_clicked()
@@ -516,14 +442,10 @@ void FenPrincipale::graphClosed() {
     disconnect(graphic_range_selector, SIGNAL(endDateChanged(QDateTime)), g, SLOT(setEndDT(QDateTime)));
 }
 
-void FenPrincipale::on_btn_optimiser_clicked()
-{
-    if(btn_optimiser->isChecked())
-        optimise_graph();
 
-    optimisation_graph = btn_optimiser->isChecked();
-}
-
+/*
+ * Actions liée à la table des valeurs
+ */
 void FenPrincipale::on_actualizeTableButton_clicked()
 {
     if(check_all_values->isChecked()) {
@@ -533,6 +455,9 @@ void FenPrincipale::on_actualizeTableButton_clicked()
     }
 }
 
+/*
+ * Ecriture des paramètres
+ */
 
 void FenPrincipale::on_dataServerLineEdit_editingFinished()
 {
@@ -552,38 +477,12 @@ void FenPrincipale::on_heureLancement_timeChanged(const QTime &time)
     file.close();
 
 }
+
+
+
 /*
-void FenPrincipale::on_horizontalSlider_valueChanged(int position)
-{
-    int heures = 0;
-    int minutes = 0;
-
-    if(position<60) {
-        if(position == 1)
-            bowltext->setText(QString::number(position) + " minute");
-        else
-            bowltext->setText(QString::number(position) + " minutes");
-
-        minutes = position;
-    } else  {
-        heures = (position-position%60)/60;
-        QString heureMsg = heures>1 ? " heures ":" heure ";
-
-        minutes = position%60;
-        QString minutesMsg = minutes>1 ? " minutes ":" minute ";
-
-        if(minutes == 0)
-            bowltext->setText(QString::number(heures) + heureMsg);
-        else
-            bowltext->setText(QString::number(heures) + heureMsg + QString::number(minutes) + minutesMsg);
-    }
-
-    QPair<GraphicView*,QMdiSubWindow*> value;
-    foreach(value,graphiques) {
-       value.first->majData(QTime(heures,minutes,0));
-    }
-}*/
-
+ * Gestion du menu Konami
+ */
 bool FenPrincipale::eventFilter( QObject *o, QEvent *e ) {
 
     if ( e->type() == QEvent::KeyPress ) {
@@ -631,52 +530,50 @@ void FenPrincipale::konamify(bool enable) {
     }
 }
 
-void FenPrincipale::on_konami_1_clicked() // nyan
-{
+void FenPrincipale::on_konami_1_clicked() {
     reinit_b();
     konami_1->setDefault(true);
-
     stack->setCurrentIndex(6);
     if(kwebview->url().toString() != "http://www.nyan.cat/original.php")
         kwebview->load(QUrl("http://www.nyan.cat/original.php"));
 }
 
-void FenPrincipale::on_konami_2_clicked() // gswitch
-{
+void FenPrincipale::on_konami_2_clicked(){
     reinit_b();
     konami_2->setDefault(true);
-
     stack->setCurrentIndex(6);
     if(kwebview->url().toString() != "http://uploads.ungrounded.net/526000/526596_GSwitch.swf")
         kwebview->load(QUrl("http://uploads.ungrounded.net/526000/526596_GSwitch.swf"));
 }
 
-void FenPrincipale::on_konami_3_clicked() // trololo
-{
+void FenPrincipale::on_konami_3_clicked(){
     reinit_b();
     konami_3->setDefault(true);
-
     stack->setCurrentIndex(6);
     if(kwebview->url().toString() != "http://www.youtube.com/watch?v=oavMtUWDBTM")
         kwebview->load(QUrl("http://www.youtube.com/watch?v=oavMtUWDBTM"));
-
 }
 
-void FenPrincipale::on_konami_4_clicked() // google
-{
+void FenPrincipale::on_konami_4_clicked() {
     reinit_b();
     konami_4->setDefault(true);
-
     stack->setCurrentIndex(6);
     if(kwebview->url().toString() != "http://www.google.fr")
         kwebview->load(QUrl("http://www.google.fr"));
 }
 
-void FenPrincipale::on_konami_close_clicked() {
-    konamify(false);
-    reinit_b();
+void FenPrincipale::on_konami_close_clicked() {konamify(false);reinit_b();stack->setCurrentIndex(0);}
 
-    stack->setCurrentIndex(0);
+
+/*
+ * L'OPTIMISATEUR DE PLACEMENT DES GRAPHIQUES OP OF THE DEAD
+ */
+void FenPrincipale::on_btn_optimiser_clicked()
+{
+    if(btn_optimiser->isChecked())
+        optimise_graph();
+
+    optimisation_graph = btn_optimiser->isChecked();
 }
 
 void FenPrincipale::optimise_graph() {
@@ -691,7 +588,7 @@ void FenPrincipale::optimise_graph() {
     int colSize = zone_graph->geometry().width();
 
     for(int i=0;i<graphiques.size();i++) {
-        int row, rowStretch, col, colStretch;
+        int row, rowStretch, col=1, colStretch=1;
         bool error = false;
         switch(nbItems) {
             case 1:
@@ -822,11 +719,4 @@ void FenPrincipale::optimise_graph() {
     }
 
 }
-/*
-void FenPrincipale::on_horizontalSlider_sliderMoved(int position)
-{
-    this->on_horizontalSlider_valueChanged(position);
-}
-*/
-
 

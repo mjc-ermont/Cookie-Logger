@@ -1,9 +1,6 @@
 #include "cookiedecoder.h"
 
-CookieDecoder::CookieDecoder()
-{
-
-}
+CookieDecoder::CookieDecoder(){}
 
 
 void CookieDecoder::decodeString(QByteArray(&data)) {
