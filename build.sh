@@ -1,5 +1,6 @@
 #!/bin/bash
 
+pwd
 cd ChronoReader &&
 git pull origin master &&
 git submodule init &&
