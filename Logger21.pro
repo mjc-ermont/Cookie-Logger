@@ -84,7 +84,6 @@ CONFIG += serialport
 
 QMAKE_CXXFLAGS_DEBUG += -O2 #Sinon ça faire l'erreur "too many sections"
 
-message(*nix detected)
 LIBS += -lqwt
 LIBS += -lqjson
 

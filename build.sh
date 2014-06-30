@@ -30,8 +30,8 @@ then
 	pxz -d mxe.tar.xz &&
 	echo "Detarring" &&
 	tar -xf mxe.tar &&
-	export PATH=$TRAVIS_BUILD_DIR/mxe/usr/bin:$PATH &&
+	export PATH=/home/travis/mjc-ermont/Cookie-Logger/mxe/usr/bin:$PATH &&
 	echo "Building" &&
-	mxe/usr/i686-pc-mingw32.shared/qt/bin/qmake Logger21.pro &&
+	/home/travis/mjc-ermont/Cookie-Logger/mxe/usr/i686-pc-mingw32.shared/qt/bin/qmake Logger21.pro &&
 	make
 fi
