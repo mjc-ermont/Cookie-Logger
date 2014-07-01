@@ -21,6 +21,12 @@ then
 elif [ $OS == "WIN" ];
 then
 	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev &&
+	git clone https://github.com/jnovy/pxz && 
+	cd pxz &&
+	make &&
+	sudo make install && 
+	cd .. &&
+
 	if [ $ARCH == "i686" ];
 	then
 		wget https://dl.dropboxusercontent.com/s/do0ufqeziw8d2qo/mxe_i686.tar.xz
