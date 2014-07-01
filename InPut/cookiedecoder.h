@@ -6,6 +6,7 @@
 #include <QByteArray>
 #include <QDebug>
 #include <QStringList>
+
 #include "../defines.h"
 
 class CookieDecoder : public QObject
@@ -20,7 +21,7 @@ signals:
     void    newValue            (int id_capteur, int id_valeur, double valeur);
 
 private:
-    QString get_checksum        (QString trame);
+    char    get_checksum        (QByteArray trame);
 
     int     precIdCapteur;
     int     precIdValeur;
