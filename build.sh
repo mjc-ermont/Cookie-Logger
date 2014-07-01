@@ -23,10 +23,10 @@ then
 	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev &&
 	if [ $ARCH == "i686" ];
 	then
-		wget https://dl.dropboxusercontent.com/s/do0ufqeziw8d2qo/mxe_i686.tar.xz &&
+		wget https://dl.dropboxusercontent.com/s/do0ufqeziw8d2qo/mxe_i686.tar.xz
 	elif [ $ARCH == "x86_64" ];
 	then
-		wget https://dl.dropboxusercontent.com/s/r2frnt3b68heh80/mxe_x86_64.tar.xz &&	
+		wget https://dl.dropboxusercontent.com/s/r2frnt3b68heh80/mxe_x86_64.tar.xz
 	fi
 	echo "Extracting" &&
 	pxz -d mxe_$ARCH.tar.xz &&
