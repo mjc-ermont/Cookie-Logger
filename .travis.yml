@@ -6,7 +6,7 @@ before_script:
 script : ./build.sh
 env :
   matrix :
-    - OS=LINUX
-    - OS=WIN
-    - ARCH=i686
-    - ARCH=x86_64
+    - OS=LINUX ARCH=i686
+    - OS=LINUX ARCH=x86_64
+    - OS=WIN ARCH=i686
+    - OS=WIN ARCH=x86_64
