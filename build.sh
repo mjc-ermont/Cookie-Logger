@@ -25,6 +25,7 @@ then
 	then
 		wget https://dl.dropboxusercontent.com/s/do0ufqeziw8d2qo/mxe_i686.tar.xz &&
 	elif [ $ARCH == "x86_64" ];
+	then
 		wget https://dl.dropboxusercontent.com/s/r2frnt3b68heh80/mxe_x86_64.tar.xz &&	
 	fi
 	echo "Extracting" &&
