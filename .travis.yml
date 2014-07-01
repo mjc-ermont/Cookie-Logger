@@ -8,3 +8,5 @@ env :
   matrix :
     - OS=LINUX
     - OS=WIN
+    - ARCH=i686
+    - ARCH=x86_64
