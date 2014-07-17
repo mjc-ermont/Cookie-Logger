@@ -16,8 +16,8 @@ then
 	make &&
 	sudo make install &&
 	cd ..
-	qmake Logger21.pro &&
-	make -f Makefile.Release
+	qmake Logger21.pro CONFIG+=release &&
+	make
 elif [ $OS == "WIN" ];
 then
 	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev &&
@@ -43,6 +43,6 @@ then
 	sudo mv /opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/include/{qw*.h,qwt/}
 	export PATH=/opt/mxe/usr/bin:$PATH &&
 	echo "Building" &&
-	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro &&
-	make -f Makefile.Release
+	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro CONFIG+=release &&
+	make
 fi
