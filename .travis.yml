@@ -19,6 +19,7 @@ deploy:
   api_key:
     secure: HrIQqdnSY8bMLcHKGAYP1fnyCmzxjN73ALfEqXzFp1gexWEZhhj57nGsC+lkI54WsmOxVExDYc9z5ILtf151R0aT5j/wKJjS3oKSIUTRYmJ9IMAMClirtHCkFy3Y2nvFUvrABW5p6Z6284ochOWFZ6th6+yjAMIeeJsyivLKbJ8=
   file: Logger21-*
+  skip_cleanup: true
   on:
     repo: mjc-ermont/Cookie-Logger
     tags: true

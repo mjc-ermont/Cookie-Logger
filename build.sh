@@ -46,6 +46,6 @@ then
 	echo "Building" &&
 	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro CONFIG+=release &&
 	make
-	mv release/Logger21 Logger21-$OS-$ARCH
+	mv release/Logger21.exe Logger21-$OS-$ARCH.exe
 fi
 
