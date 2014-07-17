@@ -7,7 +7,9 @@ script : ./build.sh
 env :
   matrix :
     - OS=LINUX ARCH=i686
-    - OS=WIN ARCH=i686
-  allow_failures:
-    - OS=WIN ARCH=x86_64
     - OS=LINUX ARCH=x86_64
+    - OS=WIN ARCH=i686
+    - OS=WIN ARCH=x86_64
+  allow_failures:
+    - OS=LINUX ARCH=x86_64
+    - OS=WIN ARCH=x86_64
