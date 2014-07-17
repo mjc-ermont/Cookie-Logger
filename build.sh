@@ -18,6 +18,7 @@ then
 	cd ..
 	qmake Logger21.pro CONFIG+=release &&
 	make
+	mv Logger21 Logger21-$OS-$ARCH
 elif [ $OS == "WIN" ];
 then
 	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev &&
@@ -45,6 +46,6 @@ then
 	echo "Building" &&
 	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro CONFIG+=release &&
 	make
+/bin/bash: q : commande introuvable
 fi
 
-mv Logger21 Logger21-$OS-$ARCH
