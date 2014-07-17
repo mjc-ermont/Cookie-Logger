@@ -46,3 +46,5 @@ then
 	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro CONFIG+=release &&
 	make
 fi
+
+mv Logger21 Logger21-$OS-$ARCH
