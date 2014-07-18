@@ -15,15 +15,15 @@ then
 	qmake qtserialport.pro &&
 	make &&
 	sudo make install &&
-	cd ..
+	cd .. &&
 	if [ $ARCH == "i686" ];
 	then
-		qmake Logger21.pro -spec linux-g++-32 &&
+		qmake Logger21.pro -spec linux-g++-32
 	elif [ $ARCH == "x86_64" ];
 	then
-		qmake Logger21.pro -spec linux-g++-64 &&
+		qmake Logger21.pro -spec linux-g++-64
 	fi
-	make
+	make &&
 	mv Logger21 Logger21-$OS-$ARCH
 elif [ $OS == "WIN" ];
 then
