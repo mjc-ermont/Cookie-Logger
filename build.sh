@@ -11,7 +11,7 @@ if [ $OS == "LINUX" ];
 then
 	if [ $ARCH == "i686" ];
 	then
-		sudo apt-get install qt4-dev-tools:i385 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib &&
+		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib &&
 		git clone git://gitorious.org/qt/qtserialport.git &&
 		cd qtserialport &&
 		qmake qtserialport.pro -spec linux-g++-32 &&
