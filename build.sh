@@ -16,7 +16,13 @@ then
 	make &&
 	sudo make install &&
 	cd ..
-	qmake Logger21.pro CONFIG+=release &&
+	if [ $ARCH == "i686" ];
+	then
+		qmake Logger21.pro -spec linux-g++-32 &&
+	elif [ $ARCH == "x86_64" ];
+	then
+		qmake Logger21.pro -spec linux-g++-64 &&
+	fi
 	make
 	mv Logger21 Logger21-$OS-$ARCH
 elif [ $OS == "WIN" ];
@@ -44,7 +50,7 @@ then
 	sudo mv /opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/include/{qw*.h,qwt/}
 	export PATH=/opt/mxe/usr/bin:$PATH &&
 	echo "Building" &&
-	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro CONFIG+=release &&
+	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro &&
 	make
 	mv release/Logger21.exe Logger21-$OS-$ARCH.exe
 fi
