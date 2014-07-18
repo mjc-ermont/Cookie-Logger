@@ -8,19 +8,26 @@ git submodule update &&
 cd .. &&
 
 if [ $OS == "LINUX" ];
-then
-	sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev libc6-dev-i386 gcc-multilib g++-multilib &&
-	git clone git://gitorious.org/qt/qtserialport.git &&
-	cd qtserialport &&
-	qmake qtserialport.pro &&
-	make &&
-	sudo make install &&
-	cd .. &&
+
 	if [ $ARCH == "i686" ];
 	then
+		sudo apt-get install qt4-dev-tools:i385 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib &&
+		git clone git://gitorious.org/qt/qtserialport.git &&
+		cd qtserialport &&
+		qmake qtserialport.pro -spec linux-g++-32 &&
+		make &&
+		sudo make install &&
+		cd .. &&
 		qmake Logger21.pro -spec linux-g++-32
 	elif [ $ARCH == "x86_64" ];
 	then
+		sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev &&
+		git clone git://gitorious.org/qt/qtserialport.git &&
+		cd qtserialport &&
+		qmake qtserialport.pro &&
+		make &&
+		sudo make install &&
+		cd .. &&
 		qmake Logger21.pro -spec linux-g++-64
 	fi
 	make &&
