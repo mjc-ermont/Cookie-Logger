@@ -8,7 +8,7 @@ git submodule update &&
 cd .. &&
 
 if [ $OS == "LINUX" ];
-
+then
 	if [ $ARCH == "i686" ];
 	then
 		sudo apt-get install qt4-dev-tools:i385 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib &&
