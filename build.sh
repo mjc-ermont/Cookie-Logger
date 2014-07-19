@@ -60,6 +60,9 @@ then
 	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro QMAKE_LFLAGS+='-static-libstdc++ -static-libgcc -Wl,--enable-auto-image-base -Wl,--add-stdcall-alias -Wl,--enable-auto-import' &&
 	make &&
 	mkdir build &&
+	cd build &&
+	wget http://arthurtoussaint.free.fr/libgcc_s_sjlj-1.dll &&
+	cd .. &&
 	cp release/Logger21.exe /opt/mxe/usr/$ARCH-w64-mingw32.shared/bin/{libqjson,zlib1,libstdc++-6,libpng16-16,libsqlite3-0}.dll /opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/lib/{qwt,QtCore4,QtGui4,QtSql4,QtSerialPort,QtWebKit4,QtNetwork4,QtSvg4}.dll  build/ &&
 	zip -r Logger21-$OS-$ARCH.zip build/
 fi
