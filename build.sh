@@ -58,9 +58,9 @@ then
 	export PATH=/opt/mxe/usr/bin:$PATH &&
 	echo "Building" &&
 	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro &&
-	make
-	mkdir build
-	cp release/Logger21.exe /opt/mxe/usr/x86_64-w64-mingw32.shared/bin/libqjson.dll /opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/lib/{qwt,QtCore4,QtGui4,QtSql4,QtSerialPort,QtWebKit4,QtNetwork4}.dll  build/
+	make &&
+	mkdir build &&
+	cp release/Logger21.exe /opt/mxe/usr/x86_64-w64-mingw32.shared/bin/libqjson.dll /opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/lib/{qwt,QtCore4,QtGui4,QtSql4,QtSerialPort,QtWebKit4,QtNetwork4}.dll  build/ &&
 	zip -r Logger21-$OS-$ARCH.zip build/
 fi
 
