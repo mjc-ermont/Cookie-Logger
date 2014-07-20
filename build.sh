@@ -50,7 +50,7 @@ then
 	sudo mv /opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/include/{qw*.h,qwt/}
 	export PATH=/opt/mxe/usr/bin:$PATH &&
 	echo "Building" &&
-	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro QMAKE_CXXFLAGS += -std=c++0x &&
+	/opt/mxe/usr/$ARCH-w64-mingw32.shared/qt/bin/qmake Logger21.pro QMAKE_CXXFLAGS += -O3 &&
 	make &&
 	mkdir build &&
 	cd build &&
