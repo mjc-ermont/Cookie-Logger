@@ -40,7 +40,7 @@ then
 	make &&
 	sudo make install && 
 	cd .. &&
-	wget http://arthurtoussaint.free.fr/mxe_$ARCH.tar.xz&
+	wget http://arthurtoussaint.free.fr/mxe_$ARCH.tar.xz &&
 	echo "Extracting" &&
 	pxz -d mxe_$ARCH.tar.xz &&
 	echo "Detarring" &&
