@@ -27,6 +27,7 @@
 #include "balaifrequenciel.h"
 #include "defines.h"
 #include "tablemgr.h"
+#include "webservicesmanager.h"
 #include "UI/timerangeselector.h"
 
 
@@ -51,9 +52,13 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         SensorManager*  getSensorMgr()  {return sensormgr; }
         MapsView*       getMap()        {return carte;}
         TableMgr*       getTableMgr()   {return tableManager;}
+        WebServicesManager* getWebServicesManager();
     // Euh rien
         void konamify(bool enable);
 
+
+        void loadSettings();
+        void saveSettings();
 
     protected:
         void reinit_b();
@@ -83,6 +88,8 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         CookieDecoder*          myDecoder;
         SensorManager*          sensormgr;
 
+        WebServicesManager*     mWebServicesManager;
+
         // Trucs en vrac
         QDateTime               h_depart;
         bool                    optimisation_graph;
@@ -95,16 +102,25 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
 
 
     public slots:
+        void onWebServicesNotification(int, QString);
+
         void updatePortListMenu();
         void portTriggered();
         void data_read(int idc, int idv, QVector<Data> data, QString reason);
 
-        void message(QString message);
+        void log_logger(QString str);
+        void log_decoder(QString str);
+        void log_serial(QString str);
+        void log_database(QString str);
+        void log_webservices(QString str);
+        void log(int id, QString str);
+
         void informationsReceived(QList<QByteArray>);
 
         void syncTime();
         void resetIndicatorRx();
         void setIndicatorRx();
+
 
         // Slots de type event sur ui
         void on_b_param_clicked();
@@ -137,6 +153,14 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void on_action9600_triggered();
         void on_action57600_triggered();
         void onRangeStartUpdate(QDateTime range_start);
+private slots:
+        void on_metewowServerLineEdit_editingFinished();
+        void on_metewowMacLineEdit_editingFinished();
+        void on_metewowMdpLineEdit_editingFinished();
+        void on_metewowServerCheckBox_clicked();
+        void on_dataServerCheckBox_clicked();
+        void on_metewowRegisterPushButton_clicked();
+        void on_metewowDeletePushButton_clicked();
 };
 
 #endif // FENPRINCIPALE_H

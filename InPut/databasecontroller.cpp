@@ -10,7 +10,9 @@ void DatabaseController::run() {
     forever {
         mutex.lock();
         if(!work.isEmpty()) {
-            qDebug() << "[DB] Queue size: " << work.size();
+            int s = work.size();
+            emit message("Queue size: " + QString::number(s) + " ");
+            qDebug() << "[DB] Queue size: " << s;
             QStringList req = work.dequeue().split(";");
             mutex.unlock();
             if(req.size() >= 4) {
@@ -81,9 +83,11 @@ void DatabaseController::setup() {
     db.setPassword("");
 
     if(!db.open()) {
+        emit message("La base de données ne s'est pas ouverte. Chiasse.");
         qDebug() << "la bdd ne s'est pas ouverte";
         return;
     } else {
+        emit message("La base de données s'est correctement initialisée");
         qDebug() << "la bdd s'est correctement initialisée";
     }
 

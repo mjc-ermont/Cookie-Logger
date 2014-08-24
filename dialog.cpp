@@ -23,6 +23,7 @@ AskDialog::AskDialog()
         }
         nItems++;
     }
+    textEntry->setText(settings->value("serial/spec","").toString());
 
     nItems++;
     selectEntry->addItem("Autre");
@@ -30,6 +31,9 @@ AskDialog::AskDialog()
         textEntry->setVisible(false);
     else
         textEntry->setVisible(true);
+
+    if(prev_port == "Autre")
+        selectEntry->setCurrentIndex(nItems-1);
 }
 
 AskDialog::~AskDialog()
@@ -46,15 +50,14 @@ void AskDialog::continueClicked()
     else
         port = selectEntry->currentText();
 
-    settings->setValue("serial/port",port);
+    settings->setValue("serial/port",selectEntry->currentText());
     settings->setValue("serial/baud",baudrate->currentIndex());
+    settings->setValue("serial/spec",textEntry->text());
 
-    Serial* com = new Serial(port, baudrate->currentText().toInt());
+    com = new Serial(port, baudrate->currentText().toInt());
     com->init();
 
-
     fen = new FenPrincipale(com);
-
     fen->show();
     this->close();
 }

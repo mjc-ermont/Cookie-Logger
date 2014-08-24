@@ -3,11 +3,11 @@
 
 
 FenPrincipale::FenPrincipale(Serial* _com) {
-
     // Initialisation paramètres
     position=0;
     n=0;
     com = _com;
+
     optimisation_graph = false;
     resetIndicator=NULL;
     // --------------------
@@ -28,6 +28,12 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     kwebview = new QWebView();
     p_konami_layout->addWidget(kwebview);
     // --------------------
+    if(com->isOkay()) {
+        log_serial("Port série activé avec succès");
+    } else {
+        log_serial("Problème d'ouverture du port série");
+    }
+
     // Initialisation radio buttons de la barre de menu (sélection port/baudrate)
     QActionGroup* group = new QActionGroup( this );
     this->action137050->setCheckable(true);
@@ -63,8 +69,10 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     sensormgr = new SensorManager(this);
     QVector<Sensor*> sensorList = sensormgr->getSensors();
     nbSensors = sensorList.size();
-    foreach(Sensor* s, sensorList)
+    log_decoder("Lecture de la liste des capteurs depuis 'conf/cplist.xml'");
+    foreach(Sensor* s, sensorList) {
         sel_capteur->addItem(s->getName());
+    }
 
     for(int i=0;i<nbSensors ;i++) {
         QTableView *t = new QTableView;
@@ -74,7 +82,15 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
         QStandardItemModel *modele = new QStandardItemModel;
         int v=0;
+
+        log_decoder("||");
+        log_decoder("|| Capteur : "+sensormgr->getSensor(i)->getName());
+
         foreach(SensorValue* s,  sensormgr->getSensor(i)->getValues()) {
+            if(s->getUnit().isEmpty())
+                log_decoder("|| ↳ "+s->getName());
+            else log_decoder("|| ↳ "+s->getName()+ " en "+s->getUnit());
+
             modele->setHorizontalHeaderItem(v,new QStandardItem(s->getName()));
             v++;
         }
@@ -85,6 +101,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     qRegisterMetaType<QVector<Data> > ("QVector<Data>");
     // Connect entre la bdd et fenprincipale pour les réponses aux requêtes de lecture
     connect(sensormgr->getDB(),SIGNAL(dataRead(int,int,QVector<Data>,QString)), this,SLOT(data_read(int,int,QVector<Data>,QString)));
+    connect(sensormgr->getDB(),SIGNAL(message(QString)), this,SLOT(log_database(QString)));
     // -------------------
     // Initialisation des différentes pages
     graphic_range_selector = new TimeRangeSelector();
@@ -92,23 +109,25 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
     tableManager = new TableMgr(&tableauxHist,sensormgr);
     carte = new MapsView(c_maps);
-    message("[INFO] Loading boarding table...");
+    log_logger("[INFO] Loading boarding table...");
     tableauBord = new BoardingTable(container,sensormgr);
-    message("[INFO] Loaded !");
+    log_logger("[INFO] Loaded !");
     // ------------------------
     // Démarrage du timer d'actualisation
-    message("[INFO] Starting refreshing timer");
+    log_logger("[INFO] Starting refreshing timer");
     actTemps = new QTimer();
     connect(actTemps,SIGNAL(timeout()),this,SLOT(syncTime()));
     actTemps->start(1000);
     // -----------------------------
     // Démarrage du décodeur de trames
     myDecoder = new CookieDecoder();
-    connect(myDecoder, SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
-    message("[INFO] All started !");
+    connect(myDecoder,SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
+    connect(myDecoder,SIGNAL(message(QString)),this,SLOT(log_decoder(QString)));
+    log_logger("[INFO] All started !");
     // -----------------------------
     // Prise en charge du port série
     connect(com,SIGNAL(dataRead(QList<QByteArray>)),this,SLOT(informationsReceived(QList<QByteArray>)));
+    connect(com,SIGNAL(message(QString)),this,SLOT(log_serial(QString)));
     // -------------------
     // Implémentation du chronoreader
     h_depart = QDateTime::currentDateTime();
@@ -116,37 +135,33 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     chronolayout->addWidget(chronoWidget);
     // --------------------
     // Lecture des paramètres enregistrés
-    QFile file("conf/url.ini");
-    file.open(QIODevice::ReadOnly);
-    QString url = QString(file.readAll());
-    file.close();
-    dataServerLineEdit->setText(url);
+    QSettings *data_settings = new QSettings();
+    loadSettings();
 
-    QFile df("conf/datedepart.ini");
-    df.open(QIODevice::ReadOnly);
-    QString date = QString(df.readAll());
-    df.close();
+    QDateTime t = data_settings->value("datedepart",QDateTime::currentDateTime()).toDateTime();
+    heureLancement->setDateTime(t);
+    chronoWidget->laucherCounter(t.time());
 
-    if(date.size() == 3) {
-        int h=date.split(":").at(0).toInt();
-        int m=date.split(":").at(1).toInt();
-        int s=date.split(":").at(2).toInt();
+    mWebServicesManager = new WebServicesManager();
+    connect(mWebServicesManager, SIGNAL(notification(int,QString)), this, SLOT(onWebServicesNotification(int,QString)));
+    connect(mWebServicesManager, SIGNAL(message(QString)), this, SLOT(log_webservices(QString)));
 
-        heureLancement->setTime(QTime(h,m,s));
-        chronoWidget->laucherCounter(QTime(h,m,s));
-    } else {
-        heureLancement->setTime(QTime::currentTime());
-        chronoWidget->laucherCounter(QTime::currentTime());
-    }
+    mWebServicesManager->test(DATASERVER);
+    mWebServicesManager->test(METEWOWSERVER);
     // -------------------------
     // Couleur custom pour l'indicateur de réception d'informations
     QPalette p = indicator_rx->palette();
     p.setColor(QPalette::Disabled, QPalette::Background, QColor(255,0,0));
     indicator_rx->setPalette(p);
     //---------------------------
+
+
 }
 
-FenPrincipale::~FenPrincipale(){}
+FenPrincipale::~FenPrincipale(){
+    qDebug() << "tamer";
+    delete com;
+}
 
 
 void FenPrincipale::resizeEvent(QResizeEvent *) {
@@ -222,7 +237,6 @@ void FenPrincipale::syncTime() {
  * Gestion des données
  */
 void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
-    setIndicatorRx();
     if(trames.size() > 0) {
         for(int i=0;i<trames.size();i++) {
             myDecoder->decodeString(trames[i]);
@@ -259,11 +273,12 @@ void FenPrincipale::data_read(int idc, int idv, QVector<Data> data, QString reas
  */
 void FenPrincipale::setIndicatorRx() {
 
-
     resetIndicator = new QTimer();
     n++;
+    qDebug() << "Increment indicator" << n;
     connect(resetIndicator,SIGNAL(timeout()),this,SLOT(resetIndicatorRx()));
 
+    resetIndicator->setSingleShot(true);
     resetIndicator->start(500);
 
     indicator_rx->setChecked(true);
@@ -271,16 +286,52 @@ void FenPrincipale::setIndicatorRx() {
 
 void FenPrincipale::resetIndicatorRx() {
     n--;
+    qDebug() << "Decrement indicator" << n;
     if(n==0)
         indicator_rx->setChecked(false);
 }
 
-void FenPrincipale::message(QString message){
+void FenPrincipale::log_logger(QString message){
+    log(0, message);
+}
 
+void FenPrincipale::log_serial(QString message){
+    log(1, message);
+}
+
+void FenPrincipale::log_decoder(QString message){
+    log(2, message);
+}
+
+void FenPrincipale::log_database(QString message){
+    log(3, message);
+}
+
+void FenPrincipale::log_webservices(QString message){
+    log(4, message);
+}
+
+void FenPrincipale::log(int section, QString message) {
     message = QDateTime::currentDateTime().toString("[hh:mm:ss] ") + message;
+    //barreStatus->showMessage(message);
 
-    barreStatus->showMessage(message);
-    console->appendPlainText(message);
+    switch(section) {
+    case 0: //logger
+        console->appendPlainText(message);
+        break;
+    case 1: //serial
+        console_serie->append(message);
+        break;
+    case 2: //decoder
+        console_decodeur->append(message);
+        break;
+    case 3: // bdd
+        console_bdd->append(message);
+        break;
+    case 4: //web
+        console_webservices->append(message);
+        break;
+    }
 }
 
 /*
@@ -398,7 +449,12 @@ void FenPrincipale::on_sel_capteur_currentIndexChanged(int index)
 
 void FenPrincipale::on_add_graph_clicked()
 {
-    GraphicView* g = new GraphicView(sel_capteur->currentIndex(), sel_valeur->itemData(sel_valeur->currentIndex()).toInt(),this);
+    int selected_sensor = sel_capteur->currentIndex();
+    int selected_value  = sel_valeur->itemData(sel_valeur->currentIndex()).toInt();
+    if(selected_sensor == -1)
+        return;
+
+    GraphicView* g = new GraphicView(selected_sensor, selected_value,this);
 
 
     connect(graphic_range_selector, SIGNAL(startDateChanged(QDateTime)), g, SLOT(setStartDT(QDateTime)));
@@ -455,30 +511,95 @@ void FenPrincipale::on_actualizeTableButton_clicked()
     }
 }
 
+void FenPrincipale::onWebServicesNotification(int type, QString text) {
+    if(type == DATASERVER) {
+        dataServerCheckBox->setText(text);
+    } else if(type == METEWOWSERVER) {
+        metewowServerCheckBox->setText(text);
+    }
+}
+
 /*
- * Ecriture des paramètres
+ * Paramètres
  */
 
-void FenPrincipale::on_dataServerLineEdit_editingFinished()
-{
-    QFile file("conf/url.ini");
-    file.open(QIODevice::ReadWrite);
-    file.resize(0);
-    file.write(dataServerLineEdit->text().toStdString().c_str());
-    file.close();
-}
 
-void FenPrincipale::on_heureLancement_timeChanged(const QTime &time)
-{
-    QFile file("conf/datedepart.ini");
-    file.open(QIODevice::ReadWrite);
-    file.resize(0);
-    file.write((QString::number(time.hour())+":"+QString::number(time.minute())+":"+QString::number(time.second())).toStdString().c_str());
-    file.close();
+void FenPrincipale::loadSettings() {
 
+    QSettings *data_settings = new QSettings();
+    dataServerLineEdit->setText(data_settings->value("dataserverurl", "").toString());
+    dataServerCheckBox->setChecked(data_settings->value("dataserverenabled", false).toBool());
+    metewowServerLineEdit->setText(data_settings->value("metewowserverurl", "").toString());
+    metewowServerCheckBox->setChecked(data_settings->value("metewowserverenabled", false).toBool());
+    metewowMacLineEdit->setText(data_settings->value("metewowid","LOGGER").toString());
+    metewowMdpLineEdit->setText(data_settings->value("metewowmdp","").toString());
 }
 
 
+void FenPrincipale::saveSettings() {
+
+    QSettings* settings = new QSettings();
+    settings->setValue("datedepart", heureLancement->dateTime());
+    settings->setValue("dataserverurl",dataServerLineEdit->text());
+    settings->setValue("dataserverenabled", dataServerCheckBox->isChecked());
+    QString mtwServer = metewowServerLineEdit->text();
+    if(mtwServer.at(mtwServer.size()-1) != '/' && mtwServer.size() > 0)
+        metewowServerLineEdit->setText(mtwServer + "/");
+    settings->setValue("metewowserverurl",metewowServerLineEdit->text());
+    settings->setValue("metewowserverenabled", metewowServerCheckBox->isChecked());
+    settings->setValue("metewowid", metewowMacLineEdit->text());
+    settings->setValue("metewowmdp", metewowMdpLineEdit->text());
+}
+
+
+
+void FenPrincipale::on_dataServerLineEdit_editingFinished() {
+    saveSettings();
+    mWebServicesManager->test(DATASERVER);
+}
+
+void FenPrincipale::on_metewowServerLineEdit_editingFinished() {
+    saveSettings();
+    mWebServicesManager->test(METEWOWSERVER);
+}
+
+void FenPrincipale::on_metewowMacLineEdit_editingFinished() {
+    saveSettings();
+}
+
+void FenPrincipale::on_metewowMdpLineEdit_editingFinished() {
+    saveSettings();
+}
+
+void FenPrincipale::on_heureLancement_timeChanged(const QTime &time) {
+    saveSettings();
+}
+
+void FenPrincipale::on_metewowServerCheckBox_clicked()
+{
+    saveSettings();
+    mWebServicesManager->test(METEWOWSERVER);
+}
+
+void FenPrincipale::on_dataServerCheckBox_clicked()
+{
+    saveSettings();
+    mWebServicesManager->test(DATASERVER);
+}
+
+void FenPrincipale::on_metewowRegisterPushButton_clicked()
+{
+    mWebServicesManager->metewowRegister();
+}
+
+void FenPrincipale::on_metewowDeletePushButton_clicked()
+{
+    mWebServicesManager->metewowDelete();
+}
+
+WebServicesManager* FenPrincipale::getWebServicesManager() {
+    return mWebServicesManager;
+}
 
 /*
  * Gestion du menu Konami
@@ -719,4 +840,5 @@ void FenPrincipale::optimise_graph() {
     }
 
 }
+
 

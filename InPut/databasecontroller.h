@@ -31,6 +31,7 @@ class DatabaseController : public QThread
         void dataWritten(int idc, int idv);
         void dataRead(int idc, int idv, QVector<Data> data, QString reason);
         void rangeStartUpdate(QDateTime range_start);
+        void message(QString);
 };
 
 #endif // DATABASECONTROLLER_H

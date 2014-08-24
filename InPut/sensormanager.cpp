@@ -44,12 +44,17 @@ void SensorManager::getSensorsFromFile() {
     reader.setDevice(cptConfig);
     reader.readNext();
     Sensor* curSensor = NULL;
+
+   // parent->log_decoder("Récupération de la liste des capteurs depuis <em>conf/cplist.xml</em>");
+
     while(!reader.atEnd()) {
         if((reader.name() == "sensor")&&(reader.attributes().value("name").toString() != "")) {
             Sensor *s = new Sensor(this,reader.attributes().value("name").toString(),reader.attributes().value("id").toString().toInt());
             curSensor = s;
             sensorList.append(s);
             qDebug() << "New sensor:" << s->getName();
+
+     //       parent->log_decoder("|| Nouveau capteur '" + s->getName() + "' ("+ QString::number(s->getId())+ ")");
         }
         if((reader.name() == "value")&&(reader.attributes().value("name").toString() != "")) {
             QString coef="x";
@@ -65,9 +70,11 @@ void SensorManager::getSensorsFromFile() {
 
             qDebug() << "  New value:" << sv->getName();
             qDebug() << "  For:" << curSensor->getName();
+      //      parent->log_decoder("||  || Nouvelle valeur '" + sv->getName() + "' ("+ QString::number(sv->getID())+ ")");
         }
         reader.readNext();
     }
+  //  parent->log_decoder("Terminé !");
 }
 
 Sensor* SensorManager::getSensor(int id) {

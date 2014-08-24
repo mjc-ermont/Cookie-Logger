@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
     AskDialog* d = new AskDialog();
     d->show();
     //------------------------------------------------------------------------------
-
-      return a.exec();
+    int rc = a.exec();
+    delete d->getSerial();
+    return rc;
 }

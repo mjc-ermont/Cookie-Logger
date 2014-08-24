@@ -21,8 +21,8 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="widgetCentral">
-   <layout class="QVBoxLayout" name="verticalLayout_5">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_7">
+    <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout_2" rowstretch="5,0" columnstretch="0,0,1,1">
       <item row="0" column="0">
        <widget class="QFrame" name="frame_2">
@@ -328,7 +328,7 @@
       <item row="1" column="2" colspan="2">
        <widget class="QStackedWidget" name="stack">
         <property name="currentIndex">
-         <number>4</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="p_tabl_bord">
          <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -340,10 +340,70 @@
         <widget class="QWidget" name="p_debug_console">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QPlainTextEdit" name="console">
-            <property name="readOnly">
-             <bool>true</bool>
+           <widget class="QTabWidget" name="tabWidget">
+            <property name="tabPosition">
+             <enum>QTabWidget::North</enum>
             </property>
+            <property name="tabShape">
+             <enum>QTabWidget::Rounded</enum>
+            </property>
+            <property name="currentIndex">
+             <number>3</number>
+            </property>
+            <widget class="QWidget" name="tab">
+             <attribute name="title">
+              <string>Logger</string>
+             </attribute>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPlainTextEdit" name="console">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_2">
+             <attribute name="title">
+              <string>Série</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_10">
+              <item row="0" column="0">
+               <widget class="QTextBrowser" name="console_serie"/>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_3">
+             <attribute name="title">
+              <string>Décodeur</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_9">
+              <item row="0" column="0">
+               <widget class="QTextBrowser" name="console_decodeur"/>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_4">
+             <attribute name="title">
+              <string>Base de données</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="0">
+               <widget class="QTextBrowser" name="console_bdd"/>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_5">
+             <attribute name="title">
+              <string>Web services</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <widget class="QTextBrowser" name="console_webservices"/>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>
@@ -376,15 +436,15 @@
                   <day>1</day>
                  </datetime>
                 </property>
+                <property name="currentSection">
+                 <enum>QDateTimeEdit::HourSection</enum>
+                </property>
                 <property name="time">
                  <time>
                   <hour>0</hour>
                   <minute>10</minute>
                   <second>0</second>
                  </time>
-                </property>
-                <property name="currentSection">
-                 <enum>QDateTimeEdit::HourSection</enum>
                 </property>
                </widget>
               </item>
@@ -405,25 +465,49 @@
          </layout>
         </widget>
         <widget class="QWidget" name="p_params">
-         <layout class="QGridLayout" name="gridLayout" rowstretch="1,0,0,0">
-          <item row="3" column="2">
-           <widget class="QLineEdit" name="dataServerLineEdit"/>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>URL du serveur de réception</string>
+         <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0,0">
+          <item row="4" column="3" colspan="2">
+           <widget class="QLineEdit" name="dataServerLineEdit">
+            <property name="placeholderText">
+             <string>http://127.0.0.1/cookie/bin/add.php</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1" colspan="2">
+          <item row="1" column="1" colspan="3">
            <widget class="QCheckBox" name="interpol_curve">
             <property name="text">
              <string>Interpoler les valeurs de courbe</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2">
+          <item row="4" column="5">
+           <widget class="QCheckBox" name="dataServerCheckBox">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="5">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>URL du serveur de réception</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="3">
            <widget class="QCheckBox" name="get_infos">
             <property name="text">
              <string>Activer mise à jour des infos</string>
@@ -433,17 +517,94 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="2">
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Heure de lancement</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>URL du serveur MétéWow</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1" colspan="5">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="7" column="5">
+           <widget class="QPushButton" name="metewowRegisterPushButton">
+            <property name="text">
+             <string>S'enregistrer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="3">
+           <widget class="QLineEdit" name="metewowMacLineEdit"/>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>     Identifiant/MDP</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="5">
+           <widget class="QCheckBox" name="metewowServerCheckBox">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="autoRepeat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="3" colspan="2">
+           <widget class="QLineEdit" name="metewowServerLineEdit">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="whatsThis">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>http://mtw.lortex.org/api/</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="4">
+           <widget class="QLineEdit" name="metewowMdpLineEdit">
+            <property name="echoMode">
+             <enum>QLineEdit::Password</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
            <widget class="QTimeEdit" name="heureLancement">
             <property name="displayFormat">
              <string>HH:mm:ss</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="label_4">
+          <item row="8" column="5">
+           <widget class="QPushButton" name="metewowDeletePushButton">
             <property name="text">
-             <string>Heure de lancement</string>
+             <string>Supprimer</string>
             </property>
            </widget>
           </item>
@@ -524,7 +685,7 @@
       </item>
      </layout>
     </item>
-    <item>
+    <item row="1" column="0">
      <widget class="QFrame" name="frame_4">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>

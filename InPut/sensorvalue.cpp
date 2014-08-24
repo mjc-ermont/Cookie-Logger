@@ -31,7 +31,7 @@ void SensorValue::addData(double d, bool parse) {
     else
         newData.value=d;
     qDebug() << "v: " << d << " parser: " << newData.value;
-
+    parent->getParent()->getParent()->log_decoder("Nouvelle valeur: ("+QString::number(parent->getId())+";"+QString::number(id)+") => "+QString::number(newData.value));
     parent->getParent()->getDB()->write(parent->getId(),id,newData.value);
 
     if(param == "xmap") {
@@ -40,19 +40,9 @@ void SensorValue::addData(double d, bool parse) {
         parent->getParent()->getParent()->getMap()->updateY(newData.value);
     }
 
-    QString url = parent->getParent()->getParent()->dataServerLineEdit->text();
-    QStringList split = url.split("||");
-    if(split.size() == 2) {
-        QHttp *serveur_search = new QHttp(split[0]);
-        serveur_search->setHost(split[0]);
-        split[1] = split[1].remove('\n');
-        serveur_search->get(split[1]+"?t=token&nc="+QString::number(parent->getId())+"&nv="+QString::number(id)+"&v="+QString::number(newData.value));
-    } else {
-        QHttp *serveur_search = new QHttp("home.konfiot.net");
-        serveur_search->setHost("home.konfiot.net");
 
-        serveur_search->get("/Cookie-WebUI-Server/bin/add.php?t=token&nc="+QString::number(parent->getId())+"&nv="+QString::number(id)+"&v="+QString::number(newData.value));
-    }
+
+    parent->getParent()->getParent()->getWebServicesManager()->update(parent->getId(), id, newData.value);
 }
 
 void SensorValue::getData(QString reason, bool last, QDateTime from, QDateTime to) {

@@ -39,7 +39,8 @@ SOURCES += \
     UI/histogram.cpp \
     UI/qxt/qxtspanslider.cpp \
     UI/qxt/qxtglobal.cpp \
-    UI/timerangeselector.cpp
+    UI/timerangeselector.cpp \
+    webservicesmanager.cpp
 
 HEADERS  += \
     tablemgr.h \
@@ -67,7 +68,8 @@ HEADERS  += \
     UI/qxt/qxtspanslider.h \
     UI/qxt/qxtspanslider_p.h \
     UI/timerangeselector.h \
-    exprtk.hpp
+    exprtk.hpp \
+    webservicesmanager.h
 
 FORMS += \
     FenPrincipale.ui \

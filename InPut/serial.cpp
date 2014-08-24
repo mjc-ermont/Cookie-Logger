@@ -9,11 +9,12 @@ Serial::Serial(QString _port,qint32 _baudrate)
     speakers_enabled = true;
     current_channel = 0;
     doingBalayage = false;
+    okay = false;
 }
 
 
 Serial::~Serial() {
-
+    qDebug() << "fermeture port série";
     serial_port->close();
 }
 
@@ -26,8 +27,14 @@ bool Serial::init() {
 
     serial_port->setBaudRate(baudrate);
     qDebug() << "test";
-    if(!serial_port->open(QIODevice::ReadWrite))
+    if(!serial_port->open(QIODevice::ReadWrite)) {
         qDebug() << "yolo";
+        emit message("Echec de l'ouverture du port série: "+serial_port->errorString());
+        okay = false;
+    } else {
+        emit message("Port série ouvert avec succès");
+        okay = true;
+    }
 
 
     QObject::connect(serial_port, SIGNAL(readyRead()), this, SLOT(readData()));
@@ -50,6 +57,8 @@ void Serial::setChannel(int id) {
         str = str + QChar(0x0D) + QChar(0x0A);
         qDebug() << "ok ta mer" << str;
         serial_port->write(str.toStdString().c_str());
+
+        emit message("Changement vers le canal "+id);
     }
 }
 
@@ -61,6 +70,10 @@ void Serial::setSpeakersEnabled(bool enabled) {
         str = str + QChar(0x0D) + QChar(0x0A);
         serial_port->write(str.toStdString().c_str());
 
+        if(enabled)
+            emit message("Activation du haut parleur");
+        else
+            emit message("Coupure du haut parleur");
  //  }
 }
 
@@ -84,8 +97,8 @@ void Serial::setBaudrate(qint32 bd) {
 }
 
 void Serial::setPort(QString port) {
-    serial_port->setPortName(port);
     serial_port->close();
+    serial_port->setPortName(port);
     serial_port->open(QIODevice::ReadWrite);
 
 }
@@ -97,6 +110,7 @@ QString Serial::getPort() {
 
 void Serial::balayageFrequenciel() {
     qDebug() << "Balayage en cours";
+    emit message("Balayage en cours");
 
     doingBalayage = true;
 
@@ -131,9 +145,11 @@ void Serial::readDataBalayage() {
 
     if(data.size() >= nvalues) {
         doingBalayage = false;
+        emit message("Balayage terminé");
         emit balayageDone(data);
     } else if(time.elapsed() > 5000) {
         doingBalayage = false;
+        emit message("Balayage terminé (timeout)");
         emit balayageDone(data);
         qDebug() << " timeout";
     }
@@ -152,6 +168,8 @@ void Serial::readData() {
 
     QByteArray dataread = serial_port->readAll();
 
+    if(dataread.size() != 0)
+        emit message(QString(dataread));
   //  qDebug() << dataread;
 
 

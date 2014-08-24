@@ -30,6 +30,10 @@ public:
     qint32 getBaudrate();
     QString getPort();
 
+    bool isOkay() {
+        return okay;
+    }
+
 
     static QStringList getPortList();
 
@@ -40,6 +44,8 @@ public slots:
 signals:
     void dataRead(QList<QByteArray>);
     void balayageDone(QVector<double>);
+
+    void message(QString);
 
 private:
 
@@ -65,6 +71,7 @@ private:
     unsigned char buffer[1024];
 
     int tty_fd;
+    bool okay;
     qint32 baudrate;
 
 };

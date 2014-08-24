@@ -15,13 +15,13 @@ class AskDialog : public QDialog, public Ui::Dialog
 public:
     AskDialog();
     ~AskDialog();
-
+    Serial* getSerial() {return com;}
 private slots:
     void continueClicked();
     void on_selectEntry_currentIndexChanged(const QString &arg1);
 private:
     FenPrincipale* fen;
-
+    Serial *com;
 
     QSettings* settings;
     int nItems;
