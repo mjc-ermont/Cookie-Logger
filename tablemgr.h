@@ -11,7 +11,6 @@
 #include "defines.h"
 #include "InPut/sensormanager.h"
 #include "InPut/sensorvalue.h"
-#include "ChronoReader/TimeCalc/timecalcs.h"
 
 
 class TableMgr

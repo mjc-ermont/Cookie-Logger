@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QThread>
+#include <QQueue>
+#include <QMutex>
 
 #include "sensormanager.h"
 

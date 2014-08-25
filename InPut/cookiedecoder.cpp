@@ -14,6 +14,7 @@ void CookieDecoder::decodeString(QByteArray(&data)) {
             emit message("Trame incomplète");
             qDebug() << "Trame incomplete";
         }
+        emit trame_erreur(1);
         return;
     }
 
@@ -35,6 +36,8 @@ void CookieDecoder::decodeString(QByteArray(&data)) {
 
         precIdCapteur=numCapteur;
         precIdValeur=numValeur;
+    } else {
+        emit trame_erreur(1);
     }
 
 }

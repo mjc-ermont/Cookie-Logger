@@ -46,6 +46,7 @@ signals:
     void balayageDone(QVector<double>);
 
     void message(QString);
+    void nBytesRead(int);
 
 private:
 

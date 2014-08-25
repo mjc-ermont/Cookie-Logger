@@ -15,9 +15,9 @@
 #include <QList>
 #include <QPair>
 #include <QMdiSubWindow>
+#include <QMessageBox>
 
 #include "ui_FenPrincipale.h"
-#include "ChronoReader/chronoreaderwidget.h"
 #include "InPut/sensormanager.h"
 #include "InPut/cookiedecoder.h"
 #include "InPut/serial.h"
@@ -29,6 +29,7 @@
 #include "tablemgr.h"
 #include "webservicesmanager.h"
 #include "UI/timerangeselector.h"
+#include "UI/stagesmanager.h"
 
 
 
@@ -37,6 +38,7 @@ class MapsView;
 class BoardingTable;
 class SensorManager;
 class TableMgr;
+class WebServicesManager;
 
 class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
 {
@@ -60,6 +62,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void loadSettings();
         void saveSettings();
 
+
     protected:
         void reinit_b();
         void resizeEvent(QResizeEvent *);
@@ -76,7 +79,6 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         BoardingTable*          tableauBord;
         MapsView*               carte;
         TableMgr*               tableManager;
-        ChronoReaderWidget*     chronoWidget;
 
         QActionGroup*           group_ports_name;
         QVector<QTableView*>    tableauxHist;
@@ -100,6 +102,10 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QList<int>              konami;
         QWebView*               kwebview;
 
+        int                     nTramesRecues;
+        int                     nTramesEchouees;
+        int                     nBytesRecus;
+
 
     public slots:
         void onWebServicesNotification(int, QString);
@@ -120,6 +126,12 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void syncTime();
         void resetIndicatorRx();
         void setIndicatorRx();
+
+
+        void incrementStatBytesRecus(int n);
+        void incrementStatTramesRecues(int n);
+        void incrementStatTramesEchouees(int n);
+
 
 
         // Slots de type event sur ui

@@ -26,9 +26,6 @@ SOURCES += \
     InPut/serial.cpp \
     InPut/sensormanager.cpp \
     InPut/fileimportdialog.cpp \
-    ChronoReader/chronoreaderwidget.cpp \
-    ChronoReader/TimeCalc/timecalcs.cpp \
-    ChronoReader/eventbox.cpp \
     UI/graphicview.cpp \
     InPut/cookiedecoder.cpp \
     InPut/yolodecoder.cpp \
@@ -40,7 +37,8 @@ SOURCES += \
     UI/qxt/qxtspanslider.cpp \
     UI/qxt/qxtglobal.cpp \
     UI/timerangeselector.cpp \
-    webservicesmanager.cpp
+    webservicesmanager.cpp \
+    UI/stagesmanager.cpp
 
 HEADERS  += \
     tablemgr.h \
@@ -54,9 +52,6 @@ HEADERS  += \
     InPut/sensormanager.h \
     InPut/sensor.h \
     InPut/fileimportdialog.h \
-    ChronoReader/chronoreaderwidget.h \
-    ChronoReader/TimeCalc/timecalcs.h \
-    ChronoReader/eventbox.h \
     UI/graphicview.h \
     InPut/cookiedecoder.h \
     InPut/yolodecoder.h \
@@ -69,7 +64,8 @@ HEADERS  += \
     UI/qxt/qxtspanslider_p.h \
     UI/timerangeselector.h \
     exprtk.hpp \
-    webservicesmanager.h
+    webservicesmanager.h \
+    UI/stagesmanager.h
 
 FORMS += \
     FenPrincipale.ui \

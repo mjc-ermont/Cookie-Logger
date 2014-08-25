@@ -10,6 +10,8 @@
 
 #include "QDebug"
 
+#include "InPut/sensormanager.h"
+
 #define DATASERVER 1
 #define METEWOWSERVER 2
 
@@ -17,13 +19,15 @@ class WebServicesManager : public QObject
 {
     Q_OBJECT
 public:
-    WebServicesManager();
+    WebServicesManager(FenPrincipale *parent);
     void update(int id_c, int id_v, double value);
     void test(int type);
 
     void metewowRegister();
     void metewowDelete();
 public slots:
+    void metewowRegisterResponse();
+    void metewowRegisterSensorResponse();
     void reponse();
     void erreur(QNetworkReply::NetworkError);
     void progression(qint64, qint64);
@@ -33,6 +37,7 @@ signals:
 private:
     QSettings *mSettings;
     QNetworkAccessManager *net;
+    FenPrincipale* mParent;
 };
 
 #endif // WEBSERVICESMANAGER_H

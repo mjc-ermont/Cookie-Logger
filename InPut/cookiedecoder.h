@@ -20,6 +20,7 @@ public:
 signals:
     void    newValue            (int id_capteur, int id_valeur, double valeur);
     void    message(QString);
+    void    trame_erreur(int);
 
 private:
     char    get_checksum        (QByteArray trame);

@@ -168,6 +168,8 @@ void Serial::readData() {
 
     QByteArray dataread = serial_port->readAll();
 
+    emit nBytesRead(dataread.size());
+
     if(dataread.size() != 0)
         emit message(QString(dataread));
   //  qDebug() << dataread;

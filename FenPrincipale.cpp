@@ -123,16 +123,18 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     myDecoder = new CookieDecoder();
     connect(myDecoder,SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
     connect(myDecoder,SIGNAL(message(QString)),this,SLOT(log_decoder(QString)));
+    connect(myDecoder,SIGNAL(trame_erreur(int)),this, SLOT(incrementStatTramesEchouees(int)));
     log_logger("[INFO] All started !");
     // -----------------------------
     // Prise en charge du port série
     connect(com,SIGNAL(dataRead(QList<QByteArray>)),this,SLOT(informationsReceived(QList<QByteArray>)));
     connect(com,SIGNAL(message(QString)),this,SLOT(log_serial(QString)));
+    connect(com, SIGNAL(nBytesRead(int)),this, SLOT(incrementStatBytesRecus(int)));
     // -------------------
     // Implémentation du chronoreader
-    h_depart = QDateTime::currentDateTime();
+   /* h_depart = QDateTime::currentDateTime();
     chronoWidget = new ChronoReaderWidget;
-    chronolayout->addWidget(chronoWidget);
+    chronolayout->addWidget(chronoWidget);*/
     // --------------------
     // Lecture des paramètres enregistrés
     QSettings *data_settings = new QSettings();
@@ -140,9 +142,8 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
     QDateTime t = data_settings->value("datedepart",QDateTime::currentDateTime()).toDateTime();
     heureLancement->setDateTime(t);
-    chronoWidget->laucherCounter(t.time());
 
-    mWebServicesManager = new WebServicesManager();
+    mWebServicesManager = new WebServicesManager(this);
     connect(mWebServicesManager, SIGNAL(notification(int,QString)), this, SLOT(onWebServicesNotification(int,QString)));
     connect(mWebServicesManager, SIGNAL(message(QString)), this, SLOT(log_webservices(QString)));
 
@@ -156,6 +157,12 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     //---------------------------
 
 
+
+    StagesManager* stmgr = new StagesManager(stageGraphicsView);
+
+    nTramesRecues = 0;
+    nTramesEchouees = 0;
+    nBytesRecus = 0;
 }
 
 FenPrincipale::~FenPrincipale(){
@@ -203,40 +210,14 @@ void FenPrincipale::onRangeStartUpdate(QDateTime range_start) {
  */
 void FenPrincipale::syncTime() {
     graphic_range_selector->setMaximumDate(QDateTime::currentDateTime());
-
-    int h,m,s;
-    h = QTime::currentTime().hour();
-    m = QTime::currentTime().minute();
-    s = QTime::currentTime().second();
-
-    if(s==42) {
-        QPalette palette = lcd_sec->palette();
-        palette.setColor(QPalette::Normal, QPalette::Foreground, Qt::red);
-        lcd_sec->setPalette(palette);
-    } else if((s>=42)&&(s<=45)) {
-        s = 42;
-    }else if(s == 46) {
-        lcd_sec->setPalette(lcd_hour->palette());
-    }
-
-
-    if(m==42) {
-        QPalette palette = lcd_min->palette();
-        palette.setColor(QPalette::Normal, QPalette::Foreground, Qt::red);
-        lcd_min->setPalette(palette);
-    } else if(m == 43) {
-        lcd_min->setPalette(lcd_hour->palette());
-    }
-
-    lcd_hour->display(QString("%1").arg(h, 10, 10, QChar('0').toUpper()));
-    lcd_min->display(QString("%1").arg(m, 10, 10, QChar('0').toUpper()));
-    lcd_sec->display(QString("%1").arg(s, 10, 10, QChar('0').toUpper()));
 }
 
 /*
  * Gestion des données
  */
 void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
+    incrementStatTramesRecues(trames.size());
+
     if(trames.size() > 0) {
         for(int i=0;i<trames.size();i++) {
             myDecoder->decodeString(trames[i]);
@@ -333,6 +314,23 @@ void FenPrincipale::log(int section, QString message) {
         break;
     }
 }
+
+
+void FenPrincipale::incrementStatBytesRecus(int n) {
+    nBytesRecus += n;
+    stats_octets_recus->setText("Octets reçus: "+nBytesRecus);
+}
+
+void FenPrincipale::incrementStatTramesRecues(int n) {
+    nTramesRecues += n;
+    stats_octets_recus->setText("Trames reçues: "+nTramesRecues);
+}
+
+void FenPrincipale::incrementStatTramesEchouees(int n) {
+    nTramesEchouees += n;
+    stats_octets_recus->setText("Trames échouées: "+nTramesEchouees);
+}
+
 
 /*
  * Gestion des actions du menu supérieur (tout comme le jambon)
@@ -647,7 +645,11 @@ void FenPrincipale::konamify(bool enable) {
         konami_4->setVisible(false);
         konami_close->setVisible(false);
 
+#ifdef TROLL
         this->setWindowTitle("To log, or not to log ? Random compilation.");
+#else
+        this->setWindowTitle("Logger 3.14");
+#endif
     }
 }
 
