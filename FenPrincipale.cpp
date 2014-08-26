@@ -26,7 +26,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     settings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
     this->setFocusPolicy(Qt::StrongFocus);
     kwebview = new QWebView();
-    p_konami_layout->addWidget(kwebview);
+    p_konami_layout->addWidget(kwebview,1);
     // --------------------
     if(com->isOkay()) {
         log_serial("Port série activé avec succès");

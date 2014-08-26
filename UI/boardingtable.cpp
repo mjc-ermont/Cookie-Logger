@@ -21,11 +21,11 @@ void BoardingTable::init(SensorManager* mgr) {
 
     for(int i=0;i<names.size();i++) {
 
-        QGroupBox* g = new QGroupBox(names[i]);
+        QFrame* g = new QFrame();
         QGridLayout* l = new QGridLayout;
 
         g->setLayout(l);
-        g->setStyleSheet("QGroupBox {  border: 1px solid gray; border-radius: 5px; font-weight: bold;} QGroupBox::title { background-color: transparent;subcontrol-position: top middle; margin-bottom: 15px; margin-top: 5px; text-align:center; font-weight:800;} ");
+        g->setStyleSheet("QFrame {  border: 1px solid gray; border-radius: 5px;} QLabel { border: none; }");
 
         capteurs_layouts.append(l);
 
@@ -40,18 +40,25 @@ void BoardingTable::init(SensorManager* mgr) {
         foreach(SensorValue* v, mgr->getSensor(i)->getValues())
             values << v->getName();
 
+        QLabel* ltitle = new QLabel(mgr->getSensor(i)->getName());
+
+        ltitle->setStyleSheet("QLabel {font-weight: 800; font-size: 20px;}");
+
+        ltitle->setAlignment(Qt::AlignCenter);
+        capteurs_layouts[i]->addWidget(ltitle, 0, 0, 1, 11);
+
         for(int v = 0; v < mgr->getSensor(i)->getValues().size(); v++) {
             QLabel *l = new QLabel(values[v]);
-            capteurs_layouts[i]->addWidget(l, v, 0, 1, 1);
+            capteurs_layouts[i]->addWidget(l, v+1, 0, 1, 1);
 
             QLCDNumber *lcd = new QLCDNumber(8);
             lcd->setStyleSheet("border: none;");
             lcd->setSegmentStyle(QLCDNumber::Flat);
             lcd->display(0);
             valeurs.append(lcd);
-            capteurs_layouts[i]->addWidget(lcd, v, 1, 1, 9);
+            capteurs_layouts[i]->addWidget(lcd, v+1, 1, 1, 9);
             QLabel *unitText=new QLabel(mgr->getSensor(i)->getValues()[v]->getUnit());
-            capteurs_layouts[i]->addWidget(unitText, v, 10, 1, 1);
+            capteurs_layouts[i]->addWidget(unitText, v+1, 10, 1, 1);
         }
 
         values.clear();
@@ -64,6 +71,6 @@ void BoardingTable::requestUpdate(SensorValue* value) {
 
 void BoardingTable::update(int idc, int idv, double value) {
     QGridLayout* layout = capteurs_layouts[idc];
-    QLCDNumber *lcd = (QLCDNumber*)layout->itemAtPosition(idv,1)->widget();
+    QLCDNumber *lcd = (QLCDNumber*)layout->itemAtPosition(idv+1,1)->widget();
     lcd->display(QString::number(value));
 }
