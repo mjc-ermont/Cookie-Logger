@@ -2,17 +2,19 @@
 
 DatabaseController::DatabaseController()
 {
-    qDebug() << ".";
 }
 
 void DatabaseController::run() {
     setup();
+
+
     forever {
         mutex.lock();
-        if(!work.isEmpty()) {
-            int s = work.size();
-            emit message("Queue size: " + QString::number(s) + " ");
-            qDebug() << "[DB] Queue size: " << s;
+        int s = work.size();
+        emit message("Queue size: " + QString::number(s) + " ");
+        qDebug() << "[DB] Queue size: " << s;
+        while(!work.isEmpty()) {
+
             QStringList req = work.dequeue().split(";");
             mutex.unlock();
             if(req.size() >= 4) {
@@ -33,7 +35,6 @@ void DatabaseController::run() {
                         rep = db.exec("SELECT value,time FROM data WHERE sensor=\""+idc+"\" AND sensorvalue=\""+idv+"\" ORDER BY time DESC LIMIT 0,1");
 
                     QVector<Data> dataset;
-                    //qDebug() << "READ";
                     while(rep.next()) {
                         double value = rep.value(0).toDouble();
                         QDateTime time = QDateTime::fromString(rep.value(1).toString(),"yyyy-MM-dd hh:mm:ss");
@@ -42,36 +43,34 @@ void DatabaseController::run() {
                         d.time = time;
 
                         dataset.push_back(d);
-                        //qDebug() << "[" << time.toString("yyyy-MM-dd hh:mm:ss") << "|" << value << "]";
                     }
-                    //qDebug() << "FINREAD";
-                    //qDebug() << "req=" << req.at(5) << ";" << last;
 
                     emit dataRead(idc.toInt(),idv.toInt(),dataset,req.at(5));
                 } else if(req.at(0) == "set") {
                     QString value = req.at(3);
 
                     db.exec("INSERT INTO data (sensor,sensorvalue,value,time) VALUES (\""+idc+"\",\""+idv+"\",\""+value+"\",\""+QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")+"\")");
-                    //qDebug() << "INSERT (" << idc << ";" << idv<<") " << value << " [" << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss") << "]";
                     emit dataWritten(idc.toInt(),idv.toInt());
                 }
             }
-        } else {
-            mutex.unlock();
         }
-
-
+        condition.wait(&mutex);
+        mutex.unlock();
     }
 }
 
 void DatabaseController::write(int idc, int idv, double v) {
+   //emit thingToWrite(idc, idv, v);
     mutex.lock();
     work.enqueue("set;"+QString::number(idc)+";"+QString::number(idv)+";"+QString::number(v));
+    condition.wakeOne();
     mutex.unlock();
 }
 void DatabaseController::read(int idc, int idv, QDateTime from, QDateTime to,QString reason,bool last) {
+  //  emit thingToRead(idc, idv, from, to, reason, last);
     mutex.lock();
     work.enqueue("get;"+QString::number(idc)+";"+QString::number(idv)+";"+from.toString("yyyy-MM-dd hh:mm:ss")+";"+to.toString("yyyy-MM-dd hh:mm:ss")+";"+reason+(last==true?";1":";0"));
+    condition.wakeOne();
     mutex.unlock();
 }
 

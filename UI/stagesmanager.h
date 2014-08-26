@@ -9,13 +9,24 @@
 #include <QScrollBar>
 #include <QEvent>
 #include <QWheelEvent>
+#include <QTextDocument>
 
 
-class StagesManager : QObject
+class StagesManager : public QObject
 {
     Q_OBJECT
 public:
     StagesManager(QGraphicsView *view);
+    void unlockDataReceivedStage();
+    void unlockGPSFixStage();
+    void unlockLaunchStage();
+    void unlockApogeeStage();
+    void unlockStage(int n);
+    void unlockNextStage();
+    void resetStage();
+    void goToPreviousStage();
+
+
 public slots:
     void render();
 protected:
@@ -27,6 +38,8 @@ private :
     QGraphicsScene* mScene;
     QStringList stages;
     int currentStage;
+
+    QVector<bool> enabled;
 };
 
 #endif // STAGESMANAGER_H

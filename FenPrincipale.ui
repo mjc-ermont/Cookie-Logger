@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>857</width>
-    <height>738</height>
+    <width>750</width>
+    <height>722</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
   <widget class="QWidget" name="widgetCentral">
    <layout class="QGridLayout" name="gridLayout_7">
     <item row="0" column="0">
-     <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,5" columnstretch="0,0,1,1">
+     <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,5" columnstretch="0,0,0,1">
       <item row="1" column="0" colspan="2">
        <widget class="QFrame" name="frame">
         <property name="sizePolicy">
@@ -434,7 +434,11 @@
            </widget>
           </item>
           <item row="7" column="3">
-           <widget class="QLineEdit" name="metewowMacLineEdit"/>
+           <widget class="QLineEdit" name="metewowMacLineEdit">
+            <property name="placeholderText">
+             <string/>
+            </property>
+           </widget>
           </item>
           <item row="7" column="1">
            <widget class="QLabel" name="label_6">
@@ -586,7 +590,7 @@
           <item>
            <widget class="QLabel" name="stats_octets_recus">
             <property name="text">
-             <string>Octets reçus: 0</string>
+             <string>Octets reçus: 0 </string>
             </property>
            </widget>
           </item>
@@ -637,7 +641,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>857</width>
+     <width>750</width>
      <height>25</height>
     </rect>
    </property>
@@ -680,8 +684,18 @@
     <addaction name="separator"/>
     <addaction name="actionBalayage_frequentiel"/>
    </widget>
+   <widget class="QMenu" name="menu_tapes">
+    <property name="title">
+     <string>Étapes</string>
+    </property>
+    <addaction name="actionPasser_l_tape_suivante"/>
+    <addaction name="actionPasser_l_tape_pr_c_dente"/>
+    <addaction name="separator"/>
+    <addaction name="actionRemettre_z_ro"/>
+   </widget>
    <addaction name="menuLogger"/>
    <addaction name="menuS_rie"/>
+   <addaction name="menu_tapes"/>
   </widget>
   <action name="actionQuitter">
    <property name="text">
@@ -746,6 +760,21 @@
   <action name="action57600">
    <property name="text">
     <string>57600</string>
+   </property>
+  </action>
+  <action name="actionPasser_l_tape_suivante">
+   <property name="text">
+    <string>Passer à l'étape suivante</string>
+   </property>
+  </action>
+  <action name="actionRemettre_z_ro">
+   <property name="text">
+    <string>Remettre à zéro</string>
+   </property>
+  </action>
+  <action name="actionPasser_l_tape_pr_c_dente">
+   <property name="text">
+    <string>Passer à l'étape précédente</string>
    </property>
   </action>
  </widget>

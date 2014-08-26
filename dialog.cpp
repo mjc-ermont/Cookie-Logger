@@ -3,6 +3,7 @@
 using namespace std;
 AskDialog::AskDialog()
 {
+    nItems = 0;
     setupUi(this);
 
     settings = new QSettings("Cookie Project","Logger");

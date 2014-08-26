@@ -143,6 +143,8 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     QDateTime t = data_settings->value("datedepart",QDateTime::currentDateTime()).toDateTime();
     heureLancement->setDateTime(t);
 
+    delete data_settings;
+
     mWebServicesManager = new WebServicesManager(this);
     connect(mWebServicesManager, SIGNAL(notification(int,QString)), this, SLOT(onWebServicesNotification(int,QString)));
     connect(mWebServicesManager, SIGNAL(message(QString)), this, SLOT(log_webservices(QString)));
@@ -158,11 +160,15 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
 
 
-    StagesManager* stmgr = new StagesManager(stageGraphicsView);
+    stmgr = new StagesManager(stageGraphicsView);
 
     nTramesRecues = 0;
     nTramesEchouees = 0;
     nBytesRecus = 0;
+    QTimer* teemo = new QTimer();
+    connect(teemo, SIGNAL(timeout()), stmgr, SLOT(render()));
+    teemo->setSingleShot(true);
+    teemo->start(50);
 }
 
 FenPrincipale::~FenPrincipale(){
@@ -174,6 +180,11 @@ FenPrincipale::~FenPrincipale(){
 void FenPrincipale::resizeEvent(QResizeEvent *) {
     if(optimisation_graph)
         optimise_graph();
+
+
+    if(stmgr != 0) {
+        stmgr->render();
+    }
 }
 
 /*
@@ -318,17 +329,17 @@ void FenPrincipale::log(int section, QString message) {
 
 void FenPrincipale::incrementStatBytesRecus(int n) {
     nBytesRecus += n;
-    stats_octets_recus->setText("Octets reçus: "+nBytesRecus);
+    stats_octets_recus->setText("Octets reçus: "+QString::number(nBytesRecus));
 }
 
 void FenPrincipale::incrementStatTramesRecues(int n) {
     nTramesRecues += n;
-    stats_octets_recus->setText("Trames reçues: "+nTramesRecues);
+    stats_trames_recues->setText("Trames reçues: "+QString::number(nTramesRecues));
 }
 
 void FenPrincipale::incrementStatTramesEchouees(int n) {
     nTramesEchouees += n;
-    stats_octets_recus->setText("Trames échouées: "+nTramesEchouees);
+    stats_trames_echouees->setText("Trames échouées: "+QString::number(nTramesEchouees));
 }
 
 
@@ -407,16 +418,6 @@ void FenPrincipale::reinit_b(){
     konami_3->setDefault(false);
     konami_4->setDefault(false);
 
-}
-
-/*
- * Oh putain...
- */
-void FenPrincipale::on_sel_valeur_currentIndexChanged(int index) {
-    // Je voulais faire quelque chose ici, mais je ne me rappelle plus de quoi.
-    // Alors j'ai fait ça.
-    if(index==42)
-        qApp->quit();
 }
 
 /*
@@ -531,6 +532,8 @@ void FenPrincipale::loadSettings() {
     metewowServerCheckBox->setChecked(data_settings->value("metewowserverenabled", false).toBool());
     metewowMacLineEdit->setText(data_settings->value("metewowid","LOGGER").toString());
     metewowMdpLineEdit->setText(data_settings->value("metewowmdp","").toString());
+
+    delete data_settings;
 }
 
 
@@ -547,6 +550,8 @@ void FenPrincipale::saveSettings() {
     settings->setValue("metewowserverenabled", metewowServerCheckBox->isChecked());
     settings->setValue("metewowid", metewowMacLineEdit->text());
     settings->setValue("metewowmdp", metewowMdpLineEdit->text());
+
+    delete settings;
 }
 
 
@@ -844,3 +849,18 @@ void FenPrincipale::optimise_graph() {
 }
 
 
+
+void FenPrincipale::on_actionPasser_l_tape_suivante_triggered()
+{
+    stmgr->unlockNextStage();
+}
+
+void FenPrincipale::on_actionRemettre_z_ro_triggered()
+{
+    stmgr->resetStage();
+}
+
+void FenPrincipale::on_actionPasser_l_tape_pr_c_dente_triggered()
+{
+    stmgr->goToPreviousStage();
+}

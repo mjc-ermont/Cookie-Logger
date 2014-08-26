@@ -54,6 +54,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         SensorManager*  getSensorMgr()  {return sensormgr; }
         MapsView*       getMap()        {return carte;}
         TableMgr*       getTableMgr()   {return tableManager;}
+        StagesManager*  getStagesManager() {return stmgr; }
         WebServicesManager* getWebServicesManager();
     // Euh rien
         void konamify(bool enable);
@@ -105,6 +106,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         int                     nTramesRecues;
         int                     nTramesEchouees;
         int                     nBytesRecus;
+        StagesManager* stmgr;
 
 
     public slots:
@@ -144,7 +146,6 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void on_b_carte_clicked();
         void on_b_graph_clicked();
         void on_sel_capteur_currentIndexChanged(int index);
-        void on_sel_valeur_currentIndexChanged(int index);
         void on_add_graph_clicked();
         void graphClosed();
         void optimise_graph();
@@ -173,6 +174,9 @@ private slots:
         void on_dataServerCheckBox_clicked();
         void on_metewowRegisterPushButton_clicked();
         void on_metewowDeletePushButton_clicked();
+        void on_actionPasser_l_tape_suivante_triggered();
+        void on_actionRemettre_z_ro_triggered();
+        void on_actionPasser_l_tape_pr_c_dente_triggered();
 };
 
 #endif // FENPRINCIPALE_H

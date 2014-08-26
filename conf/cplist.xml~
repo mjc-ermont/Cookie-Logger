@@ -11,7 +11,7 @@
 	</sensor>
 	<sensor name="Humidité" id="2">
 		<value name="Humidité" unit="%" id="0" coef="(100/pow(2,14))*x" />
-		<value name="Température" unit="°C" id="1" coef="0.01x" />	
+		<value name="Température" unit="°C" id="1" coef="(165/pow(2,14))*x-40" />	
 	</sensor>
 	<sensor name="Pression" id="3">
 		<value name="Valeur" unit="hPa" id="0" coef="((x*107.4396437)+11336.0291415)/100" />	

@@ -11,26 +11,46 @@ StagesManager::StagesManager(QGraphicsView* view)
     mView->setScene(mScene);
     render();
 
-    connect(mScene, SIGNAL(changed(QList<QRectF>)), this, SLOT(render()));
-
     mView->verticalScrollBar()->installEventFilter(this);
+    mView->horizontalScrollBar()->installEventFilter(this);
+
 
     stages.append("Initialisation");
+    enabled.push_back(true);
     stages.append("Réception données");
+    enabled.push_back(false);
 #ifdef TROLL
     stages.append("GPS OK Isomewre");
 #else
     stages.append("GPS OK");
 #endif
+    enabled.push_back(false);
     stages.append("Ballon lancé");
-    stages.append("Apogée");
+    enabled.push_back(false);
+    stages.append("Apogée atteinte");
+    enabled.push_back(false);
 
-    currentStage = 1;
+    currentStage = 0;
 }
 
 bool StagesManager::eventFilter(QObject * obj, QEvent * event)
 {
     if (event->type() == QEvent::Wheel) {
+        QWheelEvent *ev = static_cast<QWheelEvent*>(event);
+        int elementWidth = 200;
+
+        if(stages.size() != 0) {
+            if(mView->width() / stages.size() > elementWidth)
+                elementWidth = mView->width() / stages.size();
+        }
+
+
+        int width = elementWidth*stages.size() - mView->width();
+
+        int value = mView->horizontalScrollBar()->value() - ev->delta();
+        if(value > width)
+            value = width;
+        mView->horizontalScrollBar()->setValue(value);
          return true;
     }
     return false;
@@ -38,10 +58,11 @@ bool StagesManager::eventFilter(QObject * obj, QEvent * event)
 
 void StagesManager::render() {
 
-
     mScene->clear();
+
     int width = mView->width();
     int height = mView->height();
+
 
     const int arrowWidth = 20;
     int elementWidth = 200;
@@ -51,27 +72,18 @@ void StagesManager::render() {
             elementWidth = width / stages.size();
     }
 
+
+
     for(int i=0;i<stages.size();i++) {
         int xdebut = (i+1)*(elementWidth) - arrowWidth;
         int xfin   = (i+1)*(elementWidth);
 
-        QGraphicsDropShadowEffect* effect = new QGraphicsDropShadowEffect();
-        effect->setBlurRadius(20);
-        effect->setYOffset(0);
-        effect->setXOffset(5);
-
-        QGraphicsDropShadowEffect* effect2 = new QGraphicsDropShadowEffect();
-        effect->setBlurRadius(20);
-        effect2->setYOffset(0);
-        effect2->setXOffset(5);
-
-        QGraphicsLineItem* l = mScene->addLine(QLine(QPoint(xdebut, 0), QPoint(xfin, height/2 - 1)), QPen(QColor(0,0,0,196)));
-        l->setGraphicsEffect(effect);
-        QGraphicsLineItem* l2 = mScene->addLine(QLine(QPoint(xdebut, height), QPoint(xfin, height/2)), QPen(QColor(0,0,0,240)));
-        l2->setGraphicsEffect(effect2);
+        mScene->addLine(QLine(QPoint(xdebut, 0), QPoint(xfin, height/2 - 1)), QPen(QColor(0,0,0,196)));
+        mScene->addLine(QLine(QPoint(xdebut, height), QPoint(xfin, height/2)), QPen(QColor(0,0,0,240)));
 
 
-        mScene->addText(stages.at(i))->setPos(i*elementWidth,height - 40);
+        QGraphicsTextItem *texte = mScene->addText(stages.at(i));
+        texte->setPos((i+0.5)*elementWidth - (texte->document()->size().width()/2) ,height - 50);
 
         int decalage = arrowWidth * 15 / (height/2);
 
@@ -87,14 +99,73 @@ void StagesManager::render() {
         points.append(QPoint((i+1)*elementWidth - arrowWidth,0));
 
         QColor color;
-        if(i<currentStage)
-            color = QColor(128,128,128,196);
-        else if(i==currentStage)
-            color = QColor(0,100,100,196);
+
+        bool isEnabled = enabled.at(i);
+
+        if(i<currentStage && isEnabled == true)
+            color = QColor(20,100,20,196);
+        else if(i<currentStage && isEnabled == false)
+            color = QColor(120,120,20,196);
+        else if(i==currentStage && isEnabled == true)
+            color = QColor(80,200,80,196);
+        else if(i==currentStage && isEnabled == false)
+            color = QColor(180,180,30,196);
         else
-            color = QColor(255,100,100,196);
+            color = QColor(196,0,0,196);
+
         mScene->addPolygon(QPolygonF(points),QPen(), QBrush(color));
     }
 
-    mScene->addLine(0, 15, width, 15, QPen(QColor(0,0,0,196)));
+    mScene->addLine(0, 15, width-arrowWidth , 15, QPen(QColor(0,0,0,196)));
+}
+
+
+void StagesManager::unlockDataReceivedStage() {
+    enabled[1] = true;
+    unlockStage(1);
+}
+
+void StagesManager::unlockGPSFixStage() {
+    enabled[2] = true;
+    unlockStage(2);
+}
+
+void StagesManager::unlockLaunchStage() {
+    enabled[3] = true;
+    unlockStage(3);
+}
+
+void StagesManager::unlockApogeeStage() {
+    enabled[4] = true;
+    unlockStage(4);
+}
+
+void StagesManager::unlockStage(int n) {
+    if(currentStage < n) {
+        currentStage = n;
+        render();
+    }
+}
+
+void StagesManager::unlockNextStage() {
+    if(currentStage < stages.size() - 1) {
+        currentStage++;
+        render();
+    }
+}
+
+void StagesManager::resetStage() {
+    currentStage = 0;
+    render();
+
+    for(int i=1;i<enabled.size();i++)
+        enabled[i] = false;
+}
+
+void StagesManager::goToPreviousStage() {
+    if(currentStage > 0) {
+
+        currentStage--;
+        render();
+    }
 }

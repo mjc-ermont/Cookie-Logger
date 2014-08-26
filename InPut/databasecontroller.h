@@ -9,6 +9,7 @@
 #include <QThread>
 #include <QQueue>
 #include <QMutex>
+#include <QWaitCondition>
 
 #include "sensormanager.h"
 
@@ -24,10 +25,12 @@ class DatabaseController : public QThread
         void write(int idc, int idv, double v);
         void read(int idc, int idv, QDateTime from, QDateTime to, QString reason="", bool last=false);
 
+
     private:
         QSqlDatabase db;
         QQueue<QString> work;
         QMutex mutex;
+        QWaitCondition condition;
 
     signals:
         void dataWritten(int idc, int idv);

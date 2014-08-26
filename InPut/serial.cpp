@@ -185,6 +185,11 @@ void Serial::readData() {
         skipped_buf = trames.last();
         trames.removeLast();
     }
+
+    for(int i=0;i<trames.size();i++) {
+        if(trames.at(i).isEmpty())
+            trames.removeAt(i);
+    }
     emit dataRead(trames);
 }
 

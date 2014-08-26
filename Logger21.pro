@@ -85,3 +85,4 @@ QMAKE_CXXFLAGS_DEBUG += -O2 #Sinon ça faire l'erreur "too many sections"
 LIBS += -lqwt
 LIBS += -lqjson
 
+TRANSLATIONS = notroll.ts troll.ts

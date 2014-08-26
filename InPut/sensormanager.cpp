@@ -74,6 +74,9 @@ void SensorManager::getSensorsFromFile() {
         }
         reader.readNext();
     }
+
+    cptConfig->close();
+    delete cptConfig;
   //  parent->log_decoder("Terminé !");
 }
 

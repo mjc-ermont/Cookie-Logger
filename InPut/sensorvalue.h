@@ -37,6 +37,15 @@ private:
     exprtk::expression<double> expression;
     exprtk::parser<double> parser;
     double valeur;
+
+    QList<double>   last_values;
+    QList<int>      last_times;
+    double last_moy;
+    double first_moy_up;
+    double first_moy_down;
+
+    int upstreak;
+    int downstreak;
 };
 
 #endif // VALUE_H
