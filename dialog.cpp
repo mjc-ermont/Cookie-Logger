@@ -8,7 +8,7 @@ AskDialog::AskDialog()
 
     settings = new QSettings("Cookie Project","Logger");
 
-    this->setWindowTitle("Bonjour, veuillez choisir le port halal de connexion série.");
+    this->setWindowTitle("Bonjour, veuillez choisir le port de connexion série.");
     connect(pushButton,SIGNAL(clicked()),this,SLOT(continueClicked()));
     fen=NULL;
 

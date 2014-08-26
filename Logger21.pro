@@ -13,6 +13,7 @@ TARGET = Logger21
 TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXX = ccache g++
 
 ICON = icone.ico
 
@@ -38,7 +39,8 @@ SOURCES += \
     UI/qxt/qxtglobal.cpp \
     UI/timerangeselector.cpp \
     webservicesmanager.cpp \
-    UI/stagesmanager.cpp
+    UI/stagesmanager.cpp \
+    UI/mygraphicsview.cpp
 
 HEADERS  += \
     tablemgr.h \
@@ -65,7 +67,8 @@ HEADERS  += \
     UI/timerangeselector.h \
     exprtk.hpp \
     webservicesmanager.h \
-    UI/stagesmanager.h
+    UI/stagesmanager.h \
+    UI/mygraphicsview.h
 
 FORMS += \
     FenPrincipale.ui \

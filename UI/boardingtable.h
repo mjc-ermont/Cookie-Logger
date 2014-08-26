@@ -21,10 +21,13 @@ public:
     void update(int idc, int idv, double value);
     void requestUpdate(SensorValue *value);
 
+    void onResize();
+
 private:
     QGridLayout *m_container;
     QVector<QGridLayout *> capteurs_layouts;
     QVector<QLCDNumber *> valeurs;
+    QVector<QLabel*> labels;
 };
 
 #endif // BOARDINGTABLE_H

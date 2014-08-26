@@ -14,6 +14,8 @@ public:
     void setMinimumDate(QDateTime min);
     void setMaximumDate(QDateTime max);
 
+    QDateTime getLowerDate();
+    QDateTime getUpperDate();
 signals:
     void startDateChanged(QDateTime start);
     void endDateChanged(QDateTime end);

@@ -19,6 +19,9 @@ void BoardingTable::init(SensorManager* mgr) {
     int posgauche = 0;
     int posdroite = 0;
 
+
+    labels.clear();
+
     for(int i=0;i<names.size();i++) {
 
         QFrame* g = new QFrame();
@@ -45,12 +48,15 @@ void BoardingTable::init(SensorManager* mgr) {
         ltitle->setStyleSheet("QLabel {font-weight: 800; font-size: 20px;}");
 
         ltitle->setAlignment(Qt::AlignCenter);
+        labels.append(ltitle);
         capteurs_layouts[i]->addWidget(ltitle, 0, 0, 1, 11);
 
         for(int v = 0; v < mgr->getSensor(i)->getValues().size(); v++) {
             QLabel *l = new QLabel(values[v]);
+            l->setStyleSheet("QLabel {font-size: 20px; }");
+           // l->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
             capteurs_layouts[i]->addWidget(l, v+1, 0, 1, 1);
-
+            labels.append(l);
             QLCDNumber *lcd = new QLCDNumber(8);
             lcd->setStyleSheet("border: none;");
             lcd->setSegmentStyle(QLCDNumber::Flat);
@@ -58,7 +64,9 @@ void BoardingTable::init(SensorManager* mgr) {
             valeurs.append(lcd);
             capteurs_layouts[i]->addWidget(lcd, v+1, 1, 1, 9);
             QLabel *unitText=new QLabel(mgr->getSensor(i)->getValues()[v]->getUnit());
+            unitText->setStyleSheet("QLabel {font-size: 20px; }");
             capteurs_layouts[i]->addWidget(unitText, v+1, 10, 1, 1);
+            labels.append(unitText);
         }
 
         values.clear();
@@ -73,4 +81,7 @@ void BoardingTable::update(int idc, int idv, double value) {
     QGridLayout* layout = capteurs_layouts[idc];
     QLCDNumber *lcd = (QLCDNumber*)layout->itemAtPosition(idv+1,1)->widget();
     lcd->display(QString::number(value));
+}
+
+void BoardingTable::onResize() {
 }

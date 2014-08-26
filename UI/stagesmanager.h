@@ -11,12 +11,17 @@
 #include <QWheelEvent>
 #include <QTextDocument>
 
+#include <QGraphicsItemAnimation>
+#include <QTimeLine>
+
+#include "mygraphicsview.h"
+
 
 class StagesManager : public QObject
 {
     Q_OBJECT
 public:
-    StagesManager(QGraphicsView *view);
+    StagesManager(MyGraphicsView *view);
     void unlockDataReceivedStage();
     void unlockGPSFixStage();
     void unlockLaunchStage();
@@ -29,12 +34,13 @@ public:
 
 public slots:
     void render();
+    void animation(int);
 protected:
 
   bool eventFilter(QObject * obj, QEvent * event);
 
 private :
-    QGraphicsView* mView;
+    MyGraphicsView* mView;
     QGraphicsScene* mScene;
     QStringList stages;
     int currentStage;

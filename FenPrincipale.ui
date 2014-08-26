@@ -210,7 +210,7 @@
       <item row="1" column="2" colspan="2">
        <widget class="QStackedWidget" name="stack">
         <property name="currentIndex">
-         <number>6</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="p_tabl_bord">
          <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -294,53 +294,22 @@
          <layout class="QGridLayout" name="verticalLayout_3">
           <item row="0" column="0">
            <layout class="QGridLayout" name="gridLayout_6">
-            <item row="1" column="0">
+            <item row="4" column="0">
              <widget class="QTabWidget" name="tab_historique"/>
             </item>
             <item row="0" column="0">
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
-               <widget class="QPushButton" name="actualizeTableButton">
-                <property name="text">
-                 <string>Actualiser</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QTimeEdit" name="time_end">
-                <property name="dateTime">
-                 <datetime>
-                  <hour>0</hour>
-                  <minute>10</minute>
-                  <second>0</second>
-                  <year>2000</year>
-                  <month>1</month>
-                  <day>1</day>
-                 </datetime>
-                </property>
-                <property name="currentSection">
-                 <enum>QDateTimeEdit::HourSection</enum>
-                </property>
-                <property name="time">
-                 <time>
-                  <hour>0</hour>
-                  <minute>10</minute>
-                  <second>0</second>
-                 </time>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QTimeEdit" name="time_start"/>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="check_all_values">
-                <property name="text">
-                 <string>(ne marche pas)</string>
-                </property>
-               </widget>
+               <layout class="QHBoxLayout" name="p_historique_range_selection_layout"/>
               </item>
              </layout>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="actualizeTableButton">
+              <property name="text">
+               <string>Actualiser</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -572,7 +541,7 @@
       <item row="0" column="2" colspan="2">
        <layout class="QHBoxLayout" name="stageLayout">
         <item>
-         <widget class="QGraphicsView" name="stageGraphicsView">
+         <widget class="MyGraphicsView" name="stageGraphicsView">
           <property name="styleSheet">
            <string notr="true">background-color: rgba(0,0,0,0)</string>
           </property>
@@ -779,6 +748,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MyGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>UI/mygraphicsview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="res.qrc"/>
  </resources>

@@ -85,6 +85,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QVector<QTableView*>    tableauxHist;
         QVector<QPair<GraphicView*,QMdiSubWindow*> > graphiques;
         TimeRangeSelector*      graphic_range_selector;
+        TimeRangeSelector*      historique_range_selector;
 
         // Données
         Serial*                 com;

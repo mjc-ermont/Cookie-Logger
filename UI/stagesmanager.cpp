@@ -1,6 +1,6 @@
 #include "stagesmanager.h"
 
-StagesManager::StagesManager(QGraphicsView* view)
+StagesManager::StagesManager(MyGraphicsView *view)
 {
     mView = view;
 
@@ -11,9 +11,10 @@ StagesManager::StagesManager(QGraphicsView* view)
     mView->setScene(mScene);
     render();
 
+
+
     mView->verticalScrollBar()->installEventFilter(this);
     mView->horizontalScrollBar()->installEventFilter(this);
-
 
     stages.append("Initialisation");
     enabled.push_back(true);
@@ -37,7 +38,7 @@ bool StagesManager::eventFilter(QObject * obj, QEvent * event)
 {
     if (event->type() == QEvent::Wheel) {
         QWheelEvent *ev = static_cast<QWheelEvent*>(event);
-        int elementWidth = 200;
+        int elementWidth = ELEMENT_WIDTH;
 
         if(stages.size() != 0) {
             if(mView->width() / stages.size() > elementWidth)
@@ -51,13 +52,12 @@ bool StagesManager::eventFilter(QObject * obj, QEvent * event)
         if(value > width)
             value = width;
         mView->horizontalScrollBar()->setValue(value);
-         return true;
+        return true;
     }
     return false;
 }
 
 void StagesManager::render() {
-
     mScene->clear();
 
     int width = mView->width();
@@ -140,8 +140,27 @@ void StagesManager::unlockApogeeStage() {
     unlockStage(4);
 }
 
+void StagesManager::animation(int v) {
+    mView->horizontalScrollBar()->setValue(v);
+}
+
 void StagesManager::unlockStage(int n) {
     if(currentStage < n) {
+
+        int width = mView->width();
+        QTimeLine* tl = new QTimeLine(1000, this);
+
+        int elementWidth = 200;
+
+        if(stages.size() != 0) {
+            if(width / stages.size() > elementWidth)
+                elementWidth = width / stages.size();
+        }
+
+        tl->setFrameRange(mView->horizontalScrollBar()->value(), 100+currentStage*elementWidth);
+        connect(tl, SIGNAL(frameChanged(int)), this, SLOT(animation(int)));
+        tl->start();
+
         currentStage = n;
         render();
     }
@@ -149,6 +168,22 @@ void StagesManager::unlockStage(int n) {
 
 void StagesManager::unlockNextStage() {
     if(currentStage < stages.size() - 1) {
+
+        int width = mView->width();
+        QTimeLine* tl = new QTimeLine(1000, this);
+
+        int elementWidth = 200;
+
+        if(stages.size() != 0) {
+            if(width / stages.size() > elementWidth)
+                elementWidth = width / stages.size();
+        }
+
+        tl->setFrameRange(mView->horizontalScrollBar()->value(), 100+currentStage*elementWidth);
+        connect(tl, SIGNAL(frameChanged(int)), this, SLOT(animation(int)));
+        tl->start();
+
+
         currentStage++;
         render();
     }
@@ -164,6 +199,19 @@ void StagesManager::resetStage() {
 
 void StagesManager::goToPreviousStage() {
     if(currentStage > 0) {
+        int width = mView->width();
+        QTimeLine* tl = new QTimeLine(1000, this);
+
+        int elementWidth = 200;
+
+        if(stages.size() != 0) {
+            if(width / stages.size() > elementWidth)
+                elementWidth = width / stages.size();
+        }
+
+        tl->setFrameRange(mView->horizontalScrollBar()->value(), 100+(currentStage-2)*elementWidth);
+        connect(tl, SIGNAL(frameChanged(int)), this, SLOT(animation(int)));
+        tl->start();
 
         currentStage--;
         render();

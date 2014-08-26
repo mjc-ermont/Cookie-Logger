@@ -15,8 +15,8 @@ BalaiFrequenciel::BalaiFrequenciel(Serial *com_, QWidget *parent) :
     com = com_;
 
 
-    setAxisTitle( QwtPlot::yLeft, "Test" );
-    setAxisTitle( QwtPlot::xBottom, "Test" );
+    setAxisTitle( QwtPlot::yLeft, "Puissance" );
+    setAxisTitle( QwtPlot::xBottom, "Canal" );
 
     QwtLegend *legend = new QwtLegend;
     legend->setItemMode( QwtLegend::CheckableItem );
@@ -42,6 +42,7 @@ BalaiFrequenciel::BalaiFrequenciel(Serial *com_, QWidget *parent) :
 }
 
 void BalaiFrequenciel::balayageDone(QVector<double> values) {
+    qDebug() << "Balai: " << values.size();
     setData(values);
 }
 

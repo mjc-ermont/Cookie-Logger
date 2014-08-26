@@ -107,6 +107,9 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     graphic_range_selector = new TimeRangeSelector();
     p_graphics_range_selection_layout->addLayout(graphic_range_selector);
 
+    historique_range_selector = new TimeRangeSelector();
+    p_historique_range_selection_layout->addLayout(historique_range_selector);
+
     tableManager = new TableMgr(&tableauxHist,sensormgr);
     carte = new MapsView(c_maps);
     log_logger("[INFO] Loading boarding table...");
@@ -185,6 +188,10 @@ void FenPrincipale::resizeEvent(QResizeEvent *) {
     if(stmgr != 0) {
         stmgr->render();
     }
+
+    if(tableauBord != 0) {
+        tableauBord->onResize();
+    }
 }
 
 /*
@@ -214,6 +221,7 @@ void FenPrincipale::on_actionBalayage_frequentiel_triggered()
 
 void FenPrincipale::onRangeStartUpdate(QDateTime range_start) {
     graphic_range_selector->setMinimumDate(range_start);
+    historique_range_selector->setMinimumDate(range_start);
 }
 
 /*
@@ -221,6 +229,7 @@ void FenPrincipale::onRangeStartUpdate(QDateTime range_start) {
  */
 void FenPrincipale::syncTime() {
     graphic_range_selector->setMaximumDate(QDateTime::currentDateTime());
+    historique_range_selector->setMaximumDate(QDateTime::currentDateTime());
 }
 
 /*
@@ -503,11 +512,7 @@ void FenPrincipale::graphClosed() {
  */
 void FenPrincipale::on_actualizeTableButton_clicked()
 {
-    if(check_all_values->isChecked()) {
-        tableManager->requestActualization(QDateTime::fromMSecsSinceEpoch(0),QDateTime::currentDateTime());
-    } else {
-        tableManager->requestActualization(QDateTime::currentDateTime().addSecs(-60),QDateTime::currentDateTime());
-    }
+    tableManager->requestActualization(historique_range_selector->getLowerDate(), historique_range_selector->getUpperDate());
 }
 
 void FenPrincipale::onWebServicesNotification(int type, QString text) {

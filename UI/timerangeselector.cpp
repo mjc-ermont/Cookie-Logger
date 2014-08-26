@@ -33,6 +33,14 @@ void TimeRangeSelector::onUpperValueChanged(int newValue) {
     emit endDateChanged(QDateTime::fromTime_t(newValue));
 }
 
+QDateTime TimeRangeSelector::getLowerDate() {
+    return QDateTime::fromTime_t(range_slider->lowerValue());
+}
+
+QDateTime TimeRangeSelector::getUpperDate() {
+    return QDateTime::fromTime_t(range_slider->upperValue());
+}
+
 void TimeRangeSelector::setMinimumDate(QDateTime min) {
     min_date = min;
     range_slider->setMinimum(min.toTime_t());

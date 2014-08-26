@@ -108,9 +108,10 @@ QString Serial::getPort() {
 }
 
 
-void Serial::balayageFrequenciel() {
+void Serial::balayageFrequenciel() { // 05#42#43#12#19#15#23#53#35#17
     qDebug() << "Balayage en cours";
     emit message("Balayage en cours");
+
 
     doingBalayage = true;
 
@@ -120,6 +121,7 @@ void Serial::balayageFrequenciel() {
     serial_port->write(str.toStdString().c_str());
     serial_port->waitForBytesWritten(2000);
     data.clear();
+    balayage_buffer.clear();
 
     time.start();
 }
