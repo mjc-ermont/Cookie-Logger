@@ -9,7 +9,6 @@ CookieDecoder::CookieDecoder(){}
 
 
 void CookieDecoder::decodeString(QByteArray(&data)) {
-    qDebug() << "data size: " << data.size() ;
     if(data.size() < 41)
         return;
 
@@ -67,8 +66,8 @@ void CookieDecoder::decodeString(QByteArray(&data)) {
         if(elements.size()>1) {
             emit message("Trame incomplète");
             qDebug() << "Trame incomplete";
-            emit trame_erreur(1);
         }
+        emit trame_erreur(1);
         return;
     }
 
@@ -80,9 +79,9 @@ void CookieDecoder::decodeString(QByteArray(&data)) {
 
     bool checkLeSum = false;
 
-    int numCapteur = elements[1].toInt();
-    double valeur = elements[3].toDouble();
-    int numValeur = elements[2].toInt();
+    int numCapteur = elements[1].trimmed().toInt();
+    double valeur = elements[3].trimmed().toDouble();
+    int numValeur = elements[2].trimmed().toInt();
 
     emit message("Checksum comparison: "+QString::number((int)checkSum)+" | "+QString::number(QString(elements[4]).toInt(0,16)));
     if((((int)checkSum == QString(elements[4]).toInt(0,16))||(!checkLeSum))){

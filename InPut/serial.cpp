@@ -116,23 +116,25 @@ void Serial::balayageFrequenciel() { // 05#42#43#12#19#15#23#53#35#17
     doingBalayage = true;
 
 
+    time.start();
+    data.clear();
+    balayage_buffer.clear();
+
     QString str = "$S";
     str = str+  QChar(0x0D) + QChar(0x0A);
     serial_port->write(str.toStdString().c_str());
     serial_port->waitForBytesWritten(2000);
-    data.clear();
-    balayage_buffer.clear();
 
-    time.start();
 }
 
 void Serial::readDataBalayage() {
-    int nvalues = 9;
+    int nvalues = 30;
 
 
     data_read = serial_port->readAll();
     qDebug() << "read:";
     qDebug() << data_read;
+    qDebug() << "time elapsed: " << time.elapsed();
 
     balayage_buffer.append(data_read);
     content = balayage_buffer.split('#');

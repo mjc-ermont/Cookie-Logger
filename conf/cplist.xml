@@ -9,7 +9,7 @@
 		<value name="Valeur" unit="" id="0" />	
 	</sensor>
 	<sensor name="Chamallow" id="2">
-		<value name="Pression" unit="mm" id="0" coef="((x>178)*(0.000001157*x*x - 0.0025x + 1.361) + ((179>x)*(26.7264754293*x^(-0.6344255783))))*10" />	
+		<value name="Distance" unit="mm" id="0" coef="((x>178)*(0.000001157*x*x - 0.0025x + 1.361) + ((179>x)*(26.7264754293*x^(-0.6344255783))))*10" />	
 	</sensor>
 	<sensor name="Pression Coca" id="3">
 		<value name="Valeur" unit="hPa" id="0" coef="((x*107.4396437)+11336.0291415)/100" />
@@ -30,6 +30,6 @@
 		<value name="Concentation" unit="" id="0" />	
 	</sensor>
 	<sensor name="Température extérieure" id="9">
-		<value name="Concentation" unit="°C" id="0" coef="1 / (0.001129148 + (0.000234125 + (0.0000000876741 * log((10240000/x) - 10000) * log((10240000/x) - 10000) ))* log((10240000/x) - 10000) ) - 273.15"/>	
+		<value name="Valeur" unit="°C" id="0" coef="1 / (0.001129148 + (0.000234125 + (0.0000000876741 * log((10240000/x) - 10000) * log((10240000/x) - 10000) ))* log((10240000/x) - 10000) ) - 273.15"/>	
 	</sensor>
 </sensorlist>
