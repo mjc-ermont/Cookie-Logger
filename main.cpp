@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
     d->show();
     //------------------------------------------------------------------------------
     int rc = a.exec();
-    delete d->getSerial();
+    if(d->getSerial() != 0)
+        delete d->getSerial();
     return rc;
 }

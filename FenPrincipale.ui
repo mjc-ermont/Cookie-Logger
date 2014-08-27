@@ -577,6 +577,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="stats_trames_corrigees">
+            <property name="text">
+             <string>Trames corrigées: 0</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -624,6 +631,7 @@
      </property>
      <addaction name="action137050"/>
      <addaction name="action137500"/>
+     <addaction name="actionEntrer_le_canal_manuellement"/>
     </widget>
     <addaction name="actionOuvrir"/>
     <addaction name="menuFrequence"/>
@@ -744,6 +752,11 @@
   <action name="actionPasser_l_tape_pr_c_dente">
    <property name="text">
     <string>Passer à l'étape précédente</string>
+   </property>
+  </action>
+  <action name="actionEntrer_le_canal_manuellement">
+   <property name="text">
+    <string>Canal manuel</string>
    </property>
   </action>
  </widget>

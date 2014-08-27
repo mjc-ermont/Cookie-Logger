@@ -13,7 +13,6 @@ TARGET = Logger21
 TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x
-QMAKE_CXX = ccache g++
 
 ICON = icone.ico
 
@@ -40,7 +39,9 @@ SOURCES += \
     UI/timerangeselector.cpp \
     webservicesmanager.cpp \
     UI/stagesmanager.cpp \
-    UI/mygraphicsview.cpp
+    UI/mygraphicsview.cpp \
+    ReedSalomon/decode_rs.c \
+    ReedSalomon/init_rs.c
 
 HEADERS  += \
     tablemgr.h \
@@ -68,7 +69,9 @@ HEADERS  += \
     exprtk.hpp \
     webservicesmanager.h \
     UI/stagesmanager.h \
-    UI/mygraphicsview.h
+    UI/mygraphicsview.h \
+    ReedSalomon/char.h \
+    ReedSalomon/rs.h
 
 FORMS += \
     FenPrincipale.ui \

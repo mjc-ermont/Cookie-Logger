@@ -16,6 +16,7 @@
 #include <QPair>
 #include <QMdiSubWindow>
 #include <QMessageBox>
+#include <QInputDialog>
 
 #include "ui_FenPrincipale.h"
 #include "InPut/sensormanager.h"
@@ -106,6 +107,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
 
         int                     nTramesRecues;
         int                     nTramesEchouees;
+        int                     nTramesCorrigees;
         int                     nBytesRecus;
         StagesManager* stmgr;
 
@@ -134,7 +136,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void incrementStatBytesRecus(int n);
         void incrementStatTramesRecues(int n);
         void incrementStatTramesEchouees(int n);
-
+        void incrementStatTramesCorrigees(int n);
 
 
         // Slots de type event sur ui
@@ -178,6 +180,7 @@ private slots:
         void on_actionPasser_l_tape_suivante_triggered();
         void on_actionRemettre_z_ro_triggered();
         void on_actionPasser_l_tape_pr_c_dente_triggered();
+        void on_actionEntrer_le_canal_manuellement_triggered();
 };
 
 #endif // FENPRINCIPALE_H

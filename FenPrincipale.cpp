@@ -127,6 +127,8 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     connect(myDecoder,SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
     connect(myDecoder,SIGNAL(message(QString)),this,SLOT(log_decoder(QString)));
     connect(myDecoder,SIGNAL(trame_erreur(int)),this, SLOT(incrementStatTramesEchouees(int)));
+    connect(myDecoder,SIGNAL(trame_increment(int)),this,SLOT(incrementStatTramesRecues(int)));
+    connect(myDecoder,SIGNAL(trame_corrigee(int)),this,SLOT(incrementStatTramesCorrigees(int)));
     log_logger("[INFO] All started !");
     // -----------------------------
     // Prise en charge du port série
@@ -168,6 +170,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     nTramesRecues = 0;
     nTramesEchouees = 0;
     nBytesRecus = 0;
+    nTramesCorrigees = 0;
     QTimer* teemo = new QTimer();
     connect(teemo, SIGNAL(timeout()), stmgr, SLOT(render()));
     teemo->setSingleShot(true);
@@ -236,9 +239,8 @@ void FenPrincipale::syncTime() {
  * Gestion des données
  */
 void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
-    incrementStatTramesRecues(trames.size());
-
     if(trames.size() > 0) {
+
         for(int i=0;i<trames.size();i++) {
             myDecoder->decodeString(trames[i]);
         }
@@ -350,7 +352,10 @@ void FenPrincipale::incrementStatTramesEchouees(int n) {
     nTramesEchouees += n;
     stats_trames_echouees->setText("Trames échouées: "+QString::number(nTramesEchouees));
 }
-
+void FenPrincipale::incrementStatTramesCorrigees(int n) {
+    nTramesCorrigees += n;
+    stats_trames_corrigees->setText("Trames corrigées: "+QString::number(nTramesCorrigees));
+}
 
 /*
  * Gestion des actions du menu supérieur (tout comme le jambon)
@@ -404,6 +409,26 @@ void FenPrincipale::on_action57600_triggered() {com->setBaudrate(57600);}
 void FenPrincipale::on_action9600_triggered() {com->setBaudrate(9600);}
 void FenPrincipale::on_action137050_triggered() {com->setChannel(21);}
 void FenPrincipale::on_action137500_triggered(){ com->setChannel(30);}
+
+void FenPrincipale::on_actionEntrer_le_canal_manuellement_triggered()
+{
+    QStringList canaux;
+    for(int i=0;i<=30;i++) {
+        canaux.append(QString::number(136.000 + 0.050*i, 'f', 3) + " MHz");
+    }
+    QString item = QInputDialog::getItem(this,"Choisir le canal","", canaux, 21, false);
+
+    int index = canaux.indexOf(item);
+    com->setChannel(index);
+
+    action137050->setChecked(false);
+    action137500->setChecked(false);
+
+    if(index == 21)
+        action137050->setChecked(true);
+    else if(index == 30)
+        action137500->setChecked(true);
+}
 
 /*
  * Gestion des boutons du menu de gauche
@@ -869,3 +894,4 @@ void FenPrincipale::on_actionPasser_l_tape_pr_c_dente_triggered()
 {
     stmgr->goToPreviousStage();
 }
+

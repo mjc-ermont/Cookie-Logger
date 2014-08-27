@@ -6,8 +6,10 @@
 #include <QByteArray>
 #include <QDebug>
 #include <QStringList>
+#include <QChar>
 
 #include "../defines.h"
+#include "ReedSalomon/rs.h"
 
 class CookieDecoder : public QObject
 {
@@ -21,6 +23,8 @@ signals:
     void    newValue            (int id_capteur, int id_valeur, double valeur);
     void    message(QString);
     void    trame_erreur(int);
+    void    trame_increment(int);
+    void    trame_corrigee(int);
 
 private:
     char    get_checksum        (QByteArray trame);
