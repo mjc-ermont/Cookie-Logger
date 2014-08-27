@@ -1,11 +1,6 @@
 #!/bin/bash
 
 pwd
-cd ChronoReader &&
-git pull origin master &&
-git submodule init &&
-git submodule update &&
-cd .. &&
 
 if [ $OS == "LINUX" ];
 then
