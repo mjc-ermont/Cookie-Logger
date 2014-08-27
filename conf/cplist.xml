@@ -3,26 +3,33 @@
 		<value name="Longitude" unit="°" id="0" param="ymap" coef="0.00001x"/>
 		<value name="Latitude" unit="°" id="1" param="xmap" coef="0.00001x" />
 		<value name="Vitesse" unit="km/h" id="2" coef="0.01851999999984x" />
-		<value name="Heure" unit="" id="3" />
-		<value name="Altitude" unit="m" id="4" coef="0.01x"/>
+		<value name="Altitude" unit="m" id="3" coef="0.01x"/>
 	</sensor>
-	<sensor name="Accéléromètre" id="1">
+	<sensor name="pH" id="1">
 		<value name="Valeur" unit="" id="0" />	
 	</sensor>
-	<sensor name="Humidité" id="2">
-		<value name="Humidité" unit="%" id="0" coef="(100/pow(2,14))*x" />
-		<value name="Température" unit="°C" id="1" coef="(165/pow(2,14))*x-40" />	
+	<sensor name="Chamallow" id="2">
+		<value name="Pression" unit="mm" id="0" coef="((x>178)*(0.000001157*x*x - 0.0025x + 1.361) + ((179>x)*(26.7264754293*x^(-0.6344255783))))*10" />	
 	</sensor>
-	<sensor name="Pression" id="3">
-		<value param="pres" name="Valeur" unit="hPa" id="0" coef="((x*107.4396437)+11336.0291415)/100" />	
+	<sensor name="Pression Coca" id="3">
+		<value name="Valeur" unit="hPa" id="0" coef="((x*107.4396437)+11336.0291415)/100" />
 	</sensor>
 	<sensor name="Température" id="4">
-		<value name="Valeur" unit="°C" id="0" coef="1 / (0.001129148 + (0.000234125 + (0.0000000876741 * log((10240000/500) - 10000) * log((10240000/500) - 10000) ))* log((10240000/500) - 10000) ) - 273.15" />	
+		<value name="Valeur" unit="°C" id="0" coef="1 / (0.001129148 + (0.000234125 + (0.0000000876741 * log((10240000/x) - 10000) * log((10240000/x) - 10000) ))* log((10240000/x) - 10000) ) - 273.15" />	
 	</sensor>
 	<sensor name="Pile" id="5">
-		<value name="Tension" unit="V" id="0" coef="0.053763441x"/>	
+		<value name="Tension" unit="V" id="0" coef="x*5/1024"/>	
 	</sensor>
 	<sensor name="Pression Extérieure" id="6">
 		<value name="Valeur" unit="hPa" id="0" coef="((x*107.4396437)+11336.0291415)/100" />	
+	</sensor>
+	<sensor name="Conductivité" id="7">
+		<value name="Valeur" unit="" id="0" />	
+	</sensor>
+	<sensor name="CO2" id="8">
+		<value name="Concentation" unit="" id="0" />	
+	</sensor>
+	<sensor name="Température extérieure" id="9">
+		<value name="Concentation" unit="°C" id="0" coef="1 / (0.001129148 + (0.000234125 + (0.0000000876741 * log((10240000/x) - 10000) * log((10240000/x) - 10000) ))* log((10240000/x) - 10000) ) - 273.15"/>	
 	</sensor>
 </sensorlist>

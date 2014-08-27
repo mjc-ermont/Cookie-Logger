@@ -91,7 +91,7 @@ void DatabaseController::setup() {
     }
 
     db.exec("CREATE TABLE IF NOT EXISTS data (id integer primary key, sensor INT, sensorvalue INT, value DOUBLE, time DATETIME)");
-
+    db.exec("CREATE UNIQUE INDEX IF NOT EXISTS ON data (time)");
 
     QSqlQuery rep;
     rep = db.exec("SELECT time FROM data ORDER BY time ASC LIMIT 0,1");
