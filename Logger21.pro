@@ -77,8 +77,6 @@ FORMS += \
     FenPrincipale.ui \
     dialog.ui \
     InPut/fileimportdialog.ui \
-    ChronoReader/chronoreaderwidget.ui \
-    ChronoReader/eventbox.ui \
     balaifrequenciel.ui
 
 RESOURCES += \
