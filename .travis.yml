@@ -12,4 +12,4 @@ env:
   - secure: ASHPupqznv7KFgjLw5FvunS37W2TMszGeHr+WgxbSvdcOMzyEH+Cr+BorDapZQ3lKPvqGqcqeOsZ7DU1lufF2rmrv/m9UeYFHxj4IMr0IC59r0EFw9K/WUT8GRjsztV/41hrpCQato/4u42DfCUqpiMzMCeRpVBwxazcBc2SnQg=
   - secure: DU136ZbaWz3Qz4YA4fIMHGlEPAQywwf98R9Bf8TdiYJ+kfR5zvudMHgGn/asmv6Q1Z8aU3NyCN8Ih72dcPeHd14zTi86YgLH0j99FOKQAZ41M8B7fgyahTyIgB+xSBztTHwwfwpkx7fLXtrH4WLZrZ9SgmqBWYaE4R+sCjt83Zk=
 after_success: curl --retry 10 --ftp-create-dirs -T Logger21-* -u $FTP_USER:$FTP_PASSWORD
-  ftp://ftpperso.free.fr/Cookie-Logger/$TRAVIS_TAG-$TRAVIS_BRANCH-$TRAVIS_COMMIT/
+  ftp://ftpperso.free.fr/cookie_logger/$TRAVIS_TAG-$TRAVIS_BRANCH-$TRAVIS_COMMIT/
