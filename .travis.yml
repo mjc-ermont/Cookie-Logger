@@ -10,7 +10,7 @@ env:
   - OS=WIN ARCH=i686
   - OS=WIN ARCH=x86_64
   global:
-  - secure: bAdMt0H12la2dgzzpyVm0rp11z3IdZJG2kxYnsWUmyo9IyJn5ZzrpVishV1QyCPUYepkDG1BzQLtnCWXcUGjVsoITCmnK8NphpiZqFc8v2LOIod+/d0xfUO6LAWIclwt7HCgpRq00zia1kwNgV4df4Pw3XkHB+2OIs7zS2tP5zM=
-  - secure: cGcibUJTAnuiR166qZX1laG8BnHyyMkeHPpJtRRp4Tt0HUUboJGOt+lvVwrv+Wpf+6wom7YsH1sO/hTTRvILSzEwZWwO2lszUZpHRRccZoOeHpNQbf4zn+rNw/l4xYaYrP2u6yuTd0onfVSxwRVrHOYwzZ1f9CsKSVcqF/L/W9Q=
-after_success:
-    "curl --retry 10 --ftp-create-dirs -T Logger21-* -u $FTP_USER:$FTP_PASSWORD ftp://ftpperso.free.fr/Cookie-Logger/$TRAVIS_TAG-$TRAVIS_BRANCH-$TRAVIS_COMMIT/"
+  - secure: ASHPupqznv7KFgjLw5FvunS37W2TMszGeHr+WgxbSvdcOMzyEH+Cr+BorDapZQ3lKPvqGqcqeOsZ7DU1lufF2rmrv/m9UeYFHxj4IMr0IC59r0EFw9K/WUT8GRjsztV/41hrpCQato/4u42DfCUqpiMzMCeRpVBwxazcBc2SnQg=
+  - secure: DU136ZbaWz3Qz4YA4fIMHGlEPAQywwf98R9Bf8TdiYJ+kfR5zvudMHgGn/asmv6Q1Z8aU3NyCN8Ih72dcPeHd14zTi86YgLH0j99FOKQAZ41M8B7fgyahTyIgB+xSBztTHwwfwpkx7fLXtrH4WLZrZ9SgmqBWYaE4R+sCjt83Zk=
+after_success: curl --retry 10 --ftp-create-dirs -T Logger21-* -u $FTP_USER:$FTP_PASSWORD
+  ftp://ftpperso.free.fr/Cookie-Logger/$TRAVIS_TAG-$TRAVIS_BRANCH-$TRAVIS_COMMIT/
