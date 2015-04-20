@@ -8,6 +8,7 @@ then
 	then
 		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib &&
 		git clone git://code.qt.io/qt/qtserialport.git &&
+		git checkout qt4-dev
 		cd qtserialport &&
 		qmake qtserialport.pro -spec linux-g++-32 &&
 		make &&
@@ -18,6 +19,7 @@ then
 	then
 		sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev &&
 		git clone git://code.qt.io/qt/qtserialport.git &&
+		git checkout qt4-dev
 		cd qtserialport &&
 		qmake qtserialport.pro &&
 		make &&
