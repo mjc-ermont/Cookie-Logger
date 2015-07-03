@@ -6,6 +6,7 @@ import operator
 import struct
 
 def slimdecode(frame, config): 
+	print(len(frame))
 	rs = RSCodec(config["trame"]["ecc"]["length"])
 	frame = rs.decode(frame)
 
@@ -21,11 +22,10 @@ def slimdecode(frame, config):
 
 	for fmt in config["sensors"]: 
 		l = struct.calcsize(fmt)
-		val, =  struct.unpack("!" + fmt, frame[:l])
+		val =  struct.unpack("!" + fmt, frame[:l])
 		frame = frame[l:]
 		out.append(val)
 
 
-	print(len(frame))
 
 	return out
