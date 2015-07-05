@@ -2,11 +2,11 @@
 #define MAPSVIEW_H
 
 
+#include <defines.h>
+#include <FenPrincipale.h>
 #include <QWebView>
 #include <QWebFrame>
 #include <QFile>
-#include <FenPrincipale.h>
-#include <defines.h>
 
 class MapsView : public QWebView
 {

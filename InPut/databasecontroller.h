@@ -1,6 +1,8 @@
 #ifndef DATABASECONTROLLER_H
 #define DATABASECONTROLLER_H
 
+#include "sensormanager.h"
+
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlResult>
@@ -11,7 +13,6 @@
 #include <QMutex>
 #include <QWaitCondition>
 
-#include "sensormanager.h"
 
 class DatabaseController : public QThread
 {

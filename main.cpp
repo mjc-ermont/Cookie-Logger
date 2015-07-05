@@ -1,10 +1,12 @@
+
+#include "defines.h"
+
 #include <QtGui>
 #include <QInputDialog>
 #include <QDebug>
 #include <ctime>
 
 
-#include "defines.h"
 #include "FenPrincipale.h"
 #include "InPut/serial.h"
 #include "dialog.h"

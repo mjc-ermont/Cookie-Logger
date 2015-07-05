@@ -5,6 +5,7 @@
 #include "sensorvalue.h"
 #include "sensormanager.h"
 
+
 class SensorValue;
 class SensorManager;
 

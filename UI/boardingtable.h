@@ -1,12 +1,12 @@
 #ifndef BOARDINGTABLE_H
 #define BOARDINGTABLE_H
 
+#include "defines.h"
+#include "../InPut/sensormanager.h"
 #include <QGridLayout>
 #include <QLCDNumber>
 #include <QGroupBox>
 #include <QLabel>
-#include "../InPut/sensormanager.h"
-#include "defines.h"
 
 class SensorManager;
 class SensorValue;

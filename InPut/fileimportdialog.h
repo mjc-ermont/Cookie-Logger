@@ -1,10 +1,10 @@
 #ifndef FILEIMPORTDIALOG_H
 #define FILEIMPORTDIALOG_H
 
-#include <QDialog>
-#include <QFileDialog>
 #include "../FenPrincipale.h"
 #include "ui_fileimportdialog.h"
+#include <QDialog>
+#include <QFileDialog>
 
 
 class FileImportDialog : public QDialog, public Ui::FileImportDialog

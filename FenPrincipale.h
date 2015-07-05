@@ -5,6 +5,9 @@
 #define QWT_DLL
 #endif
 
+#include "defines.h"
+
+
 #include <QMainWindow>
 #include <QDateTime>
 #include <QVector>
@@ -18,15 +21,15 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
+
+#include "InPut/pythondecoder.h"
 #include "ui_FenPrincipale.h"
 #include "InPut/sensormanager.h"
-#include "InPut/cookiedecoder.h"
 #include "InPut/serial.h"
 #include "UI/boardingtable.h"
 #include "UI/graphicview.h"
 #include "UI/mapsview.h"
 #include "balaifrequenciel.h"
-#include "defines.h"
 #include "tablemgr.h"
 #include "webservicesmanager.h"
 #include "UI/timerangeselector.h"
@@ -90,7 +93,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
 
         // Données
         Serial*                 com;
-        CookieDecoder*          myDecoder;
+        pythondecoder*          myDecoder;
         SensorManager*          sensormgr;
 
         WebServicesManager*     mWebServicesManager;
@@ -126,7 +129,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void log_webservices(QString str);
         void log(int id, QString str);
 
-        void informationsReceived(QList<QByteArray>);
+        void received(QByteArray);
 
         void syncTime();
         void resetIndicatorRx();

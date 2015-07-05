@@ -10,6 +10,9 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
+#include "../defines.h"
+#include "ReedSalomon/rs.h"
+
 class Serial : public QObject
 {
     Q_OBJECT
@@ -42,10 +45,10 @@ public slots:
     void readData();
 
 signals:
-    void dataRead(QList<QByteArray>);
+    void received(QByteArray);
+    void message(QString);
     void balayageDone(QVector<double>);
 
-    void message(QString);
     void nBytesRead(int);
 
 private:
@@ -62,8 +65,6 @@ private:
     int current_channel;
 
     QSerialPort* serial_port;
-
-    QByteArray skipped_buf;
 
 
     bool doingBalayage;

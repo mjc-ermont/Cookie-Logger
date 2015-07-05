@@ -1,4 +1,4 @@
-#include <QtXml/QtXml>
+
 #include "sensormanager.h"
 
 SensorManager::SensorManager(FenPrincipale* _parent) {
@@ -37,6 +37,13 @@ void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
     }
 }
 
+void SensorManager::newFrame(QVector<double> frame){
+    for(int i=0; i<frame.size();i++) {
+        SensorValue* sv = sensorValueList[i];
+        newValue(sv->getCapteur()->getId(),sv->getID(),frame[i]);
+    }
+}
+
 void SensorManager::getSensorsFromFile() {
     QXmlStreamReader reader;
     QFile* cptConfig = new QFile("conf/cplist.xml");
@@ -61,6 +68,7 @@ void SensorManager::getSensorsFromFile() {
             QString params = reader.attributes().value("param").toString();
             SensorValue *sv = new SensorValue(reader.attributes().value("name").toString() ,reader.attributes().value("unit").toString(),reader.attributes().value("id").toString().toInt(),curSensor,coef,params);
 
+            sensorValueList.append(sv);
             if(reader.attributes().value("coef").toString() != "")
                 sv->setCoef(reader.attributes().value("coef").toString());
 

@@ -123,16 +123,19 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     actTemps->start(1000);
     // -----------------------------
     // Démarrage du décodeur de trames
-    myDecoder = new CookieDecoder();
-    connect(myDecoder,SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
+    myDecoder = new pythondecoder();
+
+    connect(myDecoder,SIGNAL(newFrame(QVector<double>)), sensormgr, SLOT(newFrame(QVector<double>)));
     connect(myDecoder,SIGNAL(message(QString)),this,SLOT(log_decoder(QString)));
     connect(myDecoder,SIGNAL(trame_erreur(int)),this, SLOT(incrementStatTramesEchouees(int)));
     connect(myDecoder,SIGNAL(trame_increment(int)),this,SLOT(incrementStatTramesRecues(int)));
     connect(myDecoder,SIGNAL(trame_corrigee(int)),this,SLOT(incrementStatTramesCorrigees(int)));
+
+    myDecoder->init();
     log_logger("[INFO] All started !");
     // -----------------------------
     // Prise en charge du port série
-    connect(com,SIGNAL(dataRead(QList<QByteArray>)),this,SLOT(informationsReceived(QList<QByteArray>)));
+    connect(com,SIGNAL(received(QByteArray)),this,SLOT(received(QByteArray)));
     connect(com,SIGNAL(message(QString)),this,SLOT(log_serial(QString)));
     connect(com, SIGNAL(nBytesRead(int)),this, SLOT(incrementStatBytesRecus(int)));
     // -------------------
@@ -231,6 +234,9 @@ void FenPrincipale::onRangeStartUpdate(QDateTime range_start) {
  * Gestion de l'horloge
  */
 void FenPrincipale::syncTime() {
+    //TODO: rezpofzea
+
+    myDecoder->appendData("slt");
     graphic_range_selector->setMaximumDate(QDateTime::currentDateTime());
     historique_range_selector->setMaximumDate(QDateTime::currentDateTime());
 }
@@ -238,19 +244,16 @@ void FenPrincipale::syncTime() {
 /*
  * Gestion des données
  */
-void FenPrincipale::informationsReceived(QList<QByteArray> trames) {
-    if(trames.size() > 0) {
 
-        for(int i=0;i<trames.size();i++) {
-            myDecoder->decodeString(trames[i]);
-        }
+void FenPrincipale::received(QByteArray d) {
+    myDecoder->appendData(d);
 
-        QPair<GraphicView*,QMdiSubWindow*> value;
-        foreach(value,graphiques) {
-            value.first->majData();
-        }
+    QPair<GraphicView*,QMdiSubWindow*> value;
+    foreach(value,graphiques) {
+        value.first->majData(); //TODO: Truc de porc?
     }
 }
+
 
 void FenPrincipale::data_read(int idc, int idv, QVector<Data> data, QString reason) {
 

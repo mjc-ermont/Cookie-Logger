@@ -12,9 +12,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Logger21
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x -I/usr/include/python3.4/
 
 ICON = icone.ico
+
+PRECOMPILED_HEADER = exprtk.hpp
 
 SOURCES += \
     FenPrincipale.cpp \
@@ -27,8 +29,6 @@ SOURCES += \
     InPut/sensormanager.cpp \
     InPut/fileimportdialog.cpp \
     UI/graphicview.cpp \
-    InPut/cookiedecoder.cpp \
-    InPut/yolodecoder.cpp \
     InPut/databasecontroller.cpp \
     InPut/sensor.cpp \
     InPut/sensorvalue.cpp \
@@ -41,7 +41,8 @@ SOURCES += \
     UI/stagesmanager.cpp \
     UI/mygraphicsview.cpp \
     ReedSalomon/decode_rs.c \
-    ReedSalomon/init_rs.c
+    ReedSalomon/init_rs.c \
+    InPut/pythondecoder.cpp
 
 HEADERS  += \
     tablemgr.h \
@@ -56,8 +57,6 @@ HEADERS  += \
     InPut/sensor.h \
     InPut/fileimportdialog.h \
     UI/graphicview.h \
-    InPut/cookiedecoder.h \
-    InPut/yolodecoder.h \
     InPut/databasecontroller.h \
     balaifrequenciel.h \
     UI/histogram.h \
@@ -71,14 +70,13 @@ HEADERS  += \
     UI/stagesmanager.h \
     UI/mygraphicsview.h \
     ReedSalomon/char.h \
-    ReedSalomon/rs.h
+    ReedSalomon/rs.h \
+    InPut/pythondecoder.h
 
 FORMS += \
     FenPrincipale.ui \
     dialog.ui \
     InPut/fileimportdialog.ui \
-    ChronoReader/chronoreaderwidget.ui \
-    ChronoReader/eventbox.ui \
     balaifrequenciel.ui
 
 RESOURCES += \
@@ -90,5 +88,6 @@ QMAKE_CXXFLAGS_DEBUG += -O2 #Sinon ça faire l'erreur "too many sections"
 
 LIBS += -lqwt
 LIBS += -lqjson
+LIBS += -lpython3.4m
 
 TRANSLATIONS = notroll.ts troll.ts
