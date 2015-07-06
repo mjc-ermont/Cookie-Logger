@@ -22,10 +22,10 @@
 #include <QInputDialog>
 
 
-#include "InPut/pythondecoder.h"
+#include "input/pythondecoder.h"
 #include "ui_FenPrincipale.h"
-#include "InPut/sensormanager.h"
-#include "InPut/serial.h"
+#include "input/sensormanager.h"
+#include "input/serial.h"
 #include "UI/boardingtable.h"
 #include "UI/graphicview.h"
 #include "UI/mapsview.h"

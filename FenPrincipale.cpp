@@ -1,5 +1,5 @@
 #include "FenPrincipale.h"
-#include "InPut/fileimportdialog.h"
+#include "input/fileimportdialog.h"
 
 
 FenPrincipale::FenPrincipale(Serial* _com) {
@@ -234,9 +234,6 @@ void FenPrincipale::onRangeStartUpdate(QDateTime range_start) {
  * Gestion de l'horloge
  */
 void FenPrincipale::syncTime() {
-    //TODO: rezpofzea
-
-    myDecoder->appendData("slt");
     graphic_range_selector->setMaximumDate(QDateTime::currentDateTime());
     historique_range_selector->setMaximumDate(QDateTime::currentDateTime());
 }

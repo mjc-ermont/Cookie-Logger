@@ -3,8 +3,8 @@
 
 
 #include <FenPrincipale.h>
-#include <InPut/sensorvalue.h>
-#include <InPut/sensor.h>
+#include <input/sensorvalue.h>
+#include <input/sensor.h>
 
 #include <qwt/qwt_plot_canvas.h>
 #include <qwt/qwt_plot.h>

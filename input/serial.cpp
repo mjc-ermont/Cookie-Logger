@@ -1,8 +1,5 @@
 #include "serial.h"
 
-#include "ReedSalomon/char.h"
-#include <stdlib.h>
-#include <string.h>
 
 Serial::Serial(QString _port,qint32 _baudrate)
 {

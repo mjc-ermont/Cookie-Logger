@@ -1,7 +1,7 @@
 #ifndef WEBSERVICESMANAGER_H
 #define WEBSERVICESMANAGER_H
 
-#include "InPut/sensormanager.h"
+#include "input/sensormanager.h"
 
 #include "QSettings"
 

@@ -2,7 +2,7 @@
 #define BOARDINGTABLE_H
 
 #include "defines.h"
-#include "../InPut/sensormanager.h"
+#include "../input/sensormanager.h"
 #include <QGridLayout>
 #include <QLCDNumber>
 #include <QGroupBox>

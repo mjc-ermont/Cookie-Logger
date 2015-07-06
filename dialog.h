@@ -3,7 +3,7 @@
 
 
 #include "FenPrincipale.h"
-#include "InPut/serial.h"
+#include "input/serial.h"
 
 #include "ui_dialog.h"
 #include "QtSerialPort/QSerialPort"

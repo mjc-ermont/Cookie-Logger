@@ -1,7 +1,7 @@
 #ifndef BALAIFREQUENCIEL_H
 #define BALAIFREQUENCIEL_H
 
-#include <InPut/serial.h>
+#include <input/serial.h>
 #include <QDialog>
 #include <qwt/qwt_plot.h>
 #include "UI/histogram.h"

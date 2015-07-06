@@ -8,7 +8,7 @@
 
 
 #include "FenPrincipale.h"
-#include "InPut/serial.h"
+#include "input/serial.h"
 #include "dialog.h"
 
 int main(int argc, char *argv[])

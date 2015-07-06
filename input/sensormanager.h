@@ -5,7 +5,6 @@
 #include "sensorvalue.h"
 #include "FenPrincipale.h"
 #include "tablemgr.h"
-#include "serialdecoder.h"
 #include "databasecontroller.h"
 
 #include <QVector>

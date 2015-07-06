@@ -10,8 +10,6 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
-#include "../defines.h"
-#include "ReedSalomon/rs.h"
 
 class Serial : public QObject
 {

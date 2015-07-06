@@ -1,7 +1,8 @@
 #ifndef DATABASECONTROLLER_H
 #define DATABASECONTROLLER_H
 
-#include "sensormanager.h"
+
+#include "defines.h"
 
 #include <QSqlQuery>
 #include <QSqlDatabase>
@@ -12,6 +13,7 @@
 #include <QQueue>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QStringList>
 
 
 class DatabaseController : public QThread

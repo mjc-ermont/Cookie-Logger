@@ -10,8 +10,8 @@
 #include <QStandardItem>
 #include <QStandardItemModel>
 
-#include "InPut/sensormanager.h"
-#include "InPut/sensorvalue.h"
+#include "input/sensormanager.h"
+#include "input/sensorvalue.h"
 
 
 class TableMgr
