@@ -125,7 +125,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     // Démarrage du décodeur de trames
     myDecoder = new pythondecoder();
 
-    connect(myDecoder,SIGNAL(newFrame(QVector<double>)), sensormgr, SLOT(newFrame(QVector<double>)));
+    connect(myDecoder,SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
     connect(myDecoder,SIGNAL(message(QString)),this,SLOT(log_decoder(QString)));
     connect(myDecoder,SIGNAL(trame_erreur(int)),this, SLOT(incrementStatTramesEchouees(int)));
     connect(myDecoder,SIGNAL(trame_increment(int)),this,SLOT(incrementStatTramesRecues(int)));
@@ -574,7 +574,7 @@ void FenPrincipale::saveSettings() {
     settings->setValue("dataserverurl",dataServerLineEdit->text());
     settings->setValue("dataserverenabled", dataServerCheckBox->isChecked());
     QString mtwServer = metewowServerLineEdit->text();
-    if(mtwServer.at(mtwServer.size()-1) != '/' && mtwServer.size() > 0)
+    if(mtwServer.size() > 0 && mtwServer.at(mtwServer.size()-1) != '/')
         metewowServerLineEdit->setText(mtwServer + "/");
     settings->setValue("metewowserverurl",metewowServerLineEdit->text());
     settings->setValue("metewowserverenabled", metewowServerCheckBox->isChecked());

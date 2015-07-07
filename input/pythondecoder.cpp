@@ -70,18 +70,27 @@ void pythondecoder::appendData(QByteArray received) {
         if(result != NULL) {
             bool trame_decodee = PyObject_IsTrue(result);
             if(trame_decodee && data != NULL) {
-                PyArrayObject* array = (PyArrayObject*)PyArray_FromAny(data,PyArray_DescrFromType(NPY_FLOAT64), 0,0, 0,NULL);
+                PyArrayObject* array = (PyArrayObject*)PyArray_FromAny(data, NULL, 0, 0, 0, NULL);
                 if(array != NULL) {
-                    QVector<double> values;
                     int s = PyArray_Size((PyObject*)array);
-                    for (int i=0; i<s;i++) {
-                        values.append(PyFloat_AsDouble(PyArray_GETITEM(array,(const char*)PyArray_GETPTR1(array,i))));
-
+                    for (int c=0; c<s;c++) {
+                        PyObject* tuple = PyArray_GETITEM(array,(const char*)PyArray_GETPTR1(array,c));
+                        int tsize = PyTuple_Size(tuple);
+                        for (int cv=0;cv<tsize;cv++) {
+                            PyObject* py_value = PyTuple_GetItem(tuple,cv);
+                            double value = PyFloat_AsDouble(py_value);
+                            Py_DECREF(py_value);
+                            emit newValue(c,cv,value);
+                        }
+                        Py_DECREF(tuple);
                     }
-
-                    newFrame(values);
+                    qDebug() << "chhec";
+                } else {
+                    qDebug() << "ez";
                 }
+            }
 
+            if (data != NULL) {
                 Py_DECREF(data);
             }
             Py_DECREF(result);

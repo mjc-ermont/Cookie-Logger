@@ -5,6 +5,9 @@ import functools
 import operator
 import struct
 import json
+import os
+import trame
+import numpy as np
 
 
 
@@ -13,23 +16,15 @@ def decode(data):
 
 
 	conf = json.load(open(config_file, "r"))
-	print("Decoding "+str(conf))
+	print("Decoding "+str(data))
 
-	vals = []
-	for fmt in conf["sensors"]:
-		val = struct.unpack("!" + fmt, os.urandom(struct.calcsize(''.join(fmt))))
-		vals.append(val)
-
-	#print(vals)
-	frame = trame.trame(vals, conf)
+	
 
 
-
-
-
-	res = slimdecode(frame, config_file)
+	res = slimdecode(data, config_file)
+	print(res)
 	if(res != False):
-		return (True, res)
+		return (True, np.array(res))
 	else:
 		return (False, 0)
 
