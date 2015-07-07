@@ -31,7 +31,7 @@ then
 	mv Logger21 Logger21-$OS-$ARCH
 elif [ $OS == "WIN" ];
 then
-	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev &&
+	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev python3-dev &&
 	git clone https://github.com/jnovy/pxz && 
 	cd pxz &&
 	make &&
