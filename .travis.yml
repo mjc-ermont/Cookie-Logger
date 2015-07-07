@@ -1,5 +1,5 @@
-language: cpp
-compiler: gcc
+language: python
+python: 3.4
 before_script:
 - sudo apt-get update
 script: "./build.sh"
