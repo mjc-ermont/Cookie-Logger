@@ -45,6 +45,7 @@ void SensorValue::addData(double d, bool parse) {
 
     parent->getParent()->getParent()->getWebServicesManager()->update(parent->getId(), id, newData.value);
 
+
     if(param == "xmap") {
         parent->getParent()->getParent()->getStagesManager()->unlockGPSFixStage();
         parent->getParent()->getParent()->getMap()->updateX(newData.value);

@@ -1,9 +1,11 @@
 #ifndef DIALOG_H
 #define DIALOG_H
 
-#include "ui_dialog.h"
-#include "InPut/serial.h"
+
 #include "FenPrincipale.h"
+#include "input/serial.h"
+
+#include "ui_dialog.h"
 #include "QtSerialPort/QSerialPort"
 #include <QSettings>
 #include <QStringList>

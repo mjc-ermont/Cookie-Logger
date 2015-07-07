@@ -2,6 +2,9 @@
 #define GRAPHICVIEW_H
 
 
+#include <FenPrincipale.h>
+#include <input/sensorvalue.h>
+#include <input/sensor.h>
 
 #include <qwt/qwt_plot_canvas.h>
 #include <qwt/qwt_plot.h>
@@ -11,9 +14,6 @@
 #include <qwt/qwt_plot_zoomer.h>
 #include <qwt/qwt_scale_draw.h>
 
-#include <FenPrincipale.h>
-#include <InPut/sensorvalue.h>
-#include <InPut/sensor.h>
 
 
 class FenPrincipale;

@@ -1,6 +1,8 @@
 #ifndef TABLEMGR_H
 #define TABLEMGR_H
 
+#include "defines.h"
+
 #include <QVector>
 #include <QTableView>
 #include <QDateTime>
@@ -8,9 +10,8 @@
 #include <QStandardItem>
 #include <QStandardItemModel>
 
-#include "defines.h"
-#include "InPut/sensormanager.h"
-#include "InPut/sensorvalue.h"
+#include "input/sensormanager.h"
+#include "input/sensorvalue.h"
 
 
 class TableMgr

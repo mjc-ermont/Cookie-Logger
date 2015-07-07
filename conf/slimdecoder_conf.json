@@ -1,0 +1,11 @@
+{
+	"sensors":["HHH", "I", "i"],
+	"trame":
+	{
+		"ecc":
+		{
+			"length":20
+		},
+		"startbyte":255
+	}
+}

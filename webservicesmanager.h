@@ -1,6 +1,8 @@
 #ifndef WEBSERVICESMANAGER_H
 #define WEBSERVICESMANAGER_H
 
+#include "input/sensormanager.h"
+
 #include "QSettings"
 
 #include <QNetworkReply>
@@ -10,7 +12,6 @@
 
 #include "QDebug"
 
-#include "InPut/sensormanager.h"
 
 #define DATASERVER 1
 #define METEWOWSERVER 2

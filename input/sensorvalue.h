@@ -3,10 +3,11 @@
 
 #include <QString>
 #include <QVector>
-#include <defines.h>
+#include "defines.h"
 #include "exprtk.hpp"
 
 #include "sensor.h"
+
 class Sensor;
 class SensorValue : public QObject
 {

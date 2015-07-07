@@ -1,15 +1,16 @@
 #ifndef SENSORMANAGER_H
 #define SENSORMANAGER_H
 
-#include <QVector>
 #include "sensor.h"
 #include "sensorvalue.h"
 #include "FenPrincipale.h"
 #include "tablemgr.h"
-#include "serialdecoder.h"
+#include "databasecontroller.h"
+
+#include <QVector>
 #include <QHttp>
 #include <QUrl>
-#include "databasecontroller.h"
+#include <QtXml/QtXml>
 
 class FenPrincipale;
 class Sensor;
@@ -26,10 +27,12 @@ public:
 
 public slots:
     void newValue(int id_capteur, int id_valeur, double valeur);
+    void newFrame(QVector<double>);
 protected:
     void getSensorsFromFile();
 private:
     QVector<Sensor*> sensorList;
+    QVector<SensorValue*> sensorValueList;
     FenPrincipale* parent;
     DatabaseController* bdd;
     double valeur;

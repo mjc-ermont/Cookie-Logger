@@ -1,5 +1,5 @@
-#include "serialdecoder.h"
 #include "serial.h"
+
 
 Serial::Serial(QString _port,qint32 _baudrate)
 {
@@ -159,44 +159,20 @@ void Serial::readDataBalayage() {
     }
 }
 
-
-
 void Serial::readData() {
     if(doingBalayage) {
         readDataBalayage();
         return;
     }
 
-  //  qDebug("l");
-    QList<QByteArray> trames;
-
     QByteArray dataread = serial_port->readAll();
 
     emit nBytesRead(dataread.size());
 
-    if(dataread.size() != 0)
+    if(dataread.size() != 0) {
+        emit received(dataread);
         emit message(QString(dataread));
-  //  qDebug() << dataread;
-
-
-    QByteArray data(skipped_buf);
-    data.append(dataread);
-
-    skipped_buf.clear();
-
-    trames = data.split('#');
-    if(trames.last().size() < 40) {
-        skipped_buf = trames.last();
-        trames.removeLast();
     }
-
-    for(int i=0;i<trames.size();i++) {
-        if(trames.at(i).isEmpty())
-            trames.removeAt(i);
-        else
-            trames[i] = "#" + trames[i];
-    }
-    emit dataRead(trames);
 }
 
 
