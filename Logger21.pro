@@ -24,7 +24,7 @@ CONFIG += serialport
 
 #QMAKE_CXXFLAGS_DEBUG += -O2 # Sinon ça fait l'erreur "too many sections"
 
-LIBS += -lqwt -lqjson -lpython3.2m
+LIBS += -lqwt -lqjson -lpython3.4m
 
 TRANSLATIONS = notroll.ts troll.ts
 
