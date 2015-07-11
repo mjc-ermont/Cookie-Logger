@@ -6,7 +6,7 @@ if [ $OS == "LINUX" ];
 then
 	if [ $ARCH == "i686" ];
 	then
-		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib python3-dev python-numpy-dev &&
+		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib python3.4-dev python-numpy-dev &&
 		git clone git://code.qt.io/qt/qtserialport.git &&
 		cd qtserialport &&
 		git checkout qt4-dev
@@ -17,7 +17,7 @@ then
 		qmake Logger21.pro -spec linux-g++-32
 	elif [ $ARCH == "x86_64" ];
 	then
-		sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev &&
+		sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3.4-dev python3-numpy python-numpy-dev &&
 		git clone git://code.qt.io/qt/qtserialport.git &&
 		cd qtserialport &&
 		git checkout qt4-dev
@@ -31,7 +31,7 @@ then
 	mv Logger21 Logger21-$OS-$ARCH
 elif [ $OS == "WIN" ];
 then
-	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev python3-dev python3-numpy python-numpy-dev &&
+	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev python3.4-dev python3-numpy python-numpy-dev &&
 	git clone https://github.com/jnovy/pxz && 
 	cd pxz &&
 	make &&
