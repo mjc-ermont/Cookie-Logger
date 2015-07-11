@@ -12,7 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Logger21
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++0x -I/usr/include/python3.4 -I/usr/include/python3.2
+QMAKE_CXXFLAGS += -std=c++0x -I/usr/include/python3.4
 
 ICON = icone.ico
 
@@ -24,7 +24,7 @@ CONFIG += serialport
 
 #QMAKE_CXXFLAGS_DEBUG += -O2 # Sinon ça fait l'erreur "too many sections"
 
-LIBS += -lqwt -lqjson -lpython3.4m
+LIBS += -lqwt -lqjson -lpython3.4
 
 TRANSLATIONS = notroll.ts troll.ts
 
