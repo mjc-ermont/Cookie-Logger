@@ -25,7 +25,6 @@ then
 		make &&
 		sudo make install &&
 		cd .. &&
-		find /usr/lib/ | grep python3.4m.so && 
 		qmake Logger21.pro -spec linux-g++-64
 	fi
 	make &&
