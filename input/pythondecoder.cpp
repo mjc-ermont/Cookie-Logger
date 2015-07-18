@@ -1,8 +1,27 @@
 #include "pythondecoder.h"
+#include <signal.h>
+#include <stdio.h>
+#include <unistd.h>
+
+void ouch(int sig)
+{
+    printf("Je code avec mon cul %d\n", sig);
+}
 
 pythondecoder::pythondecoder() {}
 
+
+
 void pythondecoder::init() {
+    struct sigaction act;
+    act.sa_handler = ouch;
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = 0;
+    sigaction(SIGSEGV, &act, 0);
+
+    ok = false;
+    buffer = "";
+
     Py_Initialize();
 
     _import_array();
@@ -12,7 +31,6 @@ void pythondecoder::init() {
 
     pModule = PyImport_ImportModule("decoder");
 
-    ok = false;
     if (pModule != NULL) {
         pFunc = PyObject_GetAttrString(pModule, "decode");
         if (pFunc && PyCallable_Check(pFunc)) {
@@ -41,27 +59,22 @@ pythondecoder::~pythondecoder() {
     Py_Finalize();
 }
 
-void pythondecoder::appendData(QByteArray received) {
-    if(!ok)
-        return;
-
+bool pythondecoder::decode(QByteArray frame) {
     PyGILState_STATE gstate;
     gstate = PyGILState_Ensure();
 
 
-    PyObject* pData = PyByteArray_FromStringAndSize(received.data(),received.length());
-
-    qDebug() << "rec: "<< QString(received) << " | " << received.length();
+    PyObject* pData = PyByteArray_FromStringAndSize(frame.data(),frame.length());
 
     pArgs = PyTuple_New(1);
     PyTuple_SetItem(pArgs, 0, pData);
 
-    Py_INCREF(pArgs);
-
 
     PyObject* pReturnValue =  PyObject_CallObject(pFunc, pArgs);
-    Py_DECREF(pData);
+
     Py_DECREF(pArgs);
+
+    bool success = false;
 
     if (pReturnValue != NULL) {
         PyObject* result = PyTuple_GetItem(pReturnValue,0);
@@ -81,15 +94,12 @@ void pythondecoder::appendData(QByteArray received) {
                         for (int cv=0;cv<tsize;cv++) {
                             PyObject* py_value = PyTuple_GetItem(tuple,cv);
                             double value = PyFloat_AsDouble(py_value);
-                            Py_DECREF(py_value);
                             emit newValue(c,cv,value);
-                            emit trame_increment(1);
                         }
                         Py_DECREF(tuple);
                     }
-                    qDebug() << "chhec";
-                } else {
-                    qDebug() << "ez";
+                    success = true;
+                    emit trame_increment(1);
                 }
             }
 
@@ -98,14 +108,38 @@ void pythondecoder::appendData(QByteArray received) {
             }
             Py_DECREF(result);
         }
-        if(pReturnValue->ob_refcnt > 0 && pReturnValue != 0)
-            Py_DECREF(pReturnValue);
-            pReturnValue = 0;
     } else {
         emit trame_erreur(1);
         emit message ("Erreur de décodage");
     }
 
     PyGILState_Release(gstate);
+    return success;
+}
+
+void pythondecoder::appendData(QByteArray received) {
+    if(!ok)
+        return;
+
+    buffer.append(received);
+    qDebug() << "Received:" << QString(received.toHex())<< " || buffer:"<<QString(buffer.toHex());
+
+    char startByte = 255;
+    int frame_length = 42;
+
+    while(buffer.indexOf(startByte) != -1 && (buffer.length() - buffer.indexOf(startByte)) >= frame_length) {
+        int firstStart = buffer.indexOf(startByte);
+        QByteArray frame_to_decode = buffer.mid(firstStart, frame_length);
+        bool result = decode(frame_to_decode);
+        qDebug() << "result: "<< (result? " true":"false");
+        if(result)
+            buffer = buffer.mid(firstStart + frame_length);
+        else if (buffer.indexOf(startByte,firstStart+1) != -1)
+            buffer = buffer.mid(buffer.indexOf(startByte,firstStart+1));
+        else
+            buffer = "";
+
+        qDebug() << "New buffer: " << QString(buffer.toHex());
+    }
 
 }

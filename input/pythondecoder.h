@@ -23,6 +23,9 @@ public:
 
     void init();
 
+protected:
+    bool decode(QByteArray frame);
+
 public slots:
     void appendData(QByteArray data);
 signals:
@@ -35,6 +38,8 @@ signals:
 private:
     PyObject *pName, *pModule, *pDict, *pFunc;
     PyObject *pArgs, *pValue;
+
+    QByteArray buffer;
 
     bool ok;
 };
