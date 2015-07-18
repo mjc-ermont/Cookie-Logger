@@ -10,14 +10,6 @@ void pythondecoder::init() {
     wchar_t * argv = const_cast<wchar_t*>(argv_str.toStdWString().c_str());
     PySys_SetArgv(qApp->argc(), &argv);
 
-    PyObject *sys = PyImport_ImportModule("sys");
-    PyObject *path = PyObject_GetAttrString(sys, "path");
-
-
-    PyList_Append(path, PyByteArray_FromStringAndSize(".",1));
-
-    qDebug() << "path:" << PyByteArray_AsString(path);
-
     pModule = PyImport_ImportModule("decoder");
 
     ok = false;
@@ -37,6 +29,10 @@ void pythondecoder::init() {
         emit message ("Chargement du decodeur python: ERREUR (1)");
         qDebug() << "Decodeur python err1";
     }
+
+    if (! PyEval_ThreadsInitialized()) {
+        PyEval_InitThreads();
+    }
 }
 
 pythondecoder::~pythondecoder() {
@@ -49,13 +45,19 @@ void pythondecoder::appendData(QByteArray received) {
     if(!ok)
         return;
 
+    PyGILState_STATE gstate;
+    gstate = PyGILState_Ensure();
+
+
     PyObject* pData = PyByteArray_FromStringAndSize(received.data(),received.length());
 
-    received = "";
+    qDebug() << "rec: "<< QString(received) << " | " << received.length();
+
     pArgs = PyTuple_New(1);
     PyTuple_SetItem(pArgs, 0, pData);
 
     Py_INCREF(pArgs);
+
 
     PyObject* pReturnValue =  PyObject_CallObject(pFunc, pArgs);
     Py_DECREF(pData);
@@ -81,6 +83,7 @@ void pythondecoder::appendData(QByteArray received) {
                             double value = PyFloat_AsDouble(py_value);
                             Py_DECREF(py_value);
                             emit newValue(c,cv,value);
+                            emit trame_increment(1);
                         }
                         Py_DECREF(tuple);
                     }
@@ -95,10 +98,14 @@ void pythondecoder::appendData(QByteArray received) {
             }
             Py_DECREF(result);
         }
-        Py_DECREF(pReturnValue);
+        if(pReturnValue->ob_refcnt > 0 && pReturnValue != 0)
+            Py_DECREF(pReturnValue);
+            pReturnValue = 0;
     } else {
-        PyErr_Print();
+        emit trame_erreur(1);
         emit message ("Erreur de décodage");
     }
+
+    PyGILState_Release(gstate);
 
 }
