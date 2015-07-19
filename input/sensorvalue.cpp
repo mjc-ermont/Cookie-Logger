@@ -39,7 +39,6 @@ void SensorValue::addData(double d, bool parse) {
         newData.value=d;
     qDebug() << "v: " << d << " parser: " << newData.value;
     parent->getParent()->getParent()->log_decoder("Nouvelle valeur: ("+QString::number(parent->getId())+";"+QString::number(id)+") => "+QString::number(newData.value));
-    parent->getParent()->getDB()->write(parent->getId(),id,newData.value,newData.time);
 
     parent->getParent()->getParent()->getStagesManager()->unlockDataReceivedStage();
 
@@ -135,6 +134,6 @@ void SensorValue::addData(double d, bool parse) {
 }
 
 void SensorValue::getData(QString reason, bool last, QDateTime from, QDateTime to) {
-    parent->getParent()->getDB()->read(parent->getId(),id,from,to,reason, last);
+    parent->getParent()->getDB()->readFrame(from,to,reason, last);
 }
 

@@ -13,6 +13,12 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
 
     this->setAutoReplot(false);
 
+
+    m_capteur_x=0;
+    m_valeur_x=0;
+    m_capteur=0;
+    m_valeur=0;
+
     zoomed = false;
 
     // axis
@@ -33,7 +39,6 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
 
     courbe->attach(this);
     majCurve();
-    majData();
 }
 
 GraphicView::GraphicView(int indexCapteur, int indexValeur,int indexCapteur_x, int indexValeur_x, FenPrincipale *parent) :
@@ -69,19 +74,13 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur,int indexCapteur_x, i
 
     courbe->attach(this);
     majCurve();
-    majData();
 }
 
 
 
 
 void GraphicView::majData() {
-    if(m_xy) {
-        value_x->getData("graphx",false,start_dt,end_dt);
-        value->getData("graphy",false,start_dt,end_dt);
-    } else {
-        value->getData("graph",false,start_dt, end_dt);
-    }
+    value->getData("graph",false,start_dt, end_dt);
 }
 
 

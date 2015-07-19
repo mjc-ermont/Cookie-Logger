@@ -18,7 +18,7 @@ public:
     ~BoardingTable();
 
     void init(SensorManager* );
-    void update(int idc, int idv, double value);
+    void update(QVector<Data> values);
     void requestUpdate(SensorValue *value);
 
     void onResize();
@@ -28,6 +28,8 @@ private:
     QVector<QGridLayout *> capteurs_layouts;
     QVector<QLCDNumber *> valeurs;
     QVector<QLabel*> labels;
+
+    SensorManager* mMgr;
 };
 
 #endif // BOARDINGTABLE_H

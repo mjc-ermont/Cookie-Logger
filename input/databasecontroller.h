@@ -22,13 +22,13 @@ class DatabaseController : public QThread
     Q_OBJECT
 
     public:
-        DatabaseController(QVector<QVector<double> > structure);
+        DatabaseController(QVector<int> structure);
         void run();
         void setup();
 
-        void write(int idc, int idv, double v, QDateTime time);
-        void read(int idc, int idv, QDateTime from, QDateTime to, QString reason="", bool last=false);
+        void writeFrame(QVector<double> frame,QDateTime time);
 
+        void readFrame(QDateTime from, QDateTime to,QString reason,bool last);
 
     private:
         QSqlDatabase db;
@@ -36,11 +36,11 @@ class DatabaseController : public QThread
         QMutex mutex;
         QWaitCondition condition;
 
-        QVector<QVector<double> > m_structure;
+        QVector<int> m_structure;
 
     signals:
-        void dataWritten(int idc, int idv);
-        void dataRead(int idc, int idv, QVector<Data> data, QString reason);
+        void dataWritten();
+        void dataRead(QVector<QVector<Data>> data, QString reason);
         void rangeStartUpdate(QDateTime range_start);
         void message(QString);
 };

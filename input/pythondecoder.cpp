@@ -13,11 +13,6 @@ pythondecoder::pythondecoder() {}
 
 
 void pythondecoder::init() {
-    struct sigaction act;
-    act.sa_handler = ouch;
-    sigemptyset(&act.sa_mask);
-    act.sa_flags = 0;
-    sigaction(SIGSEGV, &act, 0);
 
     ok = false;
     buffer = "";
@@ -94,16 +89,18 @@ bool pythondecoder::decode(QByteArray frame) {
                 PyArrayObject* array = (PyArrayObject*)PyArray_FromAny(data, NULL, 0, 0, 0, NULL);
                 if(array != NULL) {
                     int s = PyArray_Size((PyObject*)array);
+                    QVector<double> frame;
                     for (int c=0; c<s;c++) {
                         PyObject* tuple = PyArray_GETITEM(array,(const char*)PyArray_GETPTR1(array,c));
                         int tsize = PyTuple_Size(tuple);
                         for (int cv=0;cv<tsize;cv++) {
                             PyObject* py_value = PyTuple_GetItem(tuple,cv);
                             double value = PyFloat_AsDouble(py_value);
-                            emit newValue(c,cv,value);
+                            frame.append(value);
                         }
                         Py_DECREF(tuple);
                     }
+                    emit newFrame(frame);
                     success = true;
                     emit trame_increment(1);
                 }

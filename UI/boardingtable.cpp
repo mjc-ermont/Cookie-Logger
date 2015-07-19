@@ -13,6 +13,7 @@ BoardingTable::~BoardingTable() {
 
 void BoardingTable::init(SensorManager* mgr) {
     QStringList names, values;
+    mMgr = mgr;
     foreach(Sensor* s, mgr->getSensors())
         names << s->getName();
 
@@ -77,10 +78,15 @@ void BoardingTable::requestUpdate(SensorValue* value) {
     value->getData("bt",1);
 }
 
-void BoardingTable::update(int idc, int idv, double value) {
-    QGridLayout* layout = capteurs_layouts[idc];
-    QLCDNumber *lcd = (QLCDNumber*)layout->itemAtPosition(idv+1,1)->widget();
-    lcd->display(QString::number(value));
+void BoardingTable::update(QVector<Data> values) {
+    for(int i=0;i<values.size();i++) {
+        SensorValue* v = mMgr->valueAt(i);
+        int idc = v->getCapteur()->getId();
+        int idv = v->getID();
+        QGridLayout* layout = capteurs_layouts[idc];
+        QLCDNumber *lcd = (QLCDNumber*)layout->itemAtPosition(idv+1,1)->widget();
+        lcd->display(QString::number(values[i].value));
+    }
 }
 
 void BoardingTable::onResize() {

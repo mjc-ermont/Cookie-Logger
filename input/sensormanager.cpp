@@ -7,23 +7,22 @@ SensorManager::SensorManager(FenPrincipale* _parent) {
 
 
     valeur=0;
-    bdd = new DatabaseController();
+    bdd = new DatabaseController(m_structure);
     connect(bdd, SIGNAL(rangeStartUpdate(QDateTime)),parent,SLOT(onRangeStartUpdate(QDateTime)));
 
     bdd->start();
-    bdd->read(1,0,QDateTime::currentDateTime().addDays(-1),QDateTime::currentDateTime());
 }
 
 void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
     qDebug() << "Valeur: " << valeur;
 
     if(id_capteur < sensorList.size()) {
+
         if(id_valeur < sensorList[id_capteur]->getValues().size()) {
 
             sensorList[id_capteur]->getValues()[id_valeur]->addData(valeur);
             parent->getBT()->requestUpdate(sensorList[id_capteur]->getValues()[id_valeur]);
 
-            parent->setIndicatorRx();
 
 
 
@@ -37,11 +36,19 @@ void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
     }
 }
 
+int SensorManager::indexOf(int idc, int idv) {
+    return sensorValueList.indexOf(sensorList[idc]->getValues()[idv]);
+}
+
 void SensorManager::newFrame(QVector<double> frame){
+    parent->setIndicatorRx();
+
     for(int i=0; i<frame.size();i++) {
         SensorValue* sv = sensorValueList[i];
         newValue(sv->getCapteur()->getId(),sv->getID(),frame[i]);
     }
+
+    getDB()->writeFrame(frame, QDateTime::currentDateTime());
 }
 
 void SensorManager::getSensorsFromFile() {
@@ -54,12 +61,16 @@ void SensorManager::getSensorsFromFile() {
 
    // parent->log_decoder("Récupération de la liste des capteurs depuis <em>conf/cplist.xml</em>");
 
+    int comp =0;
     while(!reader.atEnd()) {
         if((reader.name() == "sensor")&&(reader.attributes().value("name").toString() != "")) {
             Sensor *s = new Sensor(this,reader.attributes().value("name").toString(),reader.attributes().value("id").toString().toInt());
             curSensor = s;
             sensorList.append(s);
             qDebug() << "New sensor:" << s->getName();
+
+            m_structure.push_back(0);
+            comp++;
 
      //       parent->log_decoder("|| Nouveau capteur '" + s->getName() + "' ("+ QString::number(s->getId())+ ")");
         }
@@ -75,6 +86,7 @@ void SensorManager::getSensorsFromFile() {
             if(curSensor != NULL)
                 curSensor->addSensorValue(sv);
 
+            m_structure[comp-1]++;
 
             qDebug() << "  New value:" << sv->getName();
             qDebug() << "  For:" << curSensor->getName();

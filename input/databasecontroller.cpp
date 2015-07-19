@@ -1,6 +1,6 @@
 #include "databasecontroller.h"
 
-DatabaseController::DatabaseController(QVector<QVector<double> > structure)
+DatabaseController::DatabaseController(QVector<int> structure)
 {
     m_structure = structure;
 }
@@ -10,18 +10,27 @@ void DatabaseController::run() {
 
 
     QSqlQuery insertionQuery;
-    insertionQuery.prepare("INSERT INTO data (sensor,sensorvalue,value,time) VALUES (:sensor,:sensorvalue,:value,:time)");
+    QString q = "INSERT INTO data (";
+
+    for(int c=0;c<m_structure.size();c++)
+        for(int cv=0;cv<m_structure[c];cv++)
+            q.push_back("c"+QString::number(c)+"v"+QString::number(cv)+",");
+
+    q.push_back("time) VALUES (");
+    for(int c=0;c<m_structure.size();c++)
+        for(int cv=0;cv<m_structure[c];cv++)
+            q.push_back(":c"+QString::number(c)+"v"+QString::number(cv)+",");
+    q.push_back(":time)");
+    insertionQuery.prepare(q);
 
 
     QSqlQuery selectQuery;
-    selectQuery.prepare("SELECT value,time FROM data WHERE sensor=:sensor AND sensorvalue=:sensorvalue AND time>:from AND time<:to");
+    selectQuery.prepare("SELECT * FROM data WHERE time>:from AND time<:to");
     QSqlQuery selectQueryLast;
-    selectQueryLast.prepare("SELECT value,time FROM data WHERE sensor=:sensor AND sensorvalue=:sensorvalue ORDER BY time DESC LIMIT 0,1");
+    selectQueryLast.prepare("SELECT * FROM data ORDER BY time DESC LIMIT 0,1");
 
     forever {
         mutex.lock();
-
-        QTime t1 = QTime::currentTime();
 
         int s = work.size();
         emit message("Queue size: " + QString::number(s) + " ");
@@ -30,81 +39,83 @@ void DatabaseController::run() {
 
             QStringList req = work.dequeue().split(";");
             mutex.unlock();
-            if(req.size() >= 4) {
-                QString idc = req.at(1);
-                QString idv = req.at(2);
+            if(req.at(0) == "get") {
+                QString from = req.at(1);
+                QString to = req.at(2);
 
-                if(req.at(0) == "get") {
-                    if(req.size() < 7)
-                        break;
-                    QString from = req.at(3);
-                    QString to = req.at(4);
-                    bool last = req.at(6) == "1";
-                    QSqlQuery rep = last ? selectQueryLast : selectQuery;
+                bool last = req.at(4) == "1";
+                QSqlQuery rep = last ? selectQueryLast : selectQuery;
 
-                    rep.bindValue("sensor",idc);
-                    rep.bindValue("sensorvalue",idv);
-
-                    if(!last) {
-                        rep.bindValue("from",from);
-                        rep.bindValue("to",to);
-                    }
-
-                    rep.exec();
-
-                    QVector<Data> dataset;
-                    while(rep.next()) {
-                        double value = rep.value(0).toDouble();
-                        QDateTime time = QDateTime::fromString(rep.value(1).toString(),"yyyy-MM-dd hh:mm:ss");
-                        Data d;
-                        d.value = value;
-                        d.time = time;
-
-                        dataset.push_back(d);
-                    }
-
-                    emit dataRead(idc.toInt(),idv.toInt(),dataset,req.at(5));
-                } else if(req.at(0) == "set") {
-
-
-                    QString value = req.at(3);
-                    QString time = req.at(4);
-
-                    insertionQuery.bindValue("sensor",idc);
-                    insertionQuery.bindValue("sensorvalue",idv);
-                    insertionQuery.bindValue("value",value);
-                    insertionQuery.bindValue("time",QDateTime::fromTime_t(time.toUInt()).toString("yyyy-MM-dd hh:mm:ss"));
-                    insertionQuery.exec();
-
-                    emit dataWritten(idc.toInt(),idv.toInt());
+                if(!last) {
+                    rep.bindValue("from",from);
+                    rep.bindValue("to",to);
                 }
+
+                qDebug() << "requete: " << req.join(";");
+
+                rep.exec();
+
+                QVector<QVector<Data>> dataset;
+
+                while(rep.next()) {
+                    QVector<Data> res;
+
+                    int comp = 1;
+                    for(int c=0;c<m_structure.size();c++) {
+                        for(int cv=0;cv<m_structure[c];cv++) {
+                            Data d;
+                            d.value = rep.value(comp).toDouble();
+                            d.time = QDateTime::currentDateTime();
+                            comp++;
+                            res.push_back(d);
+                        }
+                    }
+
+                    QDateTime t = QDateTime::fromString(rep.value(comp).toString(),"yyyy-MM-dd hh:mm:ss");
+
+                    for(int i=0;i<res.size();i++)
+                        res[i].time = t;
+
+                    dataset.push_back(res);
+                }
+                qDebug() << "je suis ici";
+                emit dataRead(dataset,req.at(3));
+            } else if(req.at(0) == "set") {
+                int comp = 1;
+                for(int c=0;c<m_structure.size();c++) {
+                    for(int cv=0;cv<m_structure[c];cv++) {
+                        insertionQuery.bindValue("c"+QString::number(c)+"v"+QString::number(cv),req.at(comp));
+                        comp++;
+                    }
+                }
+
+                insertionQuery.bindValue("time",QDateTime::fromTime_t(req.last().toUInt()).toString("yyyy-MM-dd hh:mm:ss"));
+                insertionQuery.exec();
+
+                emit dataWritten();
             }
+
         }
 
-        QTime t2 = QTime::currentTime();
-        qDebug() << "temps : " << t1.msecsTo(t2) << "s";
         condition.wait(&mutex);
         mutex.unlock();
     }
 }
 
-void DatabaseController::writeFrame(QVector<QVector<double> > frame,QDateTime time) {
+void DatabaseController::writeFrame(QVector<double> frame,QDateTime time) {
     mutex.lock();
     QString req ="set;";
-    foreach(QVector<double> c, frame) {
-        foreach(double val, c)
-            req.append(QString::number(val)+" ");
-        req.append(";");
+    foreach(double val, frame) {
+        req.append(QString::number(val)+";");
     }
     req.append(QString::number(time.toTime_t()));
     work.enqueue(req);
     mutex.unlock();
 }
 
-void DatabaseController::read(int idc, int idv, QDateTime from, QDateTime to,QString reason,bool last) {
-    //emit thingToRead(idc, idv, from, to, reason, last);
+void DatabaseController::readFrame(QDateTime from, QDateTime to,QString reason,bool last) {
     mutex.lock();
-    work.enqueue("get;"+QString::number(idc)+";"+QString::number(idv)+";"+from.toString("yyyy-MM-dd hh:mm:ss")+";"+to.toString("yyyy-MM-dd hh:mm:ss")+";"+reason+(last==true?";1":";0"));
+    work.enqueue("get;"+from.toString("yyyy-MM-dd hh:mm:ss")+";"+to.toString("yyyy-MM-dd hh:mm:ss")+";"+reason+(last==true?";1":";0"));
     condition.wakeOne();
     mutex.unlock();
 }
@@ -125,8 +136,17 @@ void DatabaseController::setup() {
         qDebug() << "la bdd s'est correctement initialisée";
     }
 
+    QString req = "CREATE TABLE IF NOT EXISTS data (id integer primary key,";
+    for(int c=0;c<m_structure.size();c++) {
+        for(int cv=0;cv<m_structure[c];cv++) {
+            req.push_back(" c"+QString::number(c)+"v"+QString::number(cv)+" DOUBLE,");
+        }
+    }
+    req.push_back(" time DATETIME)");
 
-    db.exec("CREATE TABLE IF NOT EXISTS data (id integer primary key, sensor INT, sensorvalue INT, value DOUBLE, time DATETIME)");
+    QSqlQuery result = db.exec(req);
+    qDebug() << "Requete: " << req;
+    qDebug() << result.lastError().text();
     db.exec("CREATE UNIQUE INDEX IF NOT EXISTS ON data (time)");
 
     QSqlQuery rep;

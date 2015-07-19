@@ -30,7 +30,7 @@ protected:
 public slots:
     void appendData(QByteArray data);
 signals:
-    void newValue(int capteur, int capteur_v, double value);
+    void newFrame(QVector<double> value);
     void message(QString);
     void trame_erreur(int);
     void trame_increment(int);

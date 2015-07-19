@@ -73,6 +73,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void resizeEvent(QResizeEvent *);
         bool eventFilter( QObject *o, QEvent *e );
         bool already_added(int capteur, int valeur);
+        QVector<Data> getDataColumn(int idc, int idv, QVector<QVector<Data> > &data);
 
     private:
         // Timers
@@ -120,7 +121,9 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
 
         void updatePortListMenu();
         void portTriggered();
-        void data_read(int idc, int idv, QVector<Data> data, QString reason);
+        void data_read(QVector<QVector<Data>> data, QString reason);
+
+
 
         void log_logger(QString str);
         void log_decoder(QString str);

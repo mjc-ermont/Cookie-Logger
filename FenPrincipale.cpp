@@ -106,8 +106,9 @@ FenPrincipale::FenPrincipale(Serial* _com) {
 
 
     qRegisterMetaType<QVector<Data> > ("QVector<Data>");
+    qRegisterMetaType<QVector<QVector<Data> > > ("QVector<QVector<Data> >");
     // Connect entre la bdd et fenprincipale pour les réponses aux requêtes de lecture
-    connect(sensormgr->getDB(),SIGNAL(dataRead(int,int,QVector<Data>,QString)), this,SLOT(data_read(int,int,QVector<Data>,QString)));
+    connect(sensormgr->getDB(),SIGNAL(dataRead(QVector<QVector<Data>>,QString)), this,SLOT(data_read(QVector<QVector<Data>>,QString)));
     connect(sensormgr->getDB(),SIGNAL(message(QString)), this,SLOT(log_database(QString)));
     // -------------------
     // Initialisation des différentes pages
@@ -127,7 +128,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     // Démarrage du décodeur de trames
     myDecoder = new pythondecoder();
 
-    connect(myDecoder,SIGNAL(newValue(int,int,double)), sensormgr, SLOT(newValue(int,int,double)));
+    connect(myDecoder,SIGNAL(newFrame(QVector<double>)), sensormgr, SLOT(newFrame(QVector<double>)));
     connect(myDecoder,SIGNAL(message(QString)),this,SLOT(log_decoder(QString)));
     connect(myDecoder,SIGNAL(trame_erreur(int)),this, SLOT(incrementStatTramesEchouees(int)));
     connect(myDecoder,SIGNAL(trame_increment(int)),this,SLOT(incrementStatTramesRecues(int)));
@@ -168,7 +169,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     indicator_rx->setPalette(p);
     //---------------------------
 
-
+/*
     for (int idc=0;idc<nbSensors;idc++) {
         foreach(SensorValue* v,sensormgr->getSensor(idc)->getValues()) {
             getBT()->requestUpdate(v);
@@ -178,7 +179,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
                 sensormgr->getDB()->read(idc,v->getID(),QDateTime::fromTime_t(0),QDateTime::currentDateTime(),"ymap");
             }
         }
-    }
+    }*/
 
     // --------------------------------
 
@@ -261,44 +262,42 @@ void FenPrincipale::received(QByteArray d) {
 }
 
 
-void FenPrincipale::data_read(int idc, int idv, QVector<Data> data, QString reason) {
+QVector<Data> FenPrincipale::getDataColumn(int idc, int idv, QVector<QVector<Data> > &data) {
+    int i = sensormgr->indexOf(idc,idv);
+    QVector<Data> col;
+    foreach(QVector<Data> line, data)
+        col.push_back(line[i]);
+    return col;
+}
 
-    qDebug() << "data read "<< idc << ";" << idv  << ";" << reason;
+void FenPrincipale::data_read(QVector<QVector<Data> > data, QString reason) {
+
+    qDebug() << "dataread!";
     if(reason == "graph") {
         for(int i=0;i<graphiques.size();i++) {
             GraphicView* g = graphiques.at(i).first;
-            if(g->getCapteur() == idc && g->getValeur() == idv) {
-                g->setData(data);
+            if(g->isXY()) {
+                g->setDataX(getDataColumn(g->getCapteur_x(),g->getValeur_x(),data));
+                g->setDataY(getDataColumn(g->getCapteur(),g->getValeur(),data));
+            } else {
+                g->setData(getDataColumn(g->getCapteur(),g->getValeur(),data));
             }
-        }
-    } else if(reason == "graphy") {
-        for(int i=0;i<graphiques.size();i++) {
-            GraphicView* g = graphiques.at(i).first;
-            if(g->getCapteur() == idc && g->getValeur() == idv) {
-                g->setDataY(data);
-            }
-        }
-    } else if(reason == "graphx") {
-        for(int i=0;i<graphiques.size();i++) {
-            GraphicView* g = graphiques.at(i).first;
-            if(g->getCapteur_x() == idc && g->getValeur_x() == idv) {
-                g->setDataX(data);
-            }
+
         }
     } else if(reason == "bt") {
         if(data.size() > 0) {
-            this->getBT()->update(idc,idv,data.last().value);
+            this->getBT()->update(data.last());
 
 
-            graphic_range_selector->setMaximumDate(data.last().time);
-            historique_range_selector->setMaximumDate(data.last().time);
+            graphic_range_selector->setMaximumDate(data.last()[0].time);
+            historique_range_selector->setMaximumDate(data.last()[0].time);
         }
     } else if(reason == "xmap") {
-        this->getMap()->onStartDataX(data);
+        //this->getMap()->onStartDataX(data);
     } else if(reason == "ymap") {
-        this->getMap()->onStartDataY(data);
+        //this->getMap()->onStartDataY(data);
     } else if(reason == "tab") {
-        this->getTableMgr()->actualisay(idc,idv,data);
+        this->getTableMgr()->actualisay(data);
     }
 }
 
@@ -548,6 +547,8 @@ void FenPrincipale::on_add_graph_clicked()
 
     connect(graphic_range_selector, SIGNAL(startDateChanged(QDateTime)), g, SLOT(setStartDT(QDateTime)));
     connect(graphic_range_selector, SIGNAL(endDateChanged(QDateTime)), g, SLOT(setEndDT(QDateTime)));
+
+
     QPair<GraphicView*,QMdiSubWindow*> group;
     QMdiSubWindow *w = zone_graph->addSubWindow(g);
     group.first = g;
@@ -567,6 +568,8 @@ void FenPrincipale::on_add_graph_clicked()
     on_sel_capteur_currentIndexChanged(sel_capteur->currentIndex());
     on_sel_capteur_x_currentIndexChanged(sel_capteur_x->currentIndex());
 
+    g->setRange(graphic_range_selector->getLowerDate(), graphic_range_selector->getUpperDate());
+    g->majData();
 
 
 }

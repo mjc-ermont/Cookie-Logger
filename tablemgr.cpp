@@ -8,17 +8,49 @@ TableMgr::TableMgr(QVector<QTableView*> *tab_historique, SensorManager *sensormg
 // Fait appel à la base de données pour récupérer les informations
 void TableMgr::requestActualization(QDateTime start,QDateTime end) {
 
-    for(int i_capteur=0;i_capteur<sensormgr->getSensors().size();i_capteur++) {
-        QStandardItemModel *model = ((QStandardItemModel*)m_tab_historique->at(i_capteur)->model());
-        model->removeRows(0,model->rowCount());
-        for(int i_valeur=0;i_valeur<sensormgr->getSensor(i_capteur)->getValues().size();i_valeur++) {
-            sensormgr->getSensor(i_capteur)->getValues()[i_valeur]->getData("tab",false,start,end);
-        }
-    }
+    sensormgr->getDB()->readFrame(start,end,"tab",false);
 }
 
 // Met à jour le tableau avec les données reçues
-void TableMgr::actualisay(int idc, int idv, QVector<Data> data) {
+void TableMgr::actualisay(QVector<QVector<Data>> data) {
+    foreach(QVector<Data> frame, data) {
+        QList<QStandardItem*> items;
+        int curCapteur = 0;
+        for(int i=0;i<frame.size();i++) {
+            qDebug() << "ici:"<<i;
+            SensorValue *v = sensormgr->valueAt(i);
+            int idc = v->getCapteur()->getId();
+
+            if(idc != curCapteur) {
+                QStandardItem* timeElement  = new QStandardItem;
+                timeElement->setText(frame[0].time.toString("dd/MM/yy hh:mm:ss"));
+                items << timeElement;
+
+                ((QStandardItemModel*)m_tab_historique->at(curCapteur)->model())->appendRow(items);
+                items.clear();
+
+                curCapteur = idc;
+
+            }
+
+
+            QStandardItem* curElement  = new QStandardItem;
+            curElement->setText(QString::number(frame[i].value));
+            items << curElement;
+        }
+
+        QStandardItem* timeElement  = new QStandardItem;
+        timeElement->setText(frame[0].time.toString("dd/MM/yy hh:mm:ss"));
+        items << timeElement;
+
+        ((QStandardItemModel*)m_tab_historique->at(curCapteur)->model())->appendRow(items);
+        items.clear();
+    }
+
+
+
+    /*
+
     for(int i_data=0; i_data<data.size(); i_data++) {
        if(idv==0) {
            QList<QStandardItem*> items;
@@ -28,7 +60,6 @@ void TableMgr::actualisay(int idc, int idv, QVector<Data> data) {
                curElement->setText("nul");
                items << curElement;
            }
-           ((QStandardItemModel*)m_tab_historique->at(idc)->model())->appendRow(items);
        }
 
        QString dataValue            =   QString::number(data[i_data].value);
@@ -66,7 +97,7 @@ void TableMgr::actualisay(int idc, int idv, QVector<Data> data) {
                 }
             }
         }
-    }
+    }*/
 }
 
 bool TableMgr::lineFull(int capteur) {
