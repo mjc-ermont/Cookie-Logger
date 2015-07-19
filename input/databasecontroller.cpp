@@ -54,6 +54,7 @@ void DatabaseController::run() {
                 }
             }
         }
+
         condition.wait(&mutex);
         mutex.unlock();
     }
@@ -67,7 +68,7 @@ void DatabaseController::write(int idc, int idv, double v) {
     mutex.unlock();
 }
 void DatabaseController::read(int idc, int idv, QDateTime from, QDateTime to,QString reason,bool last) {
-  //  emit thingToRead(idc, idv, from, to, reason, last);
+    //emit thingToRead(idc, idv, from, to, reason, last);
     mutex.lock();
     work.enqueue("get;"+QString::number(idc)+";"+QString::number(idv)+";"+from.toString("yyyy-MM-dd hh:mm:ss")+";"+to.toString("yyyy-MM-dd hh:mm:ss")+";"+reason+(last==true?";1":";0"));
     condition.wakeOne();

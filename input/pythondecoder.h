@@ -25,6 +25,7 @@ public:
 
 protected:
     bool decode(QByteArray frame);
+    int calcframelength();
 
 public slots:
     void appendData(QByteArray data);
@@ -42,6 +43,9 @@ private:
     QByteArray buffer;
 
     bool ok;
+
+    char startByte;
+    int frame_length;
 };
 
 #endif // PYTHONDECODER_H

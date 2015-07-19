@@ -26,6 +26,8 @@ bool Serial::init() {
     qDebug() << baudrate;
 
     serial_port->setBaudRate(baudrate);
+    serial_port->setTextModeEnabled(false);
+
     qDebug() << "test";
     if(!serial_port->open(QIODevice::ReadWrite)) {
         qDebug() << "yolo";
@@ -169,9 +171,11 @@ void Serial::readData() {
 
     emit nBytesRead(dataread.size());
 
+
     if(dataread.size() != 0) {
+        qDebug() << "taille reçue: " << dataread.size();
         emit received(dataread);
-        emit message(QString(dataread));
+        emit message(QString(dataread.toHex()));
     }
 }
 

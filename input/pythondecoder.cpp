@@ -51,6 +51,11 @@ void pythondecoder::init() {
     if (! PyEval_ThreadsInitialized()) {
         PyEval_InitThreads();
     }
+
+
+     startByte = 255;
+     frame_length = calcframelength();
+     qDebug() << "Frame length: " << frame_length;
 }
 
 pythondecoder::~pythondecoder() {
@@ -60,6 +65,7 @@ pythondecoder::~pythondecoder() {
 }
 
 bool pythondecoder::decode(QByteArray frame) {
+    qDebug() << QString(frame.toHex());
     PyGILState_STATE gstate;
     gstate = PyGILState_Ensure();
 
@@ -111,10 +117,31 @@ bool pythondecoder::decode(QByteArray frame) {
     } else {
         emit trame_erreur(1);
         emit message ("Erreur de décodage");
+        PyErr_Print();
     }
 
     PyGILState_Release(gstate);
     return success;
+}
+
+int pythondecoder::calcframelength() {
+    PyObject* pFuncCalc = PyObject_GetAttrString(pModule, "calcframelength");
+    if (pFuncCalc && PyCallable_Check(pFuncCalc)) {
+        emit message ("Chargement fonction calcul: OK");
+
+        PyObject* pReturnValue =  PyObject_CallObject(pFuncCalc, NULL);
+        Py_XDECREF(pFuncCalc);
+        if(pReturnValue != NULL)
+            return PyLong_AsLong(pReturnValue);
+        else
+            return 42;
+    } else {
+        PyErr_Print();
+        emit message ("Chargement fonction calcul: ERREUR");
+        qDebug() << "Decodeur python err";
+        Py_XDECREF(pFuncCalc);
+        return 42;
+    }
 }
 
 void pythondecoder::appendData(QByteArray received) {
@@ -124,8 +151,6 @@ void pythondecoder::appendData(QByteArray received) {
     buffer.append(received);
     qDebug() << "Received:" << QString(received.toHex())<< " || buffer:"<<QString(buffer.toHex());
 
-    char startByte = 255;
-    int frame_length = 42;
 
     while(buffer.indexOf(startByte) != -1 && (buffer.length() - buffer.indexOf(startByte)) >= frame_length) {
         int firstStart = buffer.indexOf(startByte);
