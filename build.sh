@@ -6,6 +6,9 @@ if [ $OS == "LINUX" ];
 then
 	if [ $ARCH == "i686" ];
 	then
+		sudo dpkg --add-architecture i386
+		sudo apt-get update
+		sudo apt-get install ia32-libs
 		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib python3.2:i386 python3.2-dev:i386 python-numpy-dev &&
 		git clone git://code.qt.io/qt/qtserialport.git &&
 		cd qtserialport &&
