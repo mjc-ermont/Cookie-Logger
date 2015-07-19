@@ -39,7 +39,7 @@ void SensorValue::addData(double d, bool parse) {
         newData.value=d;
     qDebug() << "v: " << d << " parser: " << newData.value;
     parent->getParent()->getParent()->log_decoder("Nouvelle valeur: ("+QString::number(parent->getId())+";"+QString::number(id)+") => "+QString::number(newData.value));
-    parent->getParent()->getDB()->write(parent->getId(),id,newData.value);
+    parent->getParent()->getDB()->write(parent->getId(),id,newData.value,newData.time);
 
     parent->getParent()->getParent()->getStagesManager()->unlockDataReceivedStage();
 
@@ -47,10 +47,12 @@ void SensorValue::addData(double d, bool parse) {
 
 
     if(param == "xmap") {
-        parent->getParent()->getParent()->getStagesManager()->unlockGPSFixStage();
+        if(newData.value != 0)
+            parent->getParent()->getParent()->getStagesManager()->unlockGPSFixStage();
         parent->getParent()->getParent()->getMap()->updateX(newData.value);
     } else if(param == "ymap") {
-        parent->getParent()->getParent()->getStagesManager()->unlockGPSFixStage();
+        if(newData.value != 0)
+            parent->getParent()->getParent()->getStagesManager()->unlockGPSFixStage();
         parent->getParent()->getParent()->getMap()->updateY(newData.value);
     } else if(param == "pres") {
         last_values.append(newData.value);

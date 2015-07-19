@@ -72,7 +72,11 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     log_decoder("Lecture de la liste des capteurs depuis 'conf/cplist.xml'");
     foreach(Sensor* s, sensorList) {
         sel_capteur->addItem(s->getName());
+        sel_capteur_x->addItem(s->getName());
     }
+
+    sel_capteur_x->setEnabled(false);
+    sel_valeur_x->setEnabled(false);
 
     for(int i=0;i<nbSensors ;i++) {
         QTableView *t = new QTableView;
@@ -98,6 +102,9 @@ FenPrincipale::FenPrincipale(Serial* _com) {
         t->horizontalHeader()->setStretchLastSection(true);
         t->setModel(modele);
     }
+
+
+
     qRegisterMetaType<QVector<Data> > ("QVector<Data>");
     // Connect entre la bdd et fenprincipale pour les réponses aux requêtes de lecture
     connect(sensormgr->getDB(),SIGNAL(dataRead(int,int,QVector<Data>,QString)), this,SLOT(data_read(int,int,QVector<Data>,QString)));
@@ -115,12 +122,7 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     log_logger("[INFO] Loading boarding table...");
     tableauBord = new BoardingTable(container,sensormgr);
     log_logger("[INFO] Loaded !");
-    // ------------------------
-    // Démarrage du timer d'actualisation
-    log_logger("[INFO] Starting refreshing timer");
-    actTemps = new QTimer();
-    connect(actTemps,SIGNAL(timeout()),this,SLOT(syncTime()));
-    actTemps->start(1000);
+
     // -----------------------------
     // Démarrage du décodeur de trames
     myDecoder = new pythondecoder();
@@ -165,6 +167,20 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     p.setColor(QPalette::Disabled, QPalette::Background, QColor(255,0,0));
     indicator_rx->setPalette(p);
     //---------------------------
+
+
+    for (int idc=0;idc<nbSensors;idc++) {
+        foreach(SensorValue* v,sensormgr->getSensor(idc)->getValues()) {
+            getBT()->requestUpdate(v);
+            if(v->getParam() == "xmap") {
+                sensormgr->getDB()->read(idc,v->getID(),QDateTime::fromTime_t(0),QDateTime::currentDateTime(),"xmap");
+            } else if(v->getParam() == "ymap") {
+                sensormgr->getDB()->read(idc,v->getID(),QDateTime::fromTime_t(0),QDateTime::currentDateTime(),"ymap");
+            }
+        }
+    }
+
+    // --------------------------------
 
 
 
@@ -230,13 +246,6 @@ void FenPrincipale::onRangeStartUpdate(QDateTime range_start) {
     historique_range_selector->setMinimumDate(range_start);
 }
 
-/*
- * Gestion de l'horloge
- */
-void FenPrincipale::syncTime() {
-    graphic_range_selector->setMaximumDate(QDateTime::currentDateTime());
-    historique_range_selector->setMaximumDate(QDateTime::currentDateTime());
-}
 
 /*
  * Gestion des données
@@ -247,7 +256,7 @@ void FenPrincipale::received(QByteArray d) {
 
     QPair<GraphicView*,QMdiSubWindow*> value;
     foreach(value,graphiques) {
-        value.first->majData(); //TODO: Truc de porc?
+        value.first->majData();
     }
 }
 
@@ -262,10 +271,32 @@ void FenPrincipale::data_read(int idc, int idv, QVector<Data> data, QString reas
                 g->setData(data);
             }
         }
+    } else if(reason == "graphy") {
+        for(int i=0;i<graphiques.size();i++) {
+            GraphicView* g = graphiques.at(i).first;
+            if(g->getCapteur() == idc && g->getValeur() == idv) {
+                g->setDataY(data);
+            }
+        }
+    } else if(reason == "graphx") {
+        for(int i=0;i<graphiques.size();i++) {
+            GraphicView* g = graphiques.at(i).first;
+            if(g->getCapteur_x() == idc && g->getValeur_x() == idv) {
+                g->setDataX(data);
+            }
+        }
     } else if(reason == "bt") {
-        this->getBT()->update(idc,idv,data.last().value);
-    } else if(reason == "map") {
+        if(data.size() > 0) {
+            this->getBT()->update(idc,idv,data.last().value);
 
+
+            graphic_range_selector->setMaximumDate(data.last().time);
+            historique_range_selector->setMaximumDate(data.last().time);
+        }
+    } else if(reason == "xmap") {
+        this->getMap()->onStartDataX(data);
+    } else if(reason == "ymap") {
+        this->getMap()->onStartDataY(data);
     } else if(reason == "tab") {
         this->getTableMgr()->actualisay(idc,idv,data);
     }
@@ -458,6 +489,7 @@ void FenPrincipale::reinit_b(){
  * Actions liées aux graphiques
  */
 bool FenPrincipale::already_added(int capteur, int valeur) {
+    return false; // gneheh
     for(int i=0;i<graphiques.size();i++) {
         if((graphiques.at(i).first->getCapteur() == capteur) && (graphiques.at(i).first->getValeur() == valeur))
             return true;
@@ -480,15 +512,39 @@ void FenPrincipale::on_sel_capteur_currentIndexChanged(int index)
     add_graph->setEnabled(added_something);
 }
 
+
+
+void FenPrincipale::on_sel_capteur_x_currentIndexChanged(int index)
+{
+    sel_valeur_x->clear();
+    bool added_something=false;
+
+    foreach(SensorValue *v, sensormgr->getSensor(index)->getValues()) {
+        if(!already_added(index, v->getID())) {
+            sel_valeur_x->addItem(v->getName(), QVariant(v->getID()));
+            added_something=true;
+        }
+    }
+}
+
+
 void FenPrincipale::on_add_graph_clicked()
 {
     int selected_sensor = sel_capteur->currentIndex();
     int selected_value  = sel_valeur->itemData(sel_valeur->currentIndex()).toInt();
     if(selected_sensor == -1)
         return;
+    GraphicView* g;
+    if(xyModeCheckbox->isChecked()) {
+        int selected_sensor_x = sel_capteur_x->currentIndex();
+        int selected_value_x  = sel_valeur_x->itemData(sel_valeur_x->currentIndex()).toInt();
+        if(selected_sensor_x == -1)
+            return;
 
-    GraphicView* g = new GraphicView(selected_sensor, selected_value,this);
-
+        g = new GraphicView(selected_sensor, selected_value, selected_sensor_x, selected_value_x, this);
+    } else {
+        g = new GraphicView(selected_sensor, selected_value,this);
+    }
 
     connect(graphic_range_selector, SIGNAL(startDateChanged(QDateTime)), g, SLOT(setStartDT(QDateTime)));
     connect(graphic_range_selector, SIGNAL(endDateChanged(QDateTime)), g, SLOT(setEndDT(QDateTime)));
@@ -498,7 +554,7 @@ void FenPrincipale::on_add_graph_clicked()
     group.second = w;
     graphiques.append(group);
 
-    w->setGeometry(w->geometry().x(),w->geometry().y(),200,200);
+    w->setGeometry(w->geometry().x(),w->geometry().y(),500,500);
 
     w->show();
 
@@ -509,6 +565,10 @@ void FenPrincipale::on_add_graph_clicked()
     }
     g->setWindowTitle(g->windowTitle());
     on_sel_capteur_currentIndexChanged(sel_capteur->currentIndex());
+    on_sel_capteur_x_currentIndexChanged(sel_capteur_x->currentIndex());
+
+
+
 }
 
 void FenPrincipale::graphClosed() {
@@ -526,6 +586,7 @@ void FenPrincipale::graphClosed() {
     }
 
     on_sel_capteur_currentIndexChanged(capteur);
+    on_sel_capteur_x_currentIndexChanged(capteur);
 
     disconnect(graphic_range_selector, SIGNAL(startDateChanged(QDateTime)), g, SLOT(setStartDT(QDateTime)));
     disconnect(graphic_range_selector, SIGNAL(endDateChanged(QDateTime)), g, SLOT(setEndDT(QDateTime)));
@@ -649,7 +710,6 @@ bool FenPrincipale::eventFilter( QObject *o, QEvent *e ) {
         } else {
             position = 0;
         }
-        qDebug() << "yolo=" << position;
 
         if(position>=konami.size()) {
             qDebug() << "Trop pimp";
@@ -895,3 +955,9 @@ void FenPrincipale::on_actionPasser_l_tape_pr_c_dente_triggered()
     stmgr->goToPreviousStage();
 }
 
+
+void FenPrincipale::on_xyModeCheckbox_toggled(bool checked)
+{
+    sel_capteur_x->setEnabled(checked);
+    sel_valeur_x->setEnabled(checked);
+}

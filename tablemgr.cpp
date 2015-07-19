@@ -7,7 +7,10 @@ TableMgr::TableMgr(QVector<QTableView*> *tab_historique, SensorManager *sensormg
 
 // Fait appel à la base de données pour récupérer les informations
 void TableMgr::requestActualization(QDateTime start,QDateTime end) {
+
     for(int i_capteur=0;i_capteur<sensormgr->getSensors().size();i_capteur++) {
+        QStandardItemModel *model = ((QStandardItemModel*)m_tab_historique->at(i_capteur)->model());
+        model->removeRows(0,model->rowCount());
         for(int i_valeur=0;i_valeur<sensormgr->getSensor(i_capteur)->getValues().size();i_valeur++) {
             sensormgr->getSensor(i_capteur)->getValues()[i_valeur]->getData("tab",false,start,end);
         }

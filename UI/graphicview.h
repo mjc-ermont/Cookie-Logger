@@ -41,17 +41,30 @@ class GraphicView : public QwtPlot
     Q_OBJECT
 
     public:
+
+        bool isXY() {return m_xy;}
+
+        // Mode temporel
         explicit GraphicView(int indexCapteur, int indexValeur, FenPrincipale *parent = 0);
+        void setData(QVector<Data> i_data) { data = i_data; majCurve();}
+        int getCapteur() { return m_capteur; }
+        int getValeur () { return m_valeur ; }
+
+        // Mode X-Y
+        explicit GraphicView(int indexCapteur, int indexValeur, int indexCapteur_x, int indexValeur_x, FenPrincipale *parent = 0);
+        void setDataX(QVector<Data> i_data_x) { data_x = i_data_x;majCurve();}
+        void setDataY(QVector<Data> i_data_y) { data = i_data_y; }
+        int getCapteur_x() { return m_capteur_x; }
+        int getValeur_x () { return m_valeur_x ; }
 
         void majData();
         double getMin();
         double getMax();
+        double getMinX();
+        double getMaxX();
 
         void setRange(QDateTime start, QDateTime end) {start_dt = start; end_dt = end; majData();}
 
-        void setData(QVector<Data> i_data) { data = i_data; majCurve();}
-        int getCapteur() { return m_capteur; }
-        int getValeur () { return m_valeur ; }
         void setZoomed(bool zoomed_p) {zoomed = zoomed_p;}
     protected:
         void calculateCurve();
@@ -63,8 +76,12 @@ class GraphicView : public QwtPlot
 
 
     private:
+        bool m_xy;
+
         int m_capteur;
         int m_valeur;
+        int m_capteur_x;
+        int m_valeur_x;
 
         FenPrincipale *m_parent;
 
@@ -74,8 +91,10 @@ class GraphicView : public QwtPlot
         QVector<double> xValues;
         QVector<double> yValues;
         QVector<Data>   data;
+        QVector<Data>   data_x;
 
         SensorValue *value;
+        SensorValue *value_x;
 
         QDateTime start_dt;
         QDateTime end_dt;

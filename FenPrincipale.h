@@ -130,8 +130,6 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void log(int id, QString str);
 
         void received(QByteArray);
-
-        void syncTime();
         void resetIndicatorRx();
         void setIndicatorRx();
 
@@ -184,6 +182,8 @@ private slots:
         void on_actionRemettre_z_ro_triggered();
         void on_actionPasser_l_tape_pr_c_dente_triggered();
         void on_actionEntrer_le_canal_manuellement_triggered();
+        void on_xyModeCheckbox_toggled(bool checked);
+        void on_sel_capteur_x_currentIndexChanged(int index);
 };
 
 #endif // FENPRINCIPALE_H

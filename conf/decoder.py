@@ -6,31 +6,49 @@ import operator
 import struct
 import json
 import os
-import trame
+
 import numpy as np
 
 
 
+config_file = "slimdecoder_conf.json"
+config = json.load(open(config_file, "r"))
+
 def decode(data):
-	config_file = "slimdecoder_conf.json"
+	print("Config")
+	print(config)
 
-
-	conf = json.load(open(config_file, "r"))
 	print("Decoding "+str(data))
 
-	
-
-
-	res = slimdecode(data, config_file)
+	res = slimdecode(data)
 	print(res)
+
 	if(res != False):
-		return (True, np.array(res))
+		float_res = []
+
+		for datatuple in res:
+                	datalist = list(datatuple)
+                	datalist = [float(x) for x in datalist]
+                	datatuple = tuple(datalist)
+                	float_res.append(datatuple)
+
+
+		return (True, np.array(float_res))
 	else:
 		return (False, 0)
 
+def calcframelength():
+	global config
+	fl = 2
+	for fmt in config["sensors"]: 
+		fl += struct.calcsize(fmt)
+	fl += config["trame"]["ecc"]["length"]
+	return fl
+	
 
-def slimdecode(frame, config_file): 
-	config = json.load(open(config_file, "r"))
+
+def slimdecode(frame): 
+	global config
 
 	print(len(frame))
 	rs = RSCodec(config["trame"]["ecc"]["length"])

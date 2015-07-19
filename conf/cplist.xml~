@@ -1,7 +1,7 @@
 <sensorlist>
 	<sensor name="GPS" id="0">
-		<value name="Longitude" unit="°" id="0" param="ymap" coef="0.00001x"/>
-		<value name="Latitude" unit="°" id="1" param="xmap" coef="0.00001x" />
+		<value name="Longitude" unit="°" id="0" param="ymap" coef="0.0000"/>
+		<value name="Latitude" unit="°" id="1" param="xmap" coef="0.0000" />
 		<value name="Vitesse" unit="km/h" id="2" coef="0.01851999999984x" />
 		<value name="Altitude" unit="m" id="3" coef="0.01x"/>
 	</sensor>
