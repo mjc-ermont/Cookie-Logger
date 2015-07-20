@@ -1,8 +1,6 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-
-
 #include <Python.h>
 #include <QDateTime>
 

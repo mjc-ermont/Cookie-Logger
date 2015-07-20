@@ -22,16 +22,6 @@ void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
 
             sensorList[id_capteur]->getValues()[id_valeur]->addData(valeur);
             parent->getBT()->requestUpdate(sensorList[id_capteur]->getValues()[id_valeur]);
-
-
-
-
-            QFile log("log.dan"); // DAN = Data ANalysis
-            log.open(QFile::Append);
-            log.write((QString::number(id_capteur) + ";" + QString::number(id_valeur) + ";" + QString::number(valeur) + ";" + QTime::currentTime().toString()).toStdString().c_str());
-            log.write("!!"); // Separator
-            log.flush();
-            log.close();
         }
     }
 }
@@ -43,12 +33,20 @@ int SensorManager::indexOf(int idc, int idv) {
 void SensorManager::newFrame(QVector<double> frame){
     parent->setIndicatorRx();
 
+    QFile backup("backup.csv");
+    backup.open(QFile::Append);
+    QTextStream out(&backup);
+
     for(int i=0; i<frame.size();i++) {
         SensorValue* sv = sensorValueList[i];
-        newValue(sv->getCapteur()->getId(),sv->getID(),frame[i]);
+        newValue(sv->getCapteur()->getId(), sv->getID(), frame[i]);
+        out << frame[i] << ",";
     }
-
     getDB()->writeFrame(frame, QDateTime::currentDateTime());
+    out << (QTime::currentTime().toString().toAscii()) << '\n';
+
+    backup.flush();
+    backup.close();
 }
 
 void SensorManager::getSensorsFromFile() {

@@ -3,7 +3,7 @@
 
 #include <qwt/qwt_plot_layout.h>
 #include <qwt/qwt_legend.h>
-#include <qwt/qwt_legend_item.h>
+//#include <qwt/qwt_legend_item.h>
 #include <qwt/qwt_plot_grid.h>
 #include <qwt/qwt_plot_histogram.h>
 #include <qwt/qwt_column_symbol.h>

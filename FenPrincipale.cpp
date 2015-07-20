@@ -1,7 +1,6 @@
 #include "FenPrincipale.h"
 #include "input/fileimportdialog.h"
 
-
 FenPrincipale::FenPrincipale(Serial* _com) {
     // Initialisation paramètres
     position=0;
