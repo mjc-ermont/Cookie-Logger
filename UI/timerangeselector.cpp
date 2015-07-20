@@ -21,16 +21,32 @@ TimeRangeSelector::TimeRangeSelector(QWidget *parent) :
 
     connect(range_slider,SIGNAL(lowerValueChanged(int)),this,SLOT(onLowerValueChanged(int)));
     connect(range_slider,SIGNAL(upperValueChanged(int)),this,SLOT(onUpperValueChanged(int)));
+
+    connect(range_slider,SIGNAL(sliderPressed()),this,SLOT(sliderPressed()));
+    connect(range_slider,SIGNAL(sliderReleased()),this,SLOT(sliderReleased()));
+}
+
+void TimeRangeSelector::sliderPressed() {
+
+    startLval = range_slider->lowerValue();
+    endLval = range_slider->upperValue();
+}
+
+void TimeRangeSelector::sliderReleased() {
+
+    if(startLval != range_slider->lowerValue())
+        emit startDateChanged(this->getLowerDate());
+
+    if(endLval != range_slider->upperValue())
+        emit endDateChanged(this->getUpperDate());
 }
 
 void TimeRangeSelector::onLowerValueChanged(int newValue) {
     date_start->setText(QDateTime::fromTime_t(newValue).toString("dd/MM/yy hh:mm:ss"));
-    emit startDateChanged(QDateTime::fromTime_t(newValue));
 }
 
 void TimeRangeSelector::onUpperValueChanged(int newValue) {
     date_end->setText(QDateTime::fromTime_t(newValue).toString("dd/MM/yy hh:mm:ss"));
-    emit endDateChanged(QDateTime::fromTime_t(newValue));
 }
 
 QDateTime TimeRangeSelector::getLowerDate() {

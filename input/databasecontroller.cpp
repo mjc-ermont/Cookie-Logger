@@ -65,7 +65,6 @@ void DatabaseController::run() {
                         for(int cv=0;cv<m_structure[c];cv++) {
                             Data d;
                             d.value = rep.value(comp).toDouble();
-                            d.time = QDateTime::currentDateTime();
                             comp++;
                             res.push_back(d);
                         }

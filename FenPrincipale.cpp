@@ -169,17 +169,6 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     indicator_rx->setPalette(p);
     //---------------------------
 
-/*
-    for (int idc=0;idc<nbSensors;idc++) {
-        foreach(SensorValue* v,sensormgr->getSensor(idc)->getValues()) {
-            getBT()->requestUpdate(v);
-            if(v->getParam() == "xmap") {
-                sensormgr->getDB()->read(idc,v->getID(),QDateTime::fromTime_t(0),QDateTime::currentDateTime(),"xmap");
-            } else if(v->getParam() == "ymap") {
-                sensormgr->getDB()->read(idc,v->getID(),QDateTime::fromTime_t(0),QDateTime::currentDateTime(),"ymap");
-            }
-        }
-    }*/
 
     // --------------------------------
 
@@ -195,6 +184,13 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     connect(teemo, SIGNAL(timeout()), stmgr, SLOT(render()));
     teemo->setSingleShot(true);
     teemo->start(50);
+
+
+
+    connect(graphic_range_selector, SIGNAL(startDateChanged(QDateTime)), this, SLOT(updateGraphs()));
+    connect(graphic_range_selector, SIGNAL(endDateChanged(QDateTime)),  this, SLOT(updateGraphs()));
+
+    sensormgr->getDB()->readFrame(QDateTime::fromTime_t(0),QDateTime::currentDateTime(),"bt",true);
 }
 
 FenPrincipale::~FenPrincipale(){
@@ -202,6 +198,9 @@ FenPrincipale::~FenPrincipale(){
     delete com;
 }
 
+void FenPrincipale::updateGraphs() {
+    sensormgr->getDB()->readFrame(graphic_range_selector->getLowerDate(), graphic_range_selector->getUpperDate(),"graph",false);
+}
 
 void FenPrincipale::resizeEvent(QResizeEvent *) {
     if(optimisation_graph)
@@ -289,6 +288,7 @@ void FenPrincipale::data_read(QVector<QVector<Data> > data, QString reason) {
         if(data.size() > 0) {
             this->getBT()->update(data.last());
 
+            qDebug() << "maximum date:" << data.last()[0].time;
 
             graphic_range_selector->setMaximumDate(data.last()[0].time);
             historique_range_selector->setMaximumDate(data.last()[0].time);

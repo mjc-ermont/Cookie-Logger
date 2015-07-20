@@ -24,7 +24,12 @@ public slots:
     void onLowerValueChanged(int newValue);
     void onUpperValueChanged(int newValue);
 
+    void sliderPressed();
+    void sliderReleased();
 private:
+    int startLval;
+    int endLval;
+
     QxtSpanSlider* range_slider;
     QLabel* date_start;
     QLabel* date_end;
