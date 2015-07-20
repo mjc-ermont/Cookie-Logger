@@ -29,7 +29,6 @@ public:
     SensorValue* valueAt(int i) {return sensorValueList[i];}
 
 public slots:
-    void newValue(int id_capteur, int id_valeur, double valeur);
     void newFrame(QVector<double>);
 protected:
     void getSensorsFromFile();

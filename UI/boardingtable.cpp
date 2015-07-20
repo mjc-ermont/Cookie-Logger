@@ -74,10 +74,6 @@ void BoardingTable::init(SensorManager* mgr) {
     }
 }
 
-void BoardingTable::requestUpdate(SensorValue* value) {
-    value->getData("bt",1);
-}
-
 void BoardingTable::update(QVector<Data> values) {
     for(int i=0;i<values.size();i++) {
         SensorValue* v = mMgr->valueAt(i);

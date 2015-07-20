@@ -48,9 +48,5 @@ void FileImportDialog::on_buttonBox_accepted() {
             qDebug() << "err";
         }
     }
-
-    for(int i=0; i<m_parent->getSensorMgr()->getSensors().size();i++) {
-        m_parent->getBT()->requestUpdate(m_parent->getSensorMgr()->getSensors().at(i)->getValues().at(0));
-    }
-
+    m_parent->getSensorMgr()->getDB()->readFrame(QDateTime::fromMSecsSinceEpoch(0), QDateTime::currentDateTime(), "bt", true);
 }

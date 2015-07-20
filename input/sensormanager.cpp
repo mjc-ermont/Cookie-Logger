@@ -13,19 +13,6 @@ SensorManager::SensorManager(FenPrincipale* _parent) {
     bdd->start();
 }
 
-void SensorManager::newValue(int id_capteur, int id_valeur, double valeur) {
-    qDebug() << "Valeur: " << valeur;
-
-    if(id_capteur < sensorList.size()) {
-
-        if(id_valeur < sensorList[id_capteur]->getValues().size()) {
-
-            sensorList[id_capteur]->getValues()[id_valeur]->addData(valeur);
-            parent->getBT()->requestUpdate(sensorList[id_capteur]->getValues()[id_valeur]);
-        }
-    }
-}
-
 int SensorManager::indexOf(int idc, int idv) {
     return sensorValueList.indexOf(sensorList[idc]->getValues()[idv]);
 }
@@ -39,10 +26,11 @@ void SensorManager::newFrame(QVector<double> frame){
 
     for(int i=0; i<frame.size();i++) {
         SensorValue* sv = sensorValueList[i];
-        newValue(sv->getCapteur()->getId(), sv->getID(), frame[i]);
+        sensorList[sv->getCapteur()->getId()]->getValues()[sv->getID()]->addData(frame[i]);
         out << frame[i] << ",";
     }
     getDB()->writeFrame(frame, QDateTime::currentDateTime());
+    getDB()->readFrame(QDateTime::currentDateTime(), QDateTime::currentDateTime(), "bt", true);
     out << (QTime::currentTime().toString().toAscii()) << '\n';
 
     backup.flush();

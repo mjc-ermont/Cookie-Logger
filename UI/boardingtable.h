@@ -19,7 +19,6 @@ public:
 
     void init(SensorManager* );
     void update(QVector<Data> values);
-    void requestUpdate(SensorValue *value);
 
     void onResize();
 
