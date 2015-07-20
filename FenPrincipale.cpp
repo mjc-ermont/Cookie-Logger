@@ -264,6 +264,7 @@ void FenPrincipale::received(QByteArray d) {
 
 QVector<Data> FenPrincipale::getDataColumn(int idc, int idv, QVector<QVector<Data> > &data) {
     int i = sensormgr->indexOf(idc,idv);
+    qDebug() << "getdcol:"<<idc<<"|"<<idv<<" => "<<i;
     QVector<Data> col;
     foreach(QVector<Data> line, data)
         col.push_back(line[i]);
@@ -516,12 +517,10 @@ void FenPrincipale::on_sel_capteur_currentIndexChanged(int index)
 void FenPrincipale::on_sel_capteur_x_currentIndexChanged(int index)
 {
     sel_valeur_x->clear();
-    bool added_something=false;
 
     foreach(SensorValue *v, sensormgr->getSensor(index)->getValues()) {
         if(!already_added(index, v->getID())) {
             sel_valeur_x->addItem(v->getName(), QVariant(v->getID()));
-            added_something=true;
         }
     }
 }
@@ -799,148 +798,39 @@ void FenPrincipale::on_btn_optimiser_clicked()
 
 void FenPrincipale::optimise_graph() {
     int nbItems = graphiques.size();
+    int rowSize = zone_graph->geometry().height();
+    int colSize = zone_graph->geometry().width();
+
     qDebug() << "Nb graphs: " << nbItems;
     qDebug() << "Taille w: " << zone_graph->geometry().width() << "| h: " << zone_graph->geometry().height();
 
+    float rapportColRow = (float)rowSize / (float)colSize; // rowNb ~= rapportColRow * colNb
+    int colNb = round( std::sqrt( (float)nbItems / rapportColRow ) ); // on veut n tq rapportColRow*n² >= nbItems
+    int rowNb = std::floor( (float)colNb*rapportColRow );
+    while( colNb*rowNb < nbItems ) rowNb++; // Ajuste par exès le nombre de lignes
 
-    int rowNb;
-    int rowSize = zone_graph->geometry().height();
-    int colNb;
-    int colSize = zone_graph->geometry().width();
+    qDebug() << "colones:" << colNb;
+    qDebug() << "lignes:" << rowNb;
 
-    for(int i=0;i<graphiques.size();i++) {
-        int row, rowStretch, col=1, colStretch=1;
-        bool error = false;
-        switch(nbItems) {
-            case 1:
-                row = 0;
-                rowStretch = 1;
-                col = 0;
-                colStretch = 1;
-                rowNb = 1;
-                colNb = 1;
-                break;
-            case 2:
-                row = 0;
-                rowStretch = 1;
-                col = i;
-                colStretch = 1;
-                rowNb = 1;
-                colNb = 2;
-                break;
-            case 3:
-                row = !(i == 0);
-                rowStretch = 1;
-                col = (i == 2);
-                colStretch = (i == 0) ? 2 : 1;
-                rowNb = 2;
-                colNb = 2;
-                break;
-            case 4:
-                row = !(i<=1);
-                rowStretch = 1;
-                col = !((i==0) || (i==2));
-                colStretch = 1;
-                rowNb = 2;
-                colNb = 2;
-                break;
-            case 5:
-                row = !(i<3);
-                rowStretch = (i==1) +1;
-                col = (i<=2) ? i : ((i == 3) ? 0 : 2 );
-                colStretch = 1;
-                rowNb = 2;
-                colNb = 3;
-                break;
-            case 6:
-                row = !(i<3);
-                rowStretch = 1;
-                col = (i<=2) ? i : i-3;
-                colStretch = 1;
-                rowNb = 2;
-                colNb = 3;
-                break;
-            case 7:
-                row = !(i<3);
-                rowStretch = 1;
-                col = (i<=2) ? ((i==2) ? 3 : i): i-3;
-                colStretch = (i == 1) ? 2 : 1;
-                rowNb = 2;
-                colNb = 4;
-                break;
-            case 8:
-                row = !(i<=3);
-                rowStretch = 1;
-                col = (i<=3) ? i : i-4;
-                colStretch = 1;
-                rowNb = 2;
-                colNb = 4;
-                break;
-            case 9:
-                if(i<=4)
-                    row = 0;
-                else if(i<=7)
-                    row = 1;
-                else
-                    row = 2;
-
-                rowStretch = ((i == 5) || (i ==7)) + 1;
-
-                if(i<=4) {
-                    col = i;
-                    colStretch = 1;
-                } else if(i == 5) {
-                    col = 0;
-                    colStretch = 1;
-                } else if(i == 6) {
-                    col = 1;
-                    colStretch = 3;
-                } else if(i == 7) {
-                    col = 4;
-                    colStretch = 1;
-                } else if(i == 8) {
-                    col = 1;
-                    colStretch = 3;
-                }
-
-
-                rowNb = 3;
-                colNb = 5;
-                break;
-            case 10:
-                if(i<=3)
-                    row = 0;
-                else if(i<=5)
-                    row = 1;
-                else
-                    row = 2;
-
-                rowStretch = 1;
-                colStretch = ((i == 4) || (i == 5)) + 1;
-
-                if(i<=3) {
-                    col = i;
-                } else if(i >= 6) {
-                    col = i-6;
-                } else if(i == 4) {
-                    col = 0;
-                } else if(i == 5) {
-                    col = 2;
-                }
-
-
-                rowNb = 3;
-                colNb = 4;
-                break;
-            default:
-                error = true;
+    int place = colNb*rowNb - nbItems; // La place disponible en trop
+    int iLigne = 0, iColone = 0;
+    for(int i=0 ; i < nbItems ; i++) {
+        int colStretch = 1;
+        if( place > 0 && iColone + 1 < colNb ) { // Si il reste de la place en trop, on étend en largeur
+            colStretch += 1;
+            place--;
         }
-        if(!error)
-            graphiques[i].second->setGeometry(col * (colSize / colNb),row * (rowSize / rowNb), (colSize / colNb) * colStretch, (rowSize / rowNb) * rowStretch);
+
+        graphiques[i].second->setGeometry(iColone * (colSize / colNb), iLigne * (rowSize / rowNb), (colSize / colNb) * colStretch, rowSize / rowNb);
+
+        iColone += colStretch;
+        if( iColone >= colNb ) {
+            iColone = 0;
+            iLigne++;
+        }
     }
 
 }
-
 
 
 void FenPrincipale::on_actionPasser_l_tape_suivante_triggered()

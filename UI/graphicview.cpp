@@ -16,8 +16,6 @@ GraphicView::GraphicView(int indexCapteur, int indexValeur, FenPrincipale *paren
 
     m_capteur_x=0;
     m_valeur_x=0;
-    m_capteur=0;
-    m_valeur=0;
 
     zoomed = false;
 
