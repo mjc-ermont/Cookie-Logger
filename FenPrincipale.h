@@ -59,6 +59,8 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         MapsView*       getMap()        {return carte;}
         TableMgr*       getTableMgr()   {return tableManager;}
         StagesManager*  getStagesManager() {return stmgr; }
+
+        TimeRangeSelector*  getGraphicTimeRangeSelector(){return graphic_range_selector;}
         WebServicesManager* getWebServicesManager();
     // Euh rien
         void konamify(bool enable);
@@ -81,6 +83,9 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QTimer*                 resetIndicator;
         QTimer*                 reset_errors_timer;
 
+        TimeRangeSelector*      historique_range_selector;
+        TimeRangeSelector*      graphic_range_selector;
+
         // UI
         BoardingTable*          tableauBord;
         MapsView*               carte;
@@ -89,8 +94,6 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         QActionGroup*           group_ports_name;
         QVector<QTableView*>    tableauxHist;
         QVector<QPair<GraphicView*,QMdiSubWindow*> > graphiques;
-        TimeRangeSelector*      graphic_range_selector;
-        TimeRangeSelector*      historique_range_selector;
 
         // Données
         Serial*                 com;

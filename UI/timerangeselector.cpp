@@ -69,6 +69,9 @@ void TimeRangeSelector::setMaximumDate(QDateTime max) {
     max_date = max;
     range_slider->setMaximum(max.toTime_t());
 
-    if(lock_up_slider)
+    if(lock_up_slider) {
         range_slider->setUpperValue(max.toTime_t());
+        emit endDateChanged(this->getUpperDate());
+    }
+
 }
