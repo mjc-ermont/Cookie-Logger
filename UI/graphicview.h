@@ -71,8 +71,8 @@ class GraphicView : public QwtPlot
         void majCurve();
 
      public slots:
-        void setStartDT(QDateTime start) { start_dt = start; majData();}
-        void setEndDT(QDateTime end) { end_dt = end; majData();}
+        void setStartDT(QDateTime start) { start_dt = start;}
+        void setEndDT(QDateTime end) { end_dt = end;}
 
 
     private:

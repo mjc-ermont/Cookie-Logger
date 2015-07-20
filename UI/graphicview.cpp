@@ -98,8 +98,8 @@ void GraphicView::majCurve() {
     }
 
     if(!zoomed) {
-        this->setAxisScale(QwtPlot::xBottom, getMin()-10, getMax()+10);
-        this->setAxisScale(QwtPlot::yLeft, getMinX()-10, getMaxX()+10);
+        this->setAxisScale(QwtPlot::xBottom, getMin()-1, getMax()+1);
+        this->setAxisScale(QwtPlot::yLeft, getMinX()-1, getMaxX()+1);
     }
     replot();
 }

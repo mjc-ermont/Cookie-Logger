@@ -124,6 +124,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void data_read(QVector<QVector<Data>> data, QString reason);
 
 
+        void updateGraphs();
 
         void log_logger(QString str);
         void log_decoder(QString str);
