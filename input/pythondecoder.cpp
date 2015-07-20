@@ -3,10 +3,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void ouch(int sig)
-{
-    printf("Je code avec mon cul %d\n", sig);
-}
 
 pythondecoder::pythondecoder() {}
 
@@ -122,23 +118,26 @@ bool pythondecoder::decode(QByteArray frame) {
 }
 
 int pythondecoder::calcframelength() {
-    PyObject* pFuncCalc = PyObject_GetAttrString(pModule, "calcframelength");
-    if (pFuncCalc && PyCallable_Check(pFuncCalc)) {
-        emit message ("Chargement fonction calcul: OK");
+    if(pModule != NULL) {
+        PyObject* pFuncCalc = PyObject_GetAttrString(pModule, "calcframelength");
+        if (pFuncCalc && PyCallable_Check(pFuncCalc)) {
+            emit message ("Chargement fonction calcul: OK");
 
-        PyObject* pReturnValue =  PyObject_CallObject(pFuncCalc, NULL);
-        Py_XDECREF(pFuncCalc);
-        if(pReturnValue != NULL)
-            return PyLong_AsLong(pReturnValue);
-        else
+            PyObject* pReturnValue =  PyObject_CallObject(pFuncCalc, NULL);
+            Py_XDECREF(pFuncCalc);
+            if(pReturnValue != NULL)
+                return PyLong_AsLong(pReturnValue);
+            else
+                return 42;
+        } else {
+            PyErr_Print();
+            emit message ("Chargement fonction calcul: ERREUR");
+            qDebug() << "Decodeur python err";
+            Py_XDECREF(pFuncCalc);
             return 42;
-    } else {
-        PyErr_Print();
-        emit message ("Chargement fonction calcul: ERREUR");
-        qDebug() << "Decodeur python err";
-        Py_XDECREF(pFuncCalc);
-        return 42;
+        }
     }
+    return 42;
 }
 
 void pythondecoder::appendData(QByteArray received) {
