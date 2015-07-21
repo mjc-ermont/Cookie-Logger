@@ -6,28 +6,19 @@ if [ $OS == "LINUX" ];
 then
 	if [ $ARCH == "i686" ];
 	then
-		sudo dpkg --add-architecture i386
-		sudo apt-get update
-		sudo apt-get install ia32-libs
-		
-		sudo apt-get install python3.2:i386
-		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib python-numpy-dev &&
-
-		wget https://www.python.org/ftp/python/3.2.6/Python-3.2.6.tgz &&
-		tar -xf Python-3.2.6.tgz &&
-		cd Python-3.2.6 &&
-		./configure --build=i686-pc-linux-gnu --host=x86_64-pc-linux-gnu --disable-ipv6 "CFLAGS=-m32" "CXXFLAGS=-m32" "LDFLAGS=-m32" &&
-		make && sudo make install &&
-		cd .. &&
-		
-		git clone git://code.qt.io/qt/qtserialport.git &&
-		cd qtserialport &&
-		git checkout qt4-dev
-		qmake qtserialport.pro -spec linux-g++-32 &&
-		make &&
-		sudo make install &&
-		cd .. &&
-		qmake Logger21.pro -spec linux-g++-32
+		sudo apt-get update && sudo apt-get install autopoint qemu qemu-system build-essential
+		wget http://releases.ubuntu.com/14.04/ubuntu-14.04.2-desktop-i386.iso
+		qemu-system-i386 -cdrom ubuntu-14.04.2-desktop-i386.iso -m 1024 -nographic -no-reboot -redir tcp:5555::22 &
+		ssh root@localhost -o StrictHostKeyChecking=no -p 5555 -i id_rsa "
+			sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev &&
+			git clone git://code.qt.io/qt/qtserialport.git &&
+			cd qtserialport &&
+			git checkout qt4-dev
+			qmake qtserialport.pro &&
+			make &&
+			sudo make install &&
+			cd ..
+		"
 	elif [ $ARCH == "x86_64" ];
 	then
 		sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev &&
