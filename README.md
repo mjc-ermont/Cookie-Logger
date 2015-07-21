@@ -25,7 +25,7 @@ Commencer par installer les dépendances des dépots officiels.
 sudo apt-get install qt4-dev-tools libqjson-dev g++ python3.4 python3.4-dev python-numpy
 ```
 
-### Compilation de [qtserialport](https://github.com/qtproject/qtserialport)
+#### Compilation de [qtserialport](https://github.com/qtproject/qtserialport)
 
 ```shell
 https://github.com/qtproject/qtserialport.git
@@ -36,10 +36,10 @@ make && sudo make install
 cd ../..
 ```
 
-### Compilation de [QWT](http://qwt.sourceforge.net/)
-#### Installation via les dépots officiels
+#### Compilation de [QWT](http://qwt.sourceforge.net/)
+##### Installation via les dépots officiels
 Cookie-Logger nécessite une version de qwt supérieure à 6.0.0 et inférieure à 6.1.0. Sur ubuntu 14.04, la version installée semble compatible : `sudo apt-get install libqwt-dev`
-#### Compilation des sources
+##### Compilation des sources
 ```shell
 # Téléchargement de la version 6.0.2
 wget http://downloads.sourceforge.net/project/qwt/qwt/6.0.2/qwt-6.0.2.tar.bz2
