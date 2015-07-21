@@ -10,7 +10,7 @@ then
 		sudo apt-get install autopoint qemu qemu-system qemu-kvm build-essential openssh-server
 		sudo /etc/init.d/ssh start
 		wget http://mirrors.kernel.org/archlinux/iso/2015.07.01/archlinux-bootstrap-2015.07.01-i686.tar.gz
-		tar -xvf http://mirrors.kernel.org/archlinux/iso/2015.07.01/archlinux-bootstrap-2015.07.01-i686.tar.gz
+		tar -xvf archlinux-bootstrap-2015.07.01-i686.tar.gz
 		qemu-system-i386 -no-kvm -cdrom archlinux-bootstrap-2015.07.01-i686.iso -m 1024 -nographic -no-reboot -redir tcp:5555::22 &
 		sleep 60
 		echo "Connection au ssh"
