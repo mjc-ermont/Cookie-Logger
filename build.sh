@@ -13,7 +13,7 @@ then
 		wget https://www.python.org/ftp/python/3.2.6/Python-3.2.6.tgz &&
 		tar -xf Python-3.2.6.tgz &&
 		cd Python-3.2.6 &&
-		./configure --build=x86_64-pc-linux-gnu --host=i686-pc-linux-gnu &&
+		./configure --build=x86_64-pc-linux-gnu --host=i686-pc-linux-gnu --disable-ipv6 &&
 		make && sudo make install &&
 		cd .. &&
 		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib python-numpy-dev &&
