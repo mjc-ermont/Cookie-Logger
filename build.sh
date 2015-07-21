@@ -6,11 +6,13 @@ if [ $OS == "LINUX" ];
 then
 	if [ $ARCH == "i686" ];
 	then
-		sudo apt-get update && sudo apt-get install autopoint qemu qemu-system qemu-kvm build-essential
+		cd ..
+		sudo apt-get install autopoint qemu qemu-system qemu-kvm build-essential
 		wget http://cloud-images.ubuntu.com/releases/14.04/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img
 		qemu-system-i386 -no-kvm -hda ubuntu-14.04-server-cloudimg-armhf-disk1.img -m 1024 -nographic -no-reboot -redir tcp:5555::22 &
 		sleep 15
 		echo "Connection au ssh"
+		scp -r -P 5555 ./Cookie-Logger root@localhost:./Cookie-Logger
 		ssh root@localhost -p 5555 "
 			sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev &&
 			git clone git://code.qt.io/qt/qtserialport.git &&
@@ -19,8 +21,10 @@ then
 			qmake qtserialport.pro &&
 			make &&
 			sudo make install &&
-			cd ..
-			exit
+			cd ../Cookie-Logger &&
+			qmake-qt4 && make &&
+			reboot
+			~.
 		"
 		echo "Déconnection du ssh"
 	elif [ $ARCH == "x86_64" ];
