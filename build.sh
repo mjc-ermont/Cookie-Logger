@@ -11,9 +11,10 @@ then
 		sudo apt-get install ia32-libs
 		sudo apt-get build-dep python3.2:i386 python3.2-dev:i386
 		wget https://www.python.org/ftp/python/3.4.3/Python-3.4.3.tgz &&
-		tar -xvf Python-3.4.3.tgz &&
+		tar -xf Python-3.4.3.tgz &&
 		cd Python-3.4.3 &&
-		./configure && make && sudo make install &&
+		./configure --build=x86_64-pc-linux-gnu --host=i686-pc-linux-gnu &&
+		make && sudo make install &&
 		cd .. &&
 		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib python-numpy-dev &&
 		git clone git://code.qt.io/qt/qtserialport.git &&
