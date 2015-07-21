@@ -14,7 +14,7 @@ then
 		sleep 15
 		echo "Connection au ssh"
 		scp -r -P 5555 ./Cookie-Logger root@localhost:./Cookie-Logger
-		ssh root@localhost -p 5555 bash -c -t "'
+		ssh -n root@localhost -p 5555 bash -c -t "'
 			sudo apt-get update
 			sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev
 			git clone git://code.qt.io/qt/qtserialport.git
