@@ -9,10 +9,10 @@ then
 		sudo dpkg --add-architecture i386
 		sudo apt-get update
 		sudo apt-get install ia32-libs
-		sudo apt-get build-dep python3.2:i386 python3.2-dev:i386
-		wget https://www.python.org/ftp/python/3.4.3/Python-3.4.3.tgz &&
-		tar -xf Python-3.4.3.tgz &&
-		cd Python-3.4.3 &&
+		sudo apt-get install python3.2:i386
+		wget https://www.python.org/ftp/python/3.2.6/Python-3.2.6.tgz &&
+		tar -xf Python-3.2.6.tgz &&
+		cd Python-3.2.6 &&
 		./configure --build=x86_64-pc-linux-gnu --host=i686-pc-linux-gnu &&
 		make && sudo make install &&
 		cd .. &&
