@@ -8,6 +8,7 @@ then
 	then
 		sudo apt-get update && sudo apt-get install autopoint qemu qemu-system build-essential
 		wget http://releases.ubuntu.com/14.04/ubuntu-14.04.2-desktop-i386.iso
+		chmod 600 id_rsa
 		qemu-system-i386 -cdrom ubuntu-14.04.2-desktop-i386.iso -m 1024 -nographic -no-reboot -redir tcp:5555::22 &
 		ssh root@localhost -o StrictHostKeyChecking=no -p 5555 -i id_rsa "
 			sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev &&
