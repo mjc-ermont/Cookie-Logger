@@ -6,7 +6,7 @@ if [ $OS == "LINUX" ];
 then
 	if [ $ARCH == "i686" ];
 	then
-		sudo apt-get update && sudo apt-get install autopoint qemu qemu-system build-essential
+		sudo apt-get update && sudo apt-get install autopoint qemu qemu-system qemu-kvm build-essential
 		wget http://cloud-images.ubuntu.com/releases/14.04/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img
 		qemu-system-i386 -hda ubuntu-14.04-server-cloudimg-armhf-disk1.img -m 1024 -nographic -no-reboot -redir tcp:5555::22
 		ssh root@localhost -p 5555 "
