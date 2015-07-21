@@ -14,7 +14,7 @@ then
 		wget https://www.python.org/ftp/python/3.2.6/Python-3.2.6.tgz &&
 		tar -xf Python-3.2.6.tgz &&
 		cd Python-3.2.6 &&
-		./configure --build=i686-pc-linux-gnu --host=x86_64-pc-linux-gnu --disable-ipv6 &&
+		./configure --host=i686-pc-linux-gnu --disable-ipv6 &&
 		make && sudo make install &&
 		cd .. &&
 		
