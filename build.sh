@@ -8,7 +8,7 @@ then
 	then
 		sudo apt-get update && sudo apt-get install autopoint qemu qemu-system qemu-kvm build-essential
 		wget http://cloud-images.ubuntu.com/releases/14.04/release/ubuntu-14.04-server-cloudimg-armhf-disk1.img
-		qemu-system-i386 -hda ubuntu-14.04-server-cloudimg-armhf-disk1.img -m 1024 -nographic -no-reboot -redir tcp:5555::22
+		qemu-system-i386 -no-kvm -hda ubuntu-14.04-server-cloudimg-armhf-disk1.img -m 1024 -nographic -no-reboot -redir tcp:5555::22
 		ssh root@localhost -p 5555 "
 			sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev &&
 			git clone git://code.qt.io/qt/qtserialport.git &&
