@@ -51,7 +51,8 @@ SOURCES += \
     input/sensorvalue.cpp \
     input/fileimportdialog.cpp \
     input/databasecontroller.cpp \
-    input/pythondecoder.cpp
+    input/pythondecoder.cpp \
+    UI/balayagedialog.cpp
 
 
 HEADERS  += \
@@ -79,7 +80,8 @@ HEADERS  += \
     input/sensorvalue.h \
     input/fileimportdialog.h \
     input/databasecontroller.h \
-    input/pythondecoder.h
+    input/pythondecoder.h \
+    UI/balayagedialog.h
 
 FORMS += \
     FenPrincipale.ui \

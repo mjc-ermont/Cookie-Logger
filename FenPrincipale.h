@@ -34,6 +34,7 @@
 #include "webservicesmanager.h"
 #include "UI/timerangeselector.h"
 #include "UI/stagesmanager.h"
+#include "UI/balayagedialog.h"
 
 
 
@@ -65,16 +66,13 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
     // Euh rien
         void konamify(bool enable);
 
-
         void loadSettings();
         void saveSettings();
-
 
     protected:
         void reinit_b();
         void resizeEvent(QResizeEvent *);
         bool eventFilter( QObject *o, QEvent *e );
-        bool already_added(int capteur, int valeur);
         QVector<Data> getDataColumn(int idc, int idv, QVector<QVector<Data> > &data);
 
     private:
@@ -177,7 +175,7 @@ class FenPrincipale : public QMainWindow, public Ui::FenPrincipale
         void on_action9600_triggered();
         void on_action57600_triggered();
         void onRangeStartUpdate(QDateTime range_start);
-private slots:
+
         void on_metewowServerLineEdit_editingFinished();
         void on_metewowMacLineEdit_editingFinished();
         void on_metewowMdpLineEdit_editingFinished();
