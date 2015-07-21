@@ -14,7 +14,7 @@ then
 		sleep 15
 		echo "Connection au ssh"
 		scp -r -P 5555 ./Cookie-Logger root@localhost:./Cookie-Logger
-		ssh -n root@localhost -p 5555 bash -c -t "'
+		ssh root@localhost -p 5555 "
 			sudo apt-get update
 			sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev
 			git clone git://code.qt.io/qt/qtserialport.git
@@ -27,7 +27,7 @@ then
 			qmake-qt4 && make
 			scp ./log root@localhost:./log
 			reboot
-		'"
+		"
 		cat ./log
 		echo "Déconnection du ssh"
 	elif [ $ARCH == "x86_64" ];
