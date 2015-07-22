@@ -26,7 +26,7 @@ SensorValue::SensorValue(QString i_name, QString i_unit, int i_id, Sensor *i_par
 
 }
 
-void SensorValue::addData(double d, bool parse) {
+double SensorValue::addData(double d, bool parse) {
     valeur = d;
 
     Data newData;
@@ -61,7 +61,7 @@ void SensorValue::addData(double d, bool parse) {
 
 
         if(last_values.size() < 5)
-            return;
+            return newData.value;
 
         QVector<double> derivees;
         for(int i=1;i<last_values.size();i++) {
@@ -73,7 +73,7 @@ void SensorValue::addData(double d, bool parse) {
             moyenne += derivees[i];
         }
         if(derivees.size() < 2)
-            return;
+            return newData.value;
 
         moyenne /= derivees.size();
 
@@ -100,37 +100,9 @@ void SensorValue::addData(double d, bool parse) {
         if(0 > low && 0 > up && (abs(last_moy - last_values.first()) > 10)) {
             parent->getParent()->getParent()->getStagesManager()->unlockLaunchStage();
         }
-        /*
-
-        if(first_moy_down == -1)
-            first_moy_down = moyenne;
-        if(first_moy_up == -1)
-            first_moy_up = moyenne;
-
-        if(moyenne > last_moy) {
-            upstreak++;
-            downstreak = 0;
-            first_moy_down = moyenne;
-        } else {
-            downstreak++;
-            upstreak=0;
-            first_moy_up = moyenne;
-        }
-
-        qDebug() << "moyenne: " << moyenne << " downstreak: " << downstreak << " upstreak: " << upstreak;
-
-        last_moy = moyenne;
-
-        qDebug() << first_moy_down - last_moy;
-
-        if(upstreak >= 5 && (last_moy - first_moy_up > 10)) {
-            parent->getParent()->getParent()->getStagesManager()->unlockApogeeStage();
-        } else if(downstreak >= 5 && (first_moy_down - last_moy > 10)) {
-            parent->getParent()->getParent()->getStagesManager()->unlockLaunchStage();
-        }*/
     }
 
-
+    return newData.value;
 }
 
 void SensorValue::getData(QString reason, bool last, QDateTime from, QDateTime to) {

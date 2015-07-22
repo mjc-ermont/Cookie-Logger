@@ -13,7 +13,7 @@ class SensorValue : public QObject
 {
 public:
     SensorValue(QString i_name, QString i_unit, int i_id,Sensor* i_parent, QString function="x", QString i_param="");
-    void addData(double d, bool parse=true);
+    double addData(double d, bool parse=true);
     QString getName() { return name;}
     int getID() {return id;}
     Sensor* getCapteur() {return parent;}

@@ -453,8 +453,7 @@ void FenPrincipale::on_sel_capteur_currentIndexChanged(int index) {
 void FenPrincipale::on_sel_capteur_x_currentIndexChanged(int index) {
     sel_valeur_x->clear();
     foreach(SensorValue *v, sensormgr->getSensor(index)->getValues())
-        if(!already_added(index, v->getID()))
-            sel_valeur_x->addItem(v->getName(), QVariant(v->getID()));
+        sel_valeur_x->addItem(v->getName(), QVariant(v->getID()));
 }
 
 
@@ -579,7 +578,7 @@ void FenPrincipale::on_metewowServerLineEdit_editingFinished() {saveSettings();m
 void FenPrincipale::on_metewowMacLineEdit_editingFinished() {saveSettings();}
 void FenPrincipale::on_metewowMdpLineEdit_editingFinished() {saveSettings();}
 void FenPrincipale::on_heureLancement_timeChanged(const QTime &time) {saveSettings();}
-void FenPrincipale::on_metewowServerCheckBox_clicked(){ aveSettings();mWebServicesManager->test(METEWOWSERVER);}
+void FenPrincipale::on_metewowServerCheckBox_clicked(){ saveSettings();mWebServicesManager->test(METEWOWSERVER);}
 void FenPrincipale::on_dataServerCheckBox_clicked() {saveSettings();mWebServicesManager->test(DATASERVER);}
 void FenPrincipale::on_metewowRegisterPushButton_clicked(){mWebServicesManager->metewowRegister();}
 void FenPrincipale::on_metewowDeletePushButton_clicked(){mWebServicesManager->metewowDelete();}

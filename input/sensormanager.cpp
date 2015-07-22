@@ -26,8 +26,10 @@ void SensorManager::newFrame(QVector<double> frame){
 
     for(int i=0; i<frame.size();i++) {
         SensorValue* sv = sensorValueList[i];
-        sensorList[sv->getCapteur()->getId()]->getValues()[sv->getID()]->addData(frame[i]);
         out << frame[i] << ",";
+
+
+        frame[i] = sensorList[sv->getCapteur()->getId()]->getValues()[sv->getID()]->addData(frame[i]);
     }
     getDB()->writeFrame(frame, QDateTime::currentDateTime());
     getDB()->readFrame(QDateTime::currentDateTime(), QDateTime::currentDateTime(), "bt", true);
