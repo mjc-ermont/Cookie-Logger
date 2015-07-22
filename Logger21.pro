@@ -14,6 +14,8 @@ TEMPLATE = app
 
 
 QMAKE_CXXFLAGS += -std=c++0x -I/usr/include/python3.4
+QMAKE_CXXFLAGS += -std=c++0x -I/usr/local/include/python3.2m
+QMAKE_CXXFLAGS += -std=c++0x -I/usr/include/python3.2 # Compatibilité des dépendances travis
 
 ICON = icone.ico
 

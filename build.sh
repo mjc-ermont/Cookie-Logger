@@ -6,18 +6,17 @@ if [ $OS == "LINUX" ];
 then
 	if [ $ARCH == "i686" ];
 	then
-		sudo dpkg --add-architecture i386
-		sudo apt-get update
-		sudo apt-get install ia32-libs
-		sudo apt-get install qt4-dev-tools:i386 libqjson-dev:i386 libqwt-dev:i386 libc6-dev-i386 gcc-multilib g++-multilib python3.2:i386 python3.2-dev:i386 python-numpy-dev &&
-		git clone git://code.qt.io/qt/qtserialport.git &&
-		cd qtserialport &&
-		git checkout qt4-dev
-		qmake qtserialport.pro -spec linux-g++-32 &&
-		make &&
-		sudo make install &&
-		cd .. &&
-		qmake Logger21.pro -spec linux-g++-32
+		cd ..
+		sudo apt-get install autopoint qemu qemu-system qemu-kvm build-essential openssh-server
+		sudo /etc/init.d/ssh start
+		wget http://mirrors.kernel.org/archlinux/iso/2015.07.01/archlinux-2015.07.01-dual.iso
+		qemu-system-i386 -no-kvm -cdrom archlinux-2015.07.01-dual.iso -m 1024 -nographic -no-reboot -redir tcp:5555::22 &
+		sleep 60
+		echo "Connection au ssh"
+		scp -r -P 5555 ./Cookie-Logger root@localhost:./Cookie-Logger
+		ssh root@localhost -p 5555 "echo lamor"
+		cat ./log
+		echo "Déconnection du ssh"
 	elif [ $ARCH == "x86_64" ];
 	then
 		sudo apt-get install qt4-dev-tools libqjson-dev libqwt-dev python3-dev python3-numpy python-numpy-dev &&
@@ -34,7 +33,7 @@ then
 	mv Logger21 Logger21-$OS-$ARCH
 elif [ $OS == "WIN" ];
 then
-	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev python3-dev python3-numpy python-numpy-dev &&
+	sudo apt-get install autopoint intltool gperf cmake scons liblzma-dev python3-dev python3-numpy python-numpy-dev build-essential &&
 	git clone https://github.com/jnovy/pxz && 
 	cd pxz &&
 	make &&
