@@ -190,6 +190,8 @@ FenPrincipale::FenPrincipale(Serial* _com) {
     connect(graphic_range_selector, SIGNAL(endDateChanged(QDateTime)),  this, SLOT(updateGraphs()));
 
     sensormgr->getDB()->readFrame(QDateTime::fromTime_t(0),QDateTime::currentDateTime(),"bt",true);
+
+    zone_graph->setOption(QMdiArea::DontMaximizeSubWindowOnActivation);
 }
 
 FenPrincipale::~FenPrincipale(){
@@ -706,6 +708,7 @@ void FenPrincipale::optimise_graph() {
             place--;
         }
 
+        graphiques[i].second->showNormal();
         graphiques[i].second->setGeometry(iColone * (colSize / colNb), iLigne * (rowSize / rowNb), (colSize / colNb) * colStretch, rowSize / rowNb);
 
         iColone += colStretch;
