@@ -1,7 +1,7 @@
 <sensorlist>
 	<sensor name="CAN" id="0">
-		<value name="Valeur 0" unit="" id="0" />
-		<value name="Valeur 1" unit="" id="1" />
+		<value name="Température" unit="°C" coef="1 / (0.001129148 + (0.000234125 + (0.0000000876741 * log((10240000/500) - 10000) * log((10240000/500) - 10000) ))* log((10240000/500) - 10000) ) - 273.15" id="0" />
+		<value name="Pression" unit="kPa" coef="(x/255.0-0.5)/0.018" id="1" />
 		<value name="Valeur 2" unit="" id="2" />
 		<value name="Valeur 3" unit="" id="3" />
 		<value name="Valeur 4" unit="" id="4" />
@@ -10,9 +10,24 @@
 		<value name="Valeur 7" unit="" id="7" />
 	</sensor>
 	<sensor name="GPS" id="1">
-		<value name="Latitude" unit="" param="ymap" id="0" />
-		<value name="Longitude" unit="" param="xmap" id="1" />
-		<value name="Vitesse" unit="" coef="0.01x" id="2" />
-		<value name="Altitude" unit="" id="3" />	
+		<value name="Latitude" unit="°" param="ymap" coef="(10^-7)x" id="0" />
+		<value name="Longitude" unit="°" param="xmap" coef="(10^-7)x" id="1" />
+		<value name="Vitesse" unit="noeuds" coef="0.01x" id="2" />
+		<value name="Altitude" unit="m" id="3" />	
+	</sensor>
+	<sensor name="Ultrasons" id ="2">
+		<value name="Vitesse" unit="m/s" coef="0.1x" id="0" />
+	</sensor>
+	<sensor name="IMU" id="3">
+		<value name="Accéléromètre x" unit="mG" coef="x/8192.0" id="0"/>
+		<value name="Accéléromètre y" unit="mG" coef="x/8192.0" id="1"/>
+		<value name="Accéléromètre z" unit="mG" coef="x/8192.0" id="2"/>
+		<value name="Température" unit="°C" coef="x/340.0+35" id="3"/>
+		<value name="Gyroscope x" unit="°/s" coef="x/65.5" id="4"/>
+		<value name="Gyroscope y" unit="°/s" coef="x/65.5" id="5"/>
+		<value name="Gyroscope z" unit="°/s" coef="x/65.5" id="6"/>
+		<value name="Magnétomètre x" unit="T" id="7"/>
+                <value name="Magnétomètre y" unit="T" id="8"/>
+                <value name="Magnétomètre z" unit="T" id="9"/>
 	</sensor>
 </sensorlist>
