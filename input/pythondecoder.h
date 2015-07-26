@@ -2,9 +2,7 @@
 #define PYTHONDECODER_H
 
 #include "defines.h"
-
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#include <numpy/arrayobject.h>
+#include "RS/rs.h"
 
 #include <QByteArray>
 #include <QFile>
@@ -26,6 +24,7 @@ public:
 protected:
     bool decode(QByteArray frame);
     int calcframelength();
+    int getrslength();
 
 public slots:
     void appendData(QByteArray data);
@@ -37,8 +36,7 @@ signals:
     void trame_corrigee(int);
 
 private:
-    PyObject *pName, *pModule, *pDict, *pFunc;
-    PyObject *pArgs, *pValue;
+    void *rs;
 
     QByteArray buffer;
 
