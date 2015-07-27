@@ -3,6 +3,10 @@
 
 #include "defines.h"
 #include "RS/rs.h"
+#include "RS/char.h"
+
+#include <stdlib.h>
+#include <string.h>
 
 #include <QByteArray>
 #include <QFile>

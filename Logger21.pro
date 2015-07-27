@@ -25,8 +25,6 @@ RESOURCES += res.qrc
 
 CONFIG += serialport
 
-#QMAKE_CXXFLAGS_DEBUG += -O2 # Sinon ça fait l'erreur "too many sections"
-
 LIBS += -lqwt -lqjson $$system(pkg-config --libs python3)
 
 TRANSLATIONS = notroll.ts troll.ts
@@ -54,7 +52,9 @@ SOURCES += \
     input/fileimportdialog.cpp \
     input/databasecontroller.cpp \
     input/pythondecoder.cpp \
-    UI/balayagedialog.cpp
+    UI/balayagedialog.cpp \
+    input/RS/decode_rs.c \
+    input/RS/init_rs.c
 
 
 HEADERS  += \
@@ -83,7 +83,9 @@ HEADERS  += \
     input/fileimportdialog.h \
     input/databasecontroller.h \
     input/pythondecoder.h \
-    UI/balayagedialog.h
+    UI/balayagedialog.h \
+    input/RS/char.h \
+    input/RS/rs.h
 
 FORMS += \
     FenPrincipale.ui \
