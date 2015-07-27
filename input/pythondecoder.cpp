@@ -32,7 +32,7 @@ bool pythondecoder::decode(QByteArray frame) {
 
     qDebug() << QString(frame.toHex());
 
-    int result = decode_rs_char(rs, frame.data(), NULL, 0);
+    int result = decode_rs_char(rs, (unsigned char*)frame.data(), NULL, 0);
     if (result == -1) {
         emit trame_erreur(1);
         emit message("Erreur de correction");
