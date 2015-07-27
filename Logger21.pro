@@ -54,7 +54,8 @@ SOURCES += \
     input/pythondecoder.cpp \
     UI/balayagedialog.cpp \
     input/RS/decode_rs.c \
-    input/RS/init_rs.c
+    input/RS/init_rs.c \
+    input/struct.cpp
 
 
 HEADERS  += \
@@ -85,7 +86,8 @@ HEADERS  += \
     input/pythondecoder.h \
     UI/balayagedialog.h \
     input/RS/char.h \
-    input/RS/rs.h
+    input/RS/rs.h \
+    input/struct.h
 
 FORMS += \
     FenPrincipale.ui \

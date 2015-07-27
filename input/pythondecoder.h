@@ -15,6 +15,8 @@
 
 #include <QApplication>
 
+#include "struct.h"
+
 
 class pythondecoder : public QObject
 {
@@ -40,14 +42,18 @@ signals:
     void trame_corrigee(int);
 
 private:
+    QString conf;
+
     void *rs;
 
     QByteArray buffer;
+    Struct unpacker;
 
     bool ok;
 
     char startByte;
     int frame_length;
+    int content_size;
 };
 
 #endif // PYTHONDECODER_H

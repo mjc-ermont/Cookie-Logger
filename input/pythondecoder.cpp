@@ -9,6 +9,7 @@ void pythondecoder::init() {
 
     ok = false;
     buffer = "";
+    conf = "BBBBBBBBiiHHHhhhhhhhhhh";
 
     rs = init_rs_char(8, 0x11d, 0, 2, 20);
     if(rs != NULL) {
@@ -19,20 +20,28 @@ void pythondecoder::init() {
     }
 
     startByte = 255;
+
     frame_length = calcframelength();
+
     qDebug() << "Frame length: " << frame_length;
 }
 
 pythondecoder::~pythondecoder() {
 }
 
+#define REEDSOLO
+
 bool pythondecoder::decode(QByteArray frame) {
     if(!ok)
         return false;
 
-    qDebug() << QString(frame.toHex());
 
-    int result = decode_rs_char(rs, frame.data(), NULL, 0);
+
+qDebug() << QString(frame.toHex());
+
+#ifdef REEDSOLO
+
+    int result = decode_rs_char(rs, (unsigned char*)frame.data(), NULL, 0);
     if (result == -1) {
         emit trame_erreur(1);
         emit message("Erreur de correction");
@@ -40,7 +49,9 @@ bool pythondecoder::decode(QByteArray frame) {
         emit trame_corrigee(1);
         emit message("OK!");
     }
+#endif
 
+    emit newFrame(unpacker.unpack(conf,frame.mid(1,content_size)));
 
     return true;
 }
@@ -50,8 +61,8 @@ int pythondecoder::getrslength() {
 }
 
 int pythondecoder::calcframelength() {
-
-    return 64;
+    content_size = unpacker.calcsize(conf);
+    return 2+content_size+getrslength();
 }
 
 void pythondecoder::appendData(QByteArray received) {
