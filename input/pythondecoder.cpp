@@ -10,7 +10,7 @@ void pythondecoder::init() {
     ok = false;
     buffer = "";
 
-    rs = init_rs_char(8, 285, 1, 1, 20);
+    rs = init_rs_char(8, 0x11, 0, 2, 20);
     if(rs != NULL) {
         ok = true;
         emit message("Init decoder ok");
@@ -32,18 +32,7 @@ bool pythondecoder::decode(QByteArray frame) {
 
     qDebug() << QString(frame.toHex());
 
-
-
-    unsigned char to_decode[64];
-    for(int i=0;i<64;i++)
-        to_decode[i] = 0;
-    memcpy(&to_decode, frame.left(frame.size()-getrslength()).data(), frame.size()-getrslength());
-    memcpy(&to_decode[64-getrslength()], frame.right(getrslength()).data(), getrslength());
-
-
-    qDebug() << QString(QByteArray::fromRawData((const char*)to_decode,64).toHex());
-
-    int result = decode_rs_char(rs, to_decode, NULL, 0);
+    int result = decode_rs_char(rs, frame.data(), NULL, 0);
     if (result == -1) {
         emit trame_erreur(1);
         emit message("Erreur de correction");
