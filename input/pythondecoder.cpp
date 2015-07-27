@@ -10,7 +10,7 @@ void pythondecoder::init() {
     ok = false;
     buffer = "";
 
-    rs = init_rs_char(8, 0x11, 0, 2, 20);
+    rs = init_rs_char(8, 0x11d, 0, 2, 20);
     if(rs != NULL) {
         ok = true;
         emit message("Init decoder ok");
