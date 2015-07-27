@@ -28,8 +28,8 @@ sudo apt-get install qt4-dev-tools libqjson-dev g++ python3.4 python3.4-dev pyth
 #### Compilation de [qtserialport](https://github.com/qtproject/qtserialport)
 
 ```shell
-https://github.com/qtproject/qtserialport.git
-cd qtserialport/src # On compile uniquement les sources
+git clone https://github.com/qtproject/qtserialport.git
+cd qtserialport
 git checkout qt4-dev # Compilation pour qt4
 qmake qtserialport.pro -spec linux-g++-32
 make && sudo make install
