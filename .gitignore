@@ -1,2 +1,7 @@
 *.user
+Logger21
 Makefile
+*.o
+*.un~
+moc_*
+ui_*
