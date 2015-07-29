@@ -18,7 +18,7 @@ protected:
       void copy(_II __first, _II __last, _OI __result);
 
 private:
-    QMap<char, u_int8_t> typesize;
+    QMap<char, uint8_t> typesize;
 
     bool isLittleEndian;
 };
