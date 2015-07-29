@@ -34,7 +34,6 @@
 #define INCLUDE_EXPRTK_HPP
 
 
-//#include <algorithm>
 #include <cctype>
 #include <cmath>
 #include <cstdio>
@@ -49,6 +48,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <algorithm>
 
 
 namespace exprtk
