@@ -29,7 +29,6 @@ void pythondecoder::init() {
 pythondecoder::~pythondecoder() {
 }
 
-#define REEDSOLO
 
 bool pythondecoder::decode(QByteArray frame) {
     if(!ok)
@@ -37,21 +36,28 @@ bool pythondecoder::decode(QByteArray frame) {
 
 
 
-qDebug() << QString(frame.toHex());
+    for(int i=0;i<255-content_size;i++)
+        frame.append((char)0x00);
 
-#ifdef REEDSOLO
+    qDebug() << QString(frame.toHex());
+    char buf_before[255];
+    memcpy(buf_before,frame.data(),255);
+
 
     int result = decode_rs_char(rs, (unsigned char*)frame.data(), NULL, 0);
     if (result == -1) {
         emit trame_erreur(1);
         emit message("Erreur de correction");
     } else {
-        emit trame_corrigee(1);
+        emit trame_increment(1);
         emit message("OK!");
-    }
-#endif
+        emit newFrame(unpacker.unpack(conf,frame.mid(1,content_size)));
 
-    //emit newFrame(unpacker.unpack(conf,frame.mid(1,content_size)));
+        if(memcmp(buf_before,frame.data(),255) != 0)
+            emit trame_corrigee(1);
+
+    }
+
 
     return true;
 }
@@ -62,7 +68,7 @@ int pythondecoder::getrslength() {
 
 int pythondecoder::calcframelength() {
     content_size = unpacker.calcsize(conf);
-    return 255;//2+content_size+getrslength();
+    return 2+content_size+getrslength();
 }
 
 void pythondecoder::appendData(QByteArray received) {
