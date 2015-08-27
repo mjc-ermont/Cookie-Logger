@@ -11,7 +11,7 @@ void pythondecoder::init() {
     buffer = "";
     conf = "BBBBBBBBiiHHHhhhhhhhhhh";
 
-    rs = init_rs_char(8, 0x11d, 0, 2, 20);
+    rs = init_rs_char(8, 0x11d, 0, 1, 20);
     if(rs != NULL) {
         ok = true;
         emit message("Init decoder ok");
@@ -51,7 +51,7 @@ qDebug() << QString(frame.toHex());
     }
 #endif
 
-    emit newFrame(unpacker.unpack(conf,frame.mid(1,content_size)));
+    //emit newFrame(unpacker.unpack(conf,frame.mid(1,content_size)));
 
     return true;
 }
@@ -62,7 +62,7 @@ int pythondecoder::getrslength() {
 
 int pythondecoder::calcframelength() {
     content_size = unpacker.calcsize(conf);
-    return 2+content_size+getrslength();
+    return 255;//2+content_size+getrslength();
 }
 
 void pythondecoder::appendData(QByteArray received) {
